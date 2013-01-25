@@ -1,0 +1,29 @@
+{
+    "name": "ns/util-bundle",
+    "type": "symfony-bundle",
+    "description": "Various Utilitity Services and Classes",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Nathanael David Noblet",
+            "email": "nathanael@noblet.ca"
+        },
+        {
+            "name": "Mark Woynarski",
+            "email": "mark.woynarski@nobletdesign.com"
+        }
+    ],
+
+    "require": {
+        "php":                                ">=5.3.2",
+	"symfony/symfony":                    "2.1.*",
+        "symfony/assetic-bundle":             "2.1.*"
+
+    },
+
+    "autoload": {
+        "psr-0": { "NS\\UtilBundle": "" }
+    },
+    "target-dir": "NS/UtilBundle"
+}
+
