@@ -1,5 +1,5 @@
 <?php
-namespace NS\UtilBundle\Form\Transformer;
+namespace NS\UtilBundle\Form\Transformers;
 
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -36,7 +36,7 @@ class EntityToAjaxJson implements DataTransformerInterface
         foreach ($entities as $entity)
             $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
 
-        return htmlentities(json_encode($idsArray));
+        return json_encode($idsArray);
     }
 
     public function reverseTransform($ids)

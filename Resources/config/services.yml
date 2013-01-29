@@ -2,10 +2,12 @@ parameters:
   ns_util.example.class: NS\UtilBundle\Example
 
 services:
-#  ns_util.example:
-#    class: "%ns_util.example.class%"
-#    arguments: [ "@service_id", plain_value, "%parameter_name%" ]
+  ns.form.types.autocomplete:
+      class: NS\UtilBundle\Form\Types\Autocomplete
+      arguments: ["@ns.model_manager", "@router" ]
+      tags:
+        - { name: form.type, alias: ns_autocomplete }
   ns.ajax_autocompleter:
     class: NS\UtilBundle\Service\Ajax
-    arguments: [ "@ns.model_manager", "@request" ]
+    arguments: [ "@ns.model_manager", "@request", "@templating" ]
     scope: request
