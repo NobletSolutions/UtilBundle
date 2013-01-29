@@ -26,16 +26,15 @@ class EntityToAjaxJson implements DataTransformerInterface
 
     public function transform($entity)
     {
-        if (null === $entity) {
+        if (null === $entity)
             return "";
-        }
 
         if (!$entity instanceof $this->_class)
             throw new UnexpectedTypeException($entity, $this->_class);
         
-        $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
-        
-        return json_encode($idsArray);
+        $idArray = array($entity->getId() => $entity->getAjaxDisplay());
+
+        return json_encode($idArray);
     }
 
     public function reverseTransform($ids)

@@ -7,6 +7,7 @@ Event.observe(window, 'load', function(event)
         
         if(input.getAttribute('data-autocomplete-tokenize') == 'true')
         {
+            options['paramName']          = 'value';
             options['afterUpdateElement'] = tokenizeResults;
             var id         = input.id;
             var name       = input.name;
@@ -31,7 +32,7 @@ Event.observe(window, 'load', function(event)
             input.insert({before:tokenholder});
             input.insert({after:tokenvalue});
             
-            if(tokendata && input.getAttribute('data-autocomplete-multiple') == 'true')
+            if(tokendata)
                 tokendata = JSON.parse(tokendata);
             else
                 tokendata = {};
