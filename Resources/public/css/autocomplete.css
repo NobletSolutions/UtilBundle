@@ -1,0 +1,33 @@
+div.autocompleteResult {
+    background: #ffffff;
+    border: 1px solid #000000;}
+
+div.autocompleteResult ul {
+  list-style-type: none;
+  margin:  0;
+  padding:0;}
+
+div.autocompleteResult ul li.selected {
+    background-color: #ffb;}
+
+div.autocompleteResult ul li {
+  display: block;
+  margin: 0;
+  padding: 0 0.5em;
+  cursor: pointer;}
+
+a.autocompleteDelete {
+    border: 1px solid #395965;
+    padding: 0 17px 0 0.3em;
+    moz-border-radius: 3px 10px 10px 3px;
+    webkit-border-radius: 3px 10px 10px 3px;
+    o-border-radius: 3px 10px 10px 3px;
+    border-radius: 3px 10px 10px 3px;
+    box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.4);
+    margin: 0.2em;
+    float: left;
+    cursor: pointer;
+    background: #E3F2F7 url(/images/cross-small.png) right center no-repeat;}
+
+a.autocompleteDelete:hover {
+    background-color: #ffffff;}
