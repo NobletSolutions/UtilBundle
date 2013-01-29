@@ -31,7 +31,7 @@ class Autocomplete extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = ($options['collection'] == true) ? new CollectionToAjaxJson($this->_em,$options['class']):new EntityToAjaxJson($this->_em,$options['class']) ;
+        $transformer = ($options['collection'] == true) ? new CollectionToAjaxJson($this->_em,$options['class']) : new EntityToAjaxJson($this->_em,$options['class']) ;
         $builder->addModelTransformer($transformer);
     }
 
@@ -70,7 +70,7 @@ class Autocomplete extends AbstractType
         parent::buildView($view, $form, $options);
         $view->vars['attr']['data-autocomplete-href'] = $this->_router->generate($options['route']);
         
-        if(isset($options['autocomplete-multiple'])  && $options['autocomplete-multiple'] == true)
+        if($options['collection'])
             $view->vars['attr']['data-autocomplete-multiple'] = "true";
     }
 }
