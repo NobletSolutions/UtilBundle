@@ -53,6 +53,6 @@ class EntityToAjaxJson implements DataTransformerInterface
         else if(count($idsArray) > 1)
             throw new \Exception('Too many ids');
         
-        return $this->_em->getRepository($this->_class)->find($idsArray[0]);        
+        return $this->_em->getRepository($this->_class)->find(key($idsArray));
     }
 }
