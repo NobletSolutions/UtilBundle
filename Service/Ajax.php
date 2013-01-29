@@ -28,7 +28,7 @@ class Ajax
         if(!$repo instanceof AjaxAutocompleteRepositoryInterface)
             throw new \Exception("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
         
-        $value    = $this->_request->get('q');
+        $value    = $this->_request->request->get('value');
         $entities = $repo->getForAutoComplete($alias,$field,$value,$limit);
         $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
         
