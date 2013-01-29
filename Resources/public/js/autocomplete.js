@@ -31,7 +31,11 @@ Event.observe(window, 'load', function(event)
             parent.insert({top:tokenholder});
             parent.insert({bottom:tokenvalue});
             
-            tokendata = JSON.parse(tokendata);
+            if(tokendata)
+                tokendata = JSON.parse(tokendata);
+            else
+                tokendata = {};
+            
             for(var key in tokendata)
             {
                 if(tokendata.hasOwnProperty(key))

@@ -27,7 +27,9 @@ a.autocompleteDelete {
     margin: 0.2em;
     float: left;
     cursor: pointer;
-    background: #E3F2F7 url(/images/cross-small.png) right center no-repeat;}
+    background: #E3F2F7 url(/images/cross-small.png) right center no-repeat;
+    color: #000000;
+    text-decoration: none;}
 
 a.autocompleteDelete:hover {
     background-color: #ffffff;}
