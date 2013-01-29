@@ -1,6 +1,7 @@
 <?php
 namespace NS\UtilBundle\Form\Transformers;
 
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use NS\SecurityBundle\Model\Manager as EntityManager;
@@ -10,7 +11,7 @@ use NS\SecurityBundle\Model\Manager as EntityManager;
  *
  * @author gnat
  */
-class EntityToAjaxJson implements DataTransformerInterface
+class CollectionToAjaxJson implements DataTransformerInterface
 {
     private $_em;
     
@@ -24,16 +25,18 @@ class EntityToAjaxJson implements DataTransformerInterface
         return $this;
     }
 
-    public function transform($entity)
+    public function transform($entities)
     {
-        if (null === $entity) {
+        if (null === $entities)
             return "";
-        }
 
-        if (!$entity instanceof $this->_class)
-            throw new UnexpectedTypeException($entity, $this->_class);
+        if (!$entities instanceof PersistentCollection)
+            throw new UnexpectedTypeException($entities, 'PersistentCollection');
         
-        $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
+        $idsArray = array();
+        // check for interface...
+        foreach ($entities as $entity)
+            $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
         
         return json_encode($idsArray);
     }
@@ -41,7 +44,7 @@ class EntityToAjaxJson implements DataTransformerInterface
     public function reverseTransform($ids)
     {
         if ('' === $ids || null === $ids)
-            return null;
+            return new ArrayCollection();
         
         if (!is_string($ids))
             throw new UnexpectedTypeException($ids, 'string');
@@ -50,9 +53,7 @@ class EntityToAjaxJson implements DataTransformerInterface
 
         if(empty($idsArray))
             return null;
-        else if(count($idsArray) > 1)
-            throw new \Exception('Too many ids');
-        
-        return $this->_em->getRepository($this->_class)->find($idsArray[0]);        
+
+        return $this->_em->getRepository($this->_class)->getByIds(array_keys($idsArray));
     }
 }

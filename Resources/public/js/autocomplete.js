@@ -8,7 +8,6 @@ Event.observe(window, 'load', function(event)
         if(input.getAttribute('data-autocomplete-tokenize') == 'true')
         {
             options['afterUpdateElement'] = tokenizeResults;
-            var parent     = input.up();
             var id         = input.id;
             var name       = input.name;
             var tokendata  = input.getValue();
@@ -25,13 +24,14 @@ Event.observe(window, 'load', function(event)
                 'type': 'hidden',
                 'id':    id + '_token_value',
                 'name':  name,
-                'value': tokendata
+                'value': tokendata,
+                'data-autocomplete-multiple': input.getAttribute('data-autocomplete-multiple')
             });
             
-            parent.insert({top:tokenholder});
-            parent.insert({bottom:tokenvalue});
+            input.insert({before:tokenholder});
+            input.insert({after:tokenvalue});
             
-            if(tokendata)
+            if(tokendata && input.getAttribute('data-autocomplete-multiple') == 'true')
                 tokendata = JSON.parse(tokendata);
             else
                 tokendata = {};
@@ -71,7 +71,7 @@ tokenizeResults = function(field, li)
     var tokenholder = $(field.id+'_token');
     var tokenvals   = tokenfield.getValue();
     
-    if(tokenvals)
+    if(tokenvals && field.getAttribute('data-autocomplete-multiple') == 'true')
         tokenvals = JSON.parse(tokenvals);
     else
         tokenvals = {};
@@ -96,6 +96,9 @@ tokenizeResults = function(field, li)
             observeToken(event);
         });
 
+        if(field.getAttribute('data-autocomplete-multiple') != 'true')
+            tokenholder.update('');
+        
         tokenholder.insert(token);
     }
 };

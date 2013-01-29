@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 use NS\SecurityBundle\Model\Manager as EntityManager;
 use \NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
+use \NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 
 /**
  * Description of Autocomplete
@@ -30,23 +31,27 @@ class Autocomplete extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new EntityToAjaxJson($this->_em);
+        $transformer = ($options['collection'] == true) ? new CollectionToAjaxJson($this->_em,$options['class']):new EntityToAjaxJson($this->_em,$options['class']) ;
         $builder->addModelTransformer($transformer);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'collection'       => false,
             'invalid_message'  => 'The selected entity does not exist',
             'attr'             => array(
                                     'data-autocomplete'          => "true",
                                     'data-autocomplete-href'     => '',
                                     'data-autocomplete-tokenize' => "true",
+                                    'data-autocomplete-multiple' => "false"
                                        ),
         ));
         
         $resolver->setRequired(array(
-            'route'
+            'route',
+            'collection',
+            'class',
         ));
     }
 
@@ -64,5 +69,8 @@ class Autocomplete extends AbstractType
     {
         parent::buildView($view, $form, $options);
         $view->vars['attr']['data-autocomplete-href'] = $this->_router->generate($options['route']);
+        
+        if(isset($options['autocomplete-multiple'])  && $options['autocomplete-multiple'] == true)
+            $view->vars['attr']['data-autocomplete-multiple'] = "true";
     }
 }
