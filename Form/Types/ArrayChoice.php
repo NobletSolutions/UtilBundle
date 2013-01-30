@@ -41,6 +41,11 @@ abstract class ArrayChoice extends AbstractType
         return $this->values;
     }
 
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
+        $transformer = new \NS\DemoBundle\ChoiceTransformer();
+        $builder->addModelTransformer($transformer);
+    }
+
     // Form AbstractType functions
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
