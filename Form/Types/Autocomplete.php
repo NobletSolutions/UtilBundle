@@ -53,6 +53,8 @@ class Autocomplete extends AbstractType
             'collection',
             'class',
         ));
+        
+        $resolver->setOptional(array('secondary-field'));
     }
 
     public function getParent()
@@ -72,5 +74,8 @@ class Autocomplete extends AbstractType
         
         if($options['collection'])
             $view->vars['attr']['data-autocomplete-multiple'] = "true";
+        
+        if(isset($options['secondary-field']))
+            $view->vars['attr']['data-autocomplete-secondary-field'] = json_encode($options['secondary-field']);
     }
 }

@@ -4,6 +4,6 @@ namespace NS\UtilBundle\Service;
 
 interface AjaxAutocompleteRepositoryInterface
 {
-    public function getForAutoComplete($alias,$field,$value,$limit);
+    public function getForAutoComplete($alias,$fields,array $value,$limit);
 }
 

@@ -21,18 +21,25 @@ class Ajax
         $this->_templating = $templating;
     }
     
-    public function getAutocomplete($class,$alias,$field,$limit = 20)
+    public function getAutocomplete($class, $alias, $fields, $limit = 20)
     {
         $repo = $this->_manager->getRepository($class);
         
         if(!$repo instanceof AjaxAutocompleteRepositoryInterface)
             throw new \Exception("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
         
-        $value    = $this->_request->request->get('value');
-        $entities = $repo->getForAutoComplete($alias,$field,$value,$limit);
-        $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
+        $secondary = $this->_request->get('secondary-field');
+        $v         = $this->_request->request->get('value');
+
+        if(empty($v))
+            $v = $this->_request->get('q');
         
-        $r        = new \Symfony\Component\HttpFoundation\Response();
+        $value = (!empty($secondary))? array('value'=>$v,'secondary'=> json_decode($secondary,true)): array('value'=>$v);
+
+        $entities  = $repo->getForAutoComplete($alias,$fields,$value,$limit);
+        $content   = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
+        
+        $r         = new \Symfony\Component\HttpFoundation\Response();
         $r->setContent($content);
         
         return $r;

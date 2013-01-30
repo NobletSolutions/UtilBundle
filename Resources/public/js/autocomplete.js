@@ -9,6 +9,17 @@ Event.observe(window, 'load', function(event)
         {
             options['paramName']          = 'value';
             options['afterUpdateElement'] = tokenizeResults;
+            
+            if(input.getAttribute('data-autocomplete-secondary-field'))
+            {
+                var sec = JSON.parse(input.getAttribute('data-autocomplete-secondary-field'));
+                var tgt = input.id.replace(sec.s, sec.r) + '_token_value';                
+                var s   = $(tgt);
+                
+                if(s)
+                    options['parameters'] = 'secondary-field=' + s.getValue();
+            }
+            
             var id         = input.id;
             var name       = input.name;
             var tokendata  = input.getValue();
