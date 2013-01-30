@@ -37,9 +37,18 @@ class ChoiceTransformer implements DataTransformerInterface
      */
     public function reverseTransform($number)
     {
-        if (!$number)
-            return null;
+        if (!is_numeric($number))
+            throw new TransformationFailedException('Unable to transform non numeric types');
 
-        return new $this->_class($number);
+        try
+        {
+            $obj = new $this->_class($number);
+        }
+        catch(\UnexpectedValueException $e)
+        {
+            throw new TransformationFailedException($e->getMessage());
+        }
+        
+        return $obj;
     }
 }

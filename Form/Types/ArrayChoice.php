@@ -13,7 +13,10 @@ abstract class ArrayChoice extends AbstractType
 
     public function __construct($value = null)
     {
-        $this->current = ($value == null || !isset($this->values[$value])) ? 0 : $value;
+        if($value !== null && !isset($this->values[$value]))
+            throw new \UnexpectedValueException('Invalid choice value: '.$value);
+        
+        $this->current = ($value == null) ? 0 : $value;
     }
 
     public function __toString()
