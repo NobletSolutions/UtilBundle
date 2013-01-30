@@ -42,7 +42,7 @@ abstract class ArrayChoice extends AbstractType
     }
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-        $transformer = new \NS\DemoBundle\ChoiceTransformer();
+        $transformer = new \NS\UtilBundle\Form\Transformers\ChoiceTransformer(get_called_class());
         $builder->addModelTransformer($transformer);
     }
 
