@@ -2,6 +2,7 @@
 namespace NS\UtilBundle\Form\Transformers;
 
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use NS\SecurityBundle\Model\Manager as EntityManager;
@@ -30,8 +31,8 @@ class CollectionToAjaxJson implements DataTransformerInterface
         if (null === $entities)
             return "";
 
-        if (!$entities instanceof PersistentCollection)
-            throw new UnexpectedTypeException($entities, 'PersistentCollection');
+        if (!$entities instanceof PersistentCollection && !$entities instanceof ArrayCollection)
+            throw new UnexpectedTypeException($entities, 'PersistentCollection or ArrayCollection');
         
         $idsArray = array();
         // check for interface...
