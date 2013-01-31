@@ -28,7 +28,7 @@ class CollectionToAjaxJson implements DataTransformerInterface
 
     public function transform($entities)
     {
-        if (null === $entities)
+        if (null === $entities || empty($entities))
             return "";
 
         if (!$entities instanceof PersistentCollection && !$entities instanceof ArrayCollection)
@@ -38,6 +38,9 @@ class CollectionToAjaxJson implements DataTransformerInterface
         // check for interface...
         foreach ($entities as $entity)
             $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
+        
+        if(empty($idsArray))
+            return null;
         
         return json_encode($idsArray);
     }
