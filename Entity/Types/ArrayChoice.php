@@ -16,6 +16,9 @@ class ArrayChoice extends IntegerType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if($value == null)
+            return null;
+
         if(is_object($value))
             return $value->getValue();
         else
