@@ -4,6 +4,7 @@ namespace NS\UtilBundle\Form\Transformers;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use NS\SecurityBundle\Model\Manager as EntityManager;
+use NS\UtilBundle\Service\AjaxAutocompleteInterface;
 
 /**
  * Description of SuppliersToID
@@ -31,6 +32,9 @@ class EntityToAjaxJson implements DataTransformerInterface
 
         if (!$entity instanceof $this->_class)
             throw new UnexpectedTypeException($entity, $this->_class);
+        
+        if (!$entity instanceof AjaxAutocompleteInterface)
+            throw new UnexpectedTypeException($entity, 'AjaxAutocompleteInterface');
         
         $idArray = array($entity->getId() => $entity->getAjaxDisplay());
 

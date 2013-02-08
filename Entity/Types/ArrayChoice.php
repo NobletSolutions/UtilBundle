@@ -18,7 +18,7 @@ class ArrayChoice extends IntegerType
     {
         if($value == null)
             return null;
-
+ 
         if(is_object($value))
             return $value->getValue();
         else

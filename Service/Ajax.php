@@ -36,7 +36,7 @@ class Ajax
         
         $value = (!empty($secondary))? array('value'=>$v,'secondary'=> json_decode($secondary,true)): array('value'=>$v);
 
-        $entities  = $repo->getForAutoComplete($alias,$fields,$value,$limit);
+        $entities  = $repo->getForAutoComplete($alias,$fields,$value,$limit)->getResult();
         $content   = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
         
         $r         = new \Symfony\Component\HttpFoundation\Response();
