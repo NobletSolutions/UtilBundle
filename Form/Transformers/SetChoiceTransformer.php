@@ -23,7 +23,7 @@ class SetChoiceTransformer implements DataTransformerInterface
     public function transform($object)
     {
         if (null === $object) 
-            return "";
+            return null;
 
         return $object->toArray();
     }
