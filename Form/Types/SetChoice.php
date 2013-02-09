@@ -54,6 +54,8 @@ abstract class SetChoice extends AbstractType
      */
     protected $setValues = array();
 
+    protected $groupedSet = array();
+    
     /**
      *
      * Set dataype
@@ -65,16 +67,39 @@ abstract class SetChoice extends AbstractType
      */
     public function __construct($assignValues = null)
     {
+        if(empty($this->groupedSet) && empty($this->set))
+            throw new \Exception("protected variables set and groupedSet are both empty");
+        
+        if(!empty($this->groupedSet))
+            $this->set = $this->flattenGroups();
+        
         if (count($this->set) > self::MAX_VALUES_IN_SET)
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
 
         if(count($assignValues) > self::MAX_VALUES_IN_SET)
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
+        
         //prepare setValues as assoc array
         $this->setValues = array_fill_keys($this->set, 0);
         
         if (!is_null($assignValues))
             $this->assign($assignValues);
+    }
+
+    public function flattenGroups()
+    {
+        $set = array();
+        foreach($this->groupedSet as $key=>$value)
+        {
+            if(is_array($value))
+            {
+                foreach($value as $k=>$v)
+                    $set[] = $v;
+            }
+            else
+                $set[] = $value;
+        }
+        return $set;
     }
 
     /**
@@ -167,9 +192,24 @@ abstract class SetChoice extends AbstractType
     public function getValueArray()
     {
         $ret = array();
-        foreach($this->set as $value)
-            $ret[$value] = $value;
-        
+        if(empty($this->groupedSet))
+        {
+            foreach($this->set as $value)
+                $ret[$value] = $value;
+        }
+        else
+        {
+            foreach($this->groupedSet as $key=>$value)
+            {
+                if(is_array($value))
+                {
+                    foreach($value as $k=>$v)
+                        $ret[$key][$v] = $v;
+                }
+                else
+                    $ret[$value] = $value;
+            }
+        }
         return $ret;
     }
 
@@ -203,7 +243,7 @@ abstract class SetChoice extends AbstractType
     {
         if ($allPossible) 
         {
-            if (ctype_digit($values)) 
+            if (is_numeric($values)) 
                 $values = $this->fromInteger((integer)$values);
             else if ($values instanceof self) 
                 $values = (string) $values;
