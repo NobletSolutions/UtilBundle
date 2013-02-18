@@ -37,7 +37,7 @@ class ChoiceTransformer implements DataTransformerInterface
      */
     public function reverseTransform($number)
     {
-        if (!is_numeric($number))
+        if (!empty($number) && !is_numeric($number))
             throw new TransformationFailedException('Unable to transform non numeric types');
 
         try

@@ -16,7 +16,7 @@ abstract class ArrayChoice extends AbstractType
         if($value !== null && !isset($this->values[$value]))
             throw new \UnexpectedValueException('Invalid choice value: '.$value);
         
-        $this->current = ($value == null) ? 0 : $value;
+        $this->current = ($value == null) ? -1 : $value;
     }
 
     public function __toString()
