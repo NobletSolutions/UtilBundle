@@ -59,6 +59,11 @@ abstract class ArrayChoice extends AbstractType
         ));
     }
 
+    public function isValid()
+    {
+        return isset($this->values[$this->current]);
+    }
+
     public function getParent()
     {
         return 'choice';
