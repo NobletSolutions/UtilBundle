@@ -7,9 +7,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class ArrayChoice extends AbstractType
 {
-    protected $values  = array();
+    const NO_SELECTION = -1;
+    
+    protected $values  = array(self::NO_SELECTION => 'N/A');
 
-    protected $current = -1; 
+    protected $current = self::NO_SELECTION; 
 
     public function __construct($value = null)
     {
@@ -18,7 +20,7 @@ abstract class ArrayChoice extends AbstractType
             if(is_numeric($value))
             {
                 if(!isset($this->values[$value]))
-                    throw new \UnexpectedValueException('Invalid choice value: '.$value);
+                    throw new \UnexpectedValueException(__LINE__.' Invalid choice value: '.$value.' for '.  get_called_class());
                 
                 $this->current = $value;
             }
@@ -33,7 +35,7 @@ abstract class ArrayChoice extends AbstractType
                     }
                 }
                 
-                throw new \UnexpectedValueException('Invalid choice value: '.$value);
+                throw new \UnexpectedValueException(__LINE__.' Invalid choice value: '.$value);
             }
         }
     }
@@ -80,9 +82,9 @@ abstract class ArrayChoice extends AbstractType
 
     public function isValid()
     {
-        return isset($this->values[$this->current]);
+        return ($this->current != self::NO_SELECTION && isset($this->values[$this->current]));
     }
-
+    
     public function getParent()
     {
         return 'choice';
