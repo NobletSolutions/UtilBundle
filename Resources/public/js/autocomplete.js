@@ -40,6 +40,9 @@ Event.observe(window, 'load', function(event)
                 'data-autocomplete-multiple': input.getAttribute('data-autocomplete-multiple')
             });
             
+            var wrap = new Element('div', {'class':'autocompleter'});
+            
+            input.wrap(wrap);            
             input.insert({before:tokenholder});
             input.insert({after:tokenvalue});
             
