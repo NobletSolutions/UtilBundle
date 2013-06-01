@@ -5,6 +5,7 @@ namespace NS\UtilBundle\Service;
 use \NS\SecurityBundle\Model\Manager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\HttpFoundation\Response;
 
 class Ajax
 {
@@ -34,14 +35,10 @@ class Ajax
         if(empty($v))
             $v = $this->_request->get('q');
         
-        $value = (!empty($secondary))? array('value'=>$v,'secondary'=> json_decode($secondary,true)): array('value'=>$v);
+        $value    = (!empty($secondary))? array('value' => $v,'secondary' => json_decode($secondary,true)) : array('value' => $v);
+        $entities = $repo->getForAutoComplete($alias,$fields,$value,$limit)->getResult();
+        $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
 
-        $entities  = $repo->getForAutoComplete($alias,$fields,$value,$limit)->getResult();
-        $content   = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
-        
-        $r         = new \Symfony\Component\HttpFoundation\Response();
-        $r->setContent($content);
-        
-        return $r;
+        return new Response($content);
     }
 }
