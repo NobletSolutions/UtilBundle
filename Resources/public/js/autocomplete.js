@@ -4,6 +4,7 @@ Event.observe(window, 'load', function(event)
     $$('input[data-autocomplete=true]').each(function(input)
     {
         var options = {};
+        options['listTitle'] = input.getAttribute('data-autocomplete-listtitle') ? input.getAttribute('data-autocomplete-tokenize') : 'Selected Options:';
         
         if(input.getAttribute('data-autocomplete-tokenize') == 'true')
         {
@@ -43,11 +44,14 @@ Event.observe(window, 'load', function(event)
             var wrap = new Element('div', {'class':'autocompleter'});
             
             input.wrap(wrap);            
-            input.insert({before:tokenholder});
+            input.insert({after:tokenholder});
             input.insert({after:tokenvalue});
             
             if(tokendata)
-                tokendata = JSON.parse(tokendata);
+            {
+                tokendata = JSON.parse(tokendata);                
+                tokenholder.insert(options['listTitle']);
+            }
             else
                 tokendata = {};
             
@@ -84,12 +88,20 @@ tokenizeResults = function(field, li)
     var value       = li.getAttribute('data-string');
     var tokenfield  = $(field.id+'_token_value');
     var tokenholder = $(field.id+'_token');
-    var tokenvals   = tokenfield.getValue();
+    var tokenvals   = tokenfield.getValue();    
+    var listTitle   = field.getAttribute('data-autocomplete-listtitle') ? field.getAttribute('data-autocomplete-tokenize') : 'Selected Options:';
     
     if(tokenvals && field.getAttribute('data-autocomplete-multiple') == 'true')
+    {
         tokenvals = JSON.parse(tokenvals);
+        if(!Object.values(tokenvals).length)
+            tokenholder.insert(listTitle);
+    }
     else
+    {
+        tokenholder.insert(listTitle);
         tokenvals = {};
+    }
     
     if(!tokenvals.hasOwnProperty(id)) //prevent duplicates
     {
@@ -112,7 +124,10 @@ tokenizeResults = function(field, li)
         });
 
         if(field.getAttribute('data-autocomplete-multiple') != 'true')
+        {
             tokenholder.update('');
+            tokenholder.insert(listTitle);
+        }
         
         tokenholder.insert(token);
     }
@@ -129,6 +144,9 @@ observeToken = function(event)
     var val = JSON.parse(f.getValue());
     delete val[v];
     f.setValue(JSON.stringify(val));
-
-    t.remove();
+    
+    if(f.getAttribute('data-autocomplete-multiple') != 'true' || !Object.values(val).length)
+        t.up().update('');
+    else
+        t.remove();
 };
