@@ -6,7 +6,7 @@ Event.observe(window, 'load', function(event)
         var options = {};
         options['listTitle'] = input.getAttribute('data-autocomplete-listtitle') ? input.getAttribute('data-autocomplete-tokenize') : 'Selected Options:';
         
-        if(input.getAttribute('data-autocomplete-tokenize') == 'true')
+        if(input.getAttribute('data-autocomplete-tokenize') === 'true')
         {
             options['paramName']          = 'value';
             options['afterUpdateElement'] = tokenizeResults;
@@ -97,7 +97,7 @@ tokenizeResults = function(field, li)
     var tokenvals   = tokenfield.getValue();    
     var listTitle   = field.getAttribute('data-autocomplete-listtitle') ? field.getAttribute('data-autocomplete-tokenize') : 'Selected Options:';
     
-    if(tokenvals && field.getAttribute('data-autocomplete-multiple') == 'true')
+    if(tokenvals && field.getAttribute('data-autocomplete-multiple') === 'true')
     {
         tokenvals = JSON.parse(tokenvals);
         if(!Object.values(tokenvals).length)
@@ -129,7 +129,7 @@ tokenizeResults = function(field, li)
             observeToken(event);
         });
 
-        if(field.getAttribute('data-autocomplete-multiple') != 'true')
+        if(field.getAttribute('data-autocomplete-multiple') !== 'true')
         {
             tokenholder.update('');
             tokenholder.insert(listTitle);
