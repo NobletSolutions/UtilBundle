@@ -18,7 +18,13 @@ Event.observe(window, 'load', function(event)
                 var s   = $(tgt);
                 
                 if(s)
+                {
                     options['parameters'] = 'secondary-field=' + s.getValue();
+                    s.observe('token:success', function(changeevent)
+                    {
+                        input.autocompleter.options.defaultParams = 'secondary-field='+s.getValue();
+                    });
+                }
             }
             
             var id         = input.id;
@@ -78,7 +84,7 @@ Event.observe(window, 'load', function(event)
             input.setValue('');
         }
         
-        new Ajax.Autocompleter(input, 'autocomplete_result', input.getAttribute('data-autocomplete-href'), options);
+        input.autocompleter = new Ajax.Autocompleter(input, 'autocomplete_result', input.getAttribute('data-autocomplete-href'), options);
     });
 });
 
@@ -130,6 +136,7 @@ tokenizeResults = function(field, li)
         }
         
         tokenholder.insert(token);
+        tokenfield.fire('token:success');
     }
 };
 
