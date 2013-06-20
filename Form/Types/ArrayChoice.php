@@ -19,7 +19,7 @@ abstract class ArrayChoice extends AbstractType
         {
             if(is_numeric($value))
             {
-                if(!isset($this->values[$value]))
+                if(!isset($this->values[$value]) && $value != self::NO_SELECTION)
                     throw new \UnexpectedValueException(__LINE__.' Invalid choice value: '.$value.' for '.  get_called_class());
                 
                 $this->current = $value;
