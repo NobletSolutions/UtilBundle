@@ -39,8 +39,8 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
     this.clockChangeEvent     = new CustomEvent(this.clockChangeEventName);
     this.clockElement         = document.getElementById(this.clock_id);
     this.currentHandle        = this.handleHours;
-    this.hoursFace            = 'img/face_hours.png';
-    this.minutesFace          = 'img/face_minutes.png';
+    this.hoursFace            = '/bundles/nsutil/images/face_hours.png';
+    this.minutesFace          = '/bundles/nsutil/images/face_minutes.png';
     this.isFirstRun           = true;
     this.minStepsSize;
     this.hourStepsSize;

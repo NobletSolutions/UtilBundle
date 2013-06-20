@@ -10,7 +10,7 @@ div.gsClockPicker {
     position: absolute;
     left: 50%;
     box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.6);
-    background: #fcfcfc url('../images/face_minutes.png') -999em -999em no-repeat;}
+    background: #fcfcfc url('/bundles/nsutil/images/face_minutes.png') -999em -999em no-repeat;}
 
 div.gsClockPicker input[type=text] {
 	border: 2px solid #bebebe;
@@ -45,7 +45,7 @@ div.gsClockPickerFields {
 }
 
 form input[type=checkbox] + label.meridian {
-	background: transparent url('../images/button_meridian.png') no-repeat 0 0;
+	background: transparent url('/bundles/nsutil/images/button_meridian.png') no-repeat 0 0;
 	cursor: pointer;
 	display: block;
 	height: 84px;
@@ -85,7 +85,7 @@ form input[type=checkbox] {
 }
 
 .js_setclock {
-	background: transparent url('../images/face_hours.png') center no-repeat;
+	background: transparent url('/bundles/nsutil/images/face_hours.png') center no-repeat;
 	height: 310px;
 	margin: 10px 10px 10px 10px;
 	position: relative;
