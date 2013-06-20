@@ -1,0 +1,163 @@
+/** time inputs **/
+form {
+	float: left;
+	margin: 10px;
+}
+
+div.gsClockPicker {
+    border: 1px solid black;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.6);
+    background: #fcfcfc url('../images/face_minutes.png') -999em -999em no-repeat;}
+
+div.gsClockPicker input[type=text] {
+	border: 2px solid #bebebe;
+	color: #787a7e;
+	float: left;
+	font-size: 40px;
+	height: 80px;
+	margin-right: 15px;
+	outline: none;
+	text-align: center;
+	width: 70px;	
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+div.gsClockPickerFields {
+    margin: 0 auto;
+    overflow: hidden;
+    width: 89%;}
+
+.meridian_mask {
+	float: left;
+	height: 84px;
+	overflow: hidden;
+	width: 113px;
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+form input[type=checkbox] + label.meridian {
+	background: transparent url('../images/button_meridian.png') no-repeat 0 0;
+	cursor: pointer;
+	display: block;
+	height: 84px;
+	text-indent: 100em;
+	width: 230px;
+
+	transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out; /** Chrome & Safari **/
+    -moz-transition: all 0.5s ease-in-out; /** Firefox **/
+    -o-transition: all 0.5s ease-in-out; /** Opera **/
+    -ms-transition: all 0.5s ease-in-out; /** IE **/
+
+	-moz-transform: translate(0, 0);
+	-o-transform: translate(0, 0);
+	-webkit-transform: translate(0, 0);
+	-ms-transform: translate(0, 0);
+	transform: translate(0, 0);
+}
+
+form input[type=checkbox]:checked + label.meridian {
+	/*background-position: -110px 0;*/
+	transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out; /** Chrome & Safari **/
+    -moz-transition: all 0.5s ease-in-out; /** Firefox **/
+    -ms-transition: all 0.5s ease-in-out; /** IE **/
+    -o-transition: all 0.5s ease-in-out; /** Opera **/
+
+	-moz-transform: translate(-113px, 0);
+	-o-transform: translate(-113px, 0);
+	-webkit-transform: translate(-113px, 0);
+	-ms-transform: translate(-113px, 0);
+	transform: translate(-113px, 0);
+}
+
+form input[type=checkbox] {
+	display: none;
+}
+
+.js_setclock {
+	background: transparent url('../images/face_hours.png') center no-repeat;
+	height: 310px;
+	margin: 10px 10px 10px 10px;
+	position: relative;
+	width: 310px;
+}
+
+	.skin {
+		cursor: pointer;
+		overflow: hidden;
+		text-indent: 100em;
+        border-radius: 10px;
+	}
+	/*	hours*/
+	.handle_hours {
+	    visibility: hidden;
+	
+		height: 180px;
+		left: 150px;
+		position: absolute;
+		top: 60px;
+		width: 12px;
+
+		-moz-transform: rotate(0deg);
+  		-webkit-transform: rotate(0deg);
+  		-o-transform: rotate(0deg);
+  		-ms-transform: rotate(0deg);
+  		transform: rotate(0deg);
+	}
+
+		.handle_hours .skin {
+			background-color: #990000;
+			height: 95px;
+			width: 100%;
+		}
+	/*	minutes */
+	.handle_minutes {
+        visibility: hidden;
+        
+		height: 200px;
+		left: 150px;
+		position: absolute;
+		top: 52px;
+		width: 12px;
+		
+		-moz-transform: rotate(90deg);
+  		-webkit-transform: rotate(90deg);
+  		-o-transform: rotate(90deg);
+  		-ms-transform: rotate(90deg);
+  		transform: rotate(90deg);
+	}
+		.handle_minutes .skin {
+			background-color: #006699;
+			height: 105px;
+			width: 100%;
+		}
+	/*	seconds	*/
+	.handle_seconds {
+		display: none;
+		height: 210px;
+		left: 158px;
+		position: absolute;
+		top: 45px;
+		width: 2px;
+		
+		-moz-transform: rotate(90deg);
+  		-webkit-transform: rotate(90deg);
+  		-o-transform: rotate(90deg);
+  		-ms-transform: rotate(90deg);
+  		transform: rotate(90deg);
+	}
+		.handle_seconds .skin {
+			background-color: #999;
+			height: 105px;
+			width: 100%;
+		}

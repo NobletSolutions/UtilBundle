@@ -1,0 +1,8 @@
+{% block timepicker %}
+<div class="gsClockPickerFields">
+    <input type="text" data-clockGroup="start_time" data-clockField="clockHours" value="12" name="start_time[hour]" maxlength="2" />
+    <input type="text" data-clockGroup="start_time" data-clockField="clockMinutes" value="10" name="start_time[minute]" maxlength="2" />
+    <input type="checkbox" data-clockGroup="start_time" data-clockField="clockMeridian" name="start_time[meridian]" id="start_time_meridian" value="1" />
+    <label class="meridian" for="start_time_meridian">AM</label>
+</div>		
+{% endblock %}
