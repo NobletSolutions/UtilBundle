@@ -1,4 +1,11 @@
-{% block timepicker %}
+{% block datepicker_widget %}
+{% spaceless %}
+    {{ form_widget(form) }}
+    <script type="text/javascript" > var picker = new Pikaday({field: $('{{id}}')}); </script>
+{% endspaceless %}
+{% endblock %}
+
+{% block nsclockpicker_widget %}
 <div class="gsClockPickerFields">
     <input type="text" data-clockGroup="start_time" data-clockField="clockHours" value="12" name="start_time[hour]" maxlength="2" />
     <input type="text" data-clockGroup="start_time" data-clockField="clockMinutes" value="10" name="start_time[minute]" maxlength="2" />

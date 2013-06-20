@@ -2,6 +2,14 @@ parameters:
   ns_util.example.class: NS\UtilBundle\Example
 
 services:
+  ns.form.types.clockpicker:
+    class: NS\UtilBundle\Form\Types\ClockPicker
+    tags:
+      - { name: form.type, alias: nsclockpicker }
+  ns.form.datepicker:
+      class: NS\UtilBundle\Form\DatePickerType
+      tags:
+        - { name: form.type, alias: datepicker }
   ns.form.types.autocomplete:
       class: NS\UtilBundle\Form\Types\Autocomplete
       arguments: ["@ns.model_manager", "@router" ]
