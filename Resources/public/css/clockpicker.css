@@ -1,18 +1,10 @@
 /** time inputs **/
-form {
+/*form {
 	float: left;
 	margin: 10px;
-}
+}*/
 
-div.gsClockPicker {
-    border: 1px solid black;
-    overflow: hidden;
-    position: absolute;
-    left: 50%;
-    box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.6);
-    background: #fcfcfc url('/bundles/nsutil/images/face_minutes.png') -999em -999em no-repeat;}
-
-div.gsClockPicker input[type=text] {
+input[type=text] .gsClockPicker {
 	border: 2px solid #bebebe;
 	color: #787a7e;
 	float: left;
@@ -80,7 +72,7 @@ form input[type=checkbox]:checked + label.meridian {
 	transform: translate(-113px, 0);
 }
 
-form input[type=checkbox] {
+form input[type=checkbox] .gsClockPicker {
 	display: none;
 }
 
