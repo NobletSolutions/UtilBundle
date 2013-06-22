@@ -2,12 +2,17 @@
 
 namespace NS\UtilBundle\Form\Types;
 
-use \Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use \Symfony\Component\Form\AbstractType;
 
-class ClockPicker extends DateTimeType
+class ClockPicker extends AbstractType
 {
     public function getName()
     {
-        return 'nsclockpicker';
+        return 'clockpicker';
+    }
+    
+    public function getParent()
+    {
+        return 'time';
     }
 }
