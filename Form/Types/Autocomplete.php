@@ -6,10 +6,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 
 use NS\SecurityBundle\Model\Manager as EntityManager;
-use \NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
-use \NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
+use NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
+use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 
 /**
  * Description of Autocomplete
@@ -67,7 +69,7 @@ class Autocomplete extends AbstractType
         return 'ns_autocomplete';
     }
 
-    public function buildView(\Symfony\Component\Form\FormView $view, \Symfony\Component\Form\FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         parent::buildView($view, $form, $options);
         $view->vars['attr']['data-autocomplete-href'] = $this->_router->generate($options['route']);

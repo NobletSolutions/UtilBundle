@@ -5,7 +5,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{% block nsclockpicker_widget %}
+{% block clockpicker2_widget %}
 <div class="gsClockPickerFields">
     <input type="text" class="gsClockPicker" data-clockGroup="start_time" data-clockField="clockHours" value="12" name="start_time[hour]" maxlength="2" />
     <input type="text" class="gsClockPicker" data-clockGroup="start_time" data-clockField="clockMinutes" value="10" name="start_time[minute]" maxlength="2" />
@@ -13,3 +13,19 @@
     <label class="meridian" for="start_time_meridian">AM</label>
 </div>		
 {% endblock %}
+    
+{% block clockpicker_widget %}
+{% spaceless %}
+<div {{ block('widget_container_attributes') }} class="gsClockPickerFields">
+  {% set hattr = attr|merge({'attr': { 'size': 1, 'maxlength': 2 ,'class': 'gsClockPicker','data-clockField':'clockHours', 'data-clockGroup': 'start_time'}}) %}
+  {% set mattr = attr|merge({'attr': { 'size': 1, 'maxlength': 2 ,'class': 'gsClockPicker','data-clockField':'clockMinutes','data-clockGroup': 'start_time'}}) %}
+  {{ form_widget(form.hour, hattr) }}:{{ form_widget(form.minute, mattr) }}
+{#
+  {{ form_widget(form.meridian) }}
+  {{ form_label(form.meridian,{'attr': {'class': 'meridian'} }) }}  
+#}  
+  <input type="checkbox" class="gsClockPicker" data-clockGroup="start_time" data-clockField="clockMeridian" name="start_time[meridian]" id="start_time_meridian" value="1" />
+  <label class="meridian" for="start_time_meridian">AM</label>
+</div>
+{% endspaceless %}
+{% endblock clockpicker_widget %}
