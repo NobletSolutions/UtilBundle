@@ -25,17 +25,33 @@ document.observe("dom:loaded", function()
         clockmeridian.addClassName('jdaClockMeridian');
         
         var clock_elements = ''+
-        '<div class="clockWrapper"><div class="js_setclock" id="'+clock_id+'">'+
+        '<div class="clockWrapper" id="clock_wrapper_'+clock_id+'">'+
+        '<h3>Click and Drag to set time</h3>'+
+        '<div class="js_setclock" id="'+clock_id+'">'+
             '<div class="handle_minutes"><div class="skin">00</div></div>'+
             '<div class="handle_hours"><div class="skin">12</div></div>'+
             '<div class="handle_seconds"><div class="skin">00</div></div>'+
         '</div></div>';
         
-        clockhour.up('div.gsClockPickerFields').insert({before:clock_elements});
+        var clockButton = new Element('button', {class:'showClock', type:'button'});
+        clockButton.insert('Show Clock');
+        clockButton.observe('click', function(click)
+        {
+            click.stop();
+            $(clock_id).isFirstRun = true;
+            $('clock_wrapper_'+clock_id).addClassName('show');
+        });
+        
+        clockhour.up('div.gsClockPickerFields').insert({before:clock_elements, bottom:clockButton});
         
         var wrapper = new Element('div', {'class':'meridian_mask'});
         wrapper.insert({top:clockmeridian, bottom:meridianlabel});
         clockminute.insert({after:wrapper});
+        
+        $(clock_id).observe('minutesUp', function(minup)
+        {
+            $('clock_wrapper_'+clock_id).removeClassName('show');
+        });
         
         new window.jda.TimeInput(clock_id);
     });

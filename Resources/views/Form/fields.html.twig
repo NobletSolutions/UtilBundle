@@ -4,7 +4,7 @@
     <script type="text/javascript" > var picker = new Pikaday({field: $('{{id}}')}); </script>
 {% endspaceless %}
 {% endblock %}
-    
+
 {% block clockpicker_widget %}
 {% spaceless %}
 <div {{ block('widget_container_attributes') }} class="gsClockPickerFields">
@@ -12,7 +12,7 @@
   {% set mattr = attr|merge({'attr': { 'size': 1, 'maxlength': 2 ,'class': 'gsClockPicker','data-clockField':'clockMinutes','data-clockGroup': 'start_time'}}) %}
   {{ form_widget(form.hour) }}:{{ form_widget(form.minute, mattr) }}
   {{ form_widget(form.meridian) }}
-  {{ form_label(form.meridian) }}  
+  {{ form_label(form.meridian) }}
 </div>
 {% endspaceless %}
 {% endblock clockpicker_widget %}

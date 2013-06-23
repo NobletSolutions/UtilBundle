@@ -30,18 +30,18 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
         seconds: ".handle_seconds"
     };
     //  variables
-    this.handleHours          = document.querySelector('#' + this.clock_id + ' ' + this.HANDLES.hours);
-    this.handleMinutes        = document.querySelector('#' + this.clock_id + ' ' + this.HANDLES.minutes);
-    this.handleSeconds        = document.querySelector('#' + this.clock_id + ' ' + this.HANDLES.seconds);
-    this.angle                = 0;
-    this.center               = new jda.Point(0, 0);
-    this.clockChangeEventName = clock_id + 'Change'
-    this.clockChangeEvent     = new CustomEvent(this.clockChangeEventName);
-    this.clockElement         = document.getElementById(this.clock_id);
-    this.currentHandle        = this.handleHours;
-    this.hoursFace            = '/bundles/nsutil/images/face_hours.png';
-    this.minutesFace          = '/bundles/nsutil/images/face_minutes.png';
-    this.isFirstRun           = true;
+    this.handleHours             = document.querySelector('#' + this.clock_id + ' ' + this.HANDLES.hours);
+    this.handleMinutes           = document.querySelector('#' + this.clock_id + ' ' + this.HANDLES.minutes);
+    this.handleSeconds           = document.querySelector('#' + this.clock_id + ' ' + this.HANDLES.seconds);
+    this.angle                   = 0;
+    this.center                  = new jda.Point(0, 0);
+    this.clockChangeEventName    = clock_id + 'Change'
+    this.clockChangeEvent        = new CustomEvent(this.clockChangeEventName);
+    this.clockElement            = document.getElementById(this.clock_id);
+    this.currentHandle           = this.handleHours;
+    this.hoursFace               = '/bundles/nsutil/images/face_hours.png';
+    this.minutesFace             = '/bundles/nsutil/images/face_minutes.png';
+    this.clockElement.isFirstRun = true;
     this.minStepsSize;
     this.hourStepsSize;
     this.hoursPoint;
@@ -363,10 +363,10 @@ jda.TimeInput = function(selector, options)
         
         var ev = e ? e:window.event;
         
-        if(tinput.AnalogClock.isFirstRun || tinput.AnalogClock.currentHandle == tinput.AnalogClock.handleMinutes)
+        if(tinput.AnalogClock.clockElement.isFirstRun || tinput.AnalogClock.currentHandle == tinput.AnalogClock.handleMinutes)
         {
             tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.HANDLES.hours);
-            tinput.AnalogClock.isFirstRun = false;
+            tinput.AnalogClock.clockElement.isFirstRun = false;
         }
         else
         {
@@ -390,10 +390,18 @@ jda.TimeInput = function(selector, options)
     
     this.clockUpHandler = function(e)
     {
-        if(tinput.AnalogClock.isFirstRun || tinput.AnalogClock.currentHandle == tinput.AnalogClock.handleMinutes)
+        if(tinput.AnalogClock.clockElement.isFirstRun || tinput.AnalogClock.currentHandle == tinput.AnalogClock.handleMinutes)
+        {
             tinput.AnalogClock.clockElement.style.backgroundImage = "url("+tinput.AnalogClock.hoursFace+")";
+            var evt = new CustomEvent('minutesUp');
+            tinput.AnalogClock.clockElement.dispatchEvent(evt);
+        }
         else
+        {
             tinput.AnalogClock.clockElement.style.backgroundImage = "url("+tinput.AnalogClock.minutesFace+")";
+            var evt = new CustomEvent('hoursUp');
+            tinput.AnalogClock.clockElement.dispatchEvent(evt);
+        }
         
         tinput.AnalogClock.currentHandle.style.visibility = 'hidden';
 //        var evt = document.createEvent('MouseEvents');
