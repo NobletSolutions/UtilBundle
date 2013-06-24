@@ -27,6 +27,7 @@ document.observe("dom:loaded", function()
         var clock_elements = ''+
         '<div class="clockWrapper" id="clock_wrapper_'+clock_id+'">'+
         '<h3>Click and Drag to set time</h3>'+
+        '<div id="clock_value_'+clock_id+'" class="clockValue"></div>'+
         '<div class="js_setclock" id="'+clock_id+'">'+
             '<div class="handle_minutes"><div class="skin">00</div></div>'+
             '<div class="handle_hours"><div class="skin">12</div></div>'+

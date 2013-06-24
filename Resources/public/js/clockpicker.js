@@ -38,6 +38,7 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
     this.clockChangeEventName    = clock_id + 'Change'
     this.clockChangeEvent        = new CustomEvent(this.clockChangeEventName);
     this.clockElement            = document.getElementById(this.clock_id);
+    this.clockValueElement       = document.getElementById('clock_value_'+this.clock_id);
     this.currentHandle           = this.handleHours;
     this.hoursFace               = '/bundles/nsutil/images/face_hours.png';
     this.minutesFace             = '/bundles/nsutil/images/face_minutes.png';
@@ -341,6 +342,11 @@ jda.TimeInput = function(selector, options)
         
         tinput.updateTime(scope, time);
     };
+    
+    this.setTimeValueDisplay = function()
+    {
+        tinput.AnalogClock.clockValueElement.innerHTML = tinput.handleHours.value+':'+tinput.handleMinutes.value
+    };
 
     /**
      * @event
@@ -352,6 +358,8 @@ jda.TimeInput = function(selector, options)
             tinput.handleHours.value = e.value;
         else
             tinput.handleMinutes.value = e.value;
+        
+        tinput.setTimeValueDisplay();
     };
     
     this.clockPressHandler = function(e)
@@ -462,6 +470,8 @@ jda.TimeInput = function(selector, options)
             tinput.AnalogClock.clockElement.attachEvent('onMousedown', tinput.clockPressHandler);
             document.attachEvent('onMouseup', tinput.clockUpHandler);
         }
+        
+        tinput.setTimeValueDisplay();
     };
         
     this.initialize();
