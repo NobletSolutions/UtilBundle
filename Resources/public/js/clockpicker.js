@@ -371,11 +371,11 @@ jda.TimeInput = function(selector, options)
         
         tinput.AnalogClock.currentHandle.style.visibility = 'visible';
         
-        var elPos = jda.clientMouse(e);
-        var evt = document.createEvent('MouseEvents');
+        var elPos = jda.elementMouse(e, tinput.AnalogClock.clockElement);
+        var evt   = document.createEvent('MouseEvents');
         evt.initMouseEvent('mousedown', false, true, window, 0, 0, 0, elPos[0], elPos[1], false, false, false, false, 0, null);
         tinput.AnalogClock.currentHandle.dispatchEvent(evt);
-        tinput.AnalogClock.setClock(evt);
+        tinput.AnalogClock.setClock(e);
         
         if (ev.stopPropagation)
             ev.stopPropagation();        
@@ -517,7 +517,7 @@ jda.clientMouse = function(e)
             + document.documentElement.scrollTop;
     }
     
-    return [posx, posy];
+    return [posx, posy, e.screenX, e.screenY];
 };
 
 jda.cumulativeOffset = function(element)
