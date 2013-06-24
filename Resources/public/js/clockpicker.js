@@ -63,8 +63,6 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
         aclock.angle += stepsSize;
         setTimeout(rotateHandle, 1000);
     };
-    00
-    12
 
     /**
      * Gets the current angle given by the mouse coordinates
@@ -82,9 +80,8 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
             newAngle = Math.acos(value) * 180 / Math.PI;
 
         //  left sidedown
-        if (newPoint.x < aclock.center.x) {
+        if (newPoint.x < aclock.center.x)
             newAngle = 360 - newAngle;
-        }
 
         if(aclock.currentHandle === aclock.handleHours)
             var stepsSize = aclock.hourStepsSize;
@@ -101,14 +98,11 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
      * @param {Number} value The new angle
      */
     this.setAngle = function(value)
-    {
-        //  apply rotation in IE9
-        if (jda.Utils.isIE()) {
-            aclock.currentHandle.style.cssText = '-ms-transform: rotate(' + value + 'deg)';
-        } else {
-            //  chrome, safari, firefox
-            aclock.currentHandle.style[jda.CSSPrefixer.transform] = 'rotate(' + value + 'deg)';
-        }
+    {        
+        if (jda.Utils.isIE())
+            aclock.currentHandle.style.cssText = '-ms-transform: rotate(' + value + 'deg)'; //  apply rotation in IE9
+        else            
+            aclock.currentHandle.style[jda.CSSPrefixer.transform] = 'rotate(' + value + 'deg)';//  chrome, safari, firefox
 
         aclock.angle = value;
     };
@@ -119,11 +113,7 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
      */
     this.setCurrentHandle = function(value)
     {
-        //  set current handle
-        if (value === aclock.HANDLES.hours)
-            aclock.currentHandle = aclock.handleHours;
-        else
-            aclock.currentHandle = aclock.handleMinutes;
+        aclock.currentHandle = value;
     };
 
     /**
@@ -133,14 +123,12 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
     this.updateTime = function(value)
     {
         var newAngle;
-        //  set hours
-        if (aclock.currentHandle === aclock.handleHours) {
-            newAngle = value * aclock.hourStepsSize;
-        } 
-        //  set minutes
-        else {
-            newAngle = (value / 60) * aclock.MIN_STEPS * aclock.minStepsSize;
-        }
+        
+        if (aclock.currentHandle === aclock.handleHours)
+            newAngle = value * aclock.hourStepsSize; //  set hours
+        else
+            newAngle = (value / 60) * aclock.MIN_STEPS * aclock.minStepsSize; //  set minutes
+        
         aclock.setAngle(newAngle);
     };
 
@@ -153,21 +141,20 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
         var time;
 
         //  hours updated
-        if (aclock.currentHandle === aclock.handleHours) {
-            aclock.clockChangeEvent.handle = aclock.HANDLES.hours;
+        if (aclock.currentHandle === aclock.handleHours)
+        {
+            aclock.clockChangeEvent.handle = aclock.handleHours;
             time = aclock.angle / aclock.hourStepsSize;
-            if (time == 0) {
+            if (time == 0)
                 time = 12;
-            }
         }
         //  minutes updated
         else
         {
-            aclock.clockChangeEvent.handle = aclock.HANDLES.minutes;
+            aclock.clockChangeEvent.handle = aclock.handleMinutes;
             time = aclock.angle * 60 / (aclock.MIN_STEPS * aclock.minStepsSize);
-            if (time === 60) {
+            if (time === 60)
                 time = 0;
-            }
         }
         
         aclock.clockChangeEvent.value = jda.Utils.formatDigit(time);
@@ -180,6 +167,10 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
      * Drag handle
      */
     this.document_mousemoveHandler = function(e) {
+        aclock.setClock(e);
+    };
+    
+    this.setClock = function(e) {
         var elPos    = jda.elementMouse(e, aclock.clockElement);
         var newAngle = aclock.getAngle(elPos[0], elPos[1]);
         aclock.setAngle(newAngle);
@@ -195,11 +186,6 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
             document.removeEventListener('mousemove', aclock.document_mousemoveHandler, false);  
         else if(document.detachEvent)
             document.detachEvent('onmousemove', aclock.document_mousemoveHandler);
-        
-//        if (ev.stopPropagation)
-//            ev.stopPropagation();        
-//        else if (ev.cancelBubble != null)
-//            ev.cancelBubble = true;
     };
 
     /**
@@ -253,6 +239,7 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
     //  get clock's center point
     this.center.x = this.handleHours.offsetLeft;
     this.center.y = this.handleHours.offsetTop + this.handleHours.offsetHeight * 0.5;
+    
     //  add event listeners
     if(document.addEventListener)
     {
@@ -300,7 +287,7 @@ jda.TimeInput = function(selector, options)
     {
         e.currentTarget.focus();
         e.currentTarget.select();
-        tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.HANDLES.hours);
+        tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleHours);
     };
 
     /**
@@ -311,13 +298,12 @@ jda.TimeInput = function(selector, options)
     {
         e.currentTarget.focus();
         e.currentTarget.select();
-        tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.HANDLES.minutes);
+        tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleMinutes);
     };
 
     this.updateTime = function(handle, value)
     {
         handle.value = value;
-        //handle.value =  value;
         //  send data to AnalogClock
         tinput.AnalogClock.updateTime(value);
     };
@@ -331,15 +317,17 @@ jda.TimeInput = function(selector, options)
         var scope = e.currentTarget,
             time = scope.value.replace(/[^0-9]+$/g, "");
 
-        if (scope.name === "hours") {
-            if (time == 0) {
+        if (scope.name === "hours")
+        {
+            if (time == 0)
                 time = 12;
-            }
-        } else {
-            if (time > 59) {
-                time = jda.Utils.formatDigit(0);
-            }
         }
+        else
+        {
+            if (time > 59)
+                time = jda.Utils.formatDigit(0);
+        }
+        
         tinput.updateTime(scope, time);
     };
 
@@ -349,11 +337,10 @@ jda.TimeInput = function(selector, options)
      */
     this.clockChangeHandler = function(e)
     {
-        if (e.handle === tinput.AnalogClock.HANDLES.hours) {
+        if(e.handle === tinput.AnalogClock.handleHours)
             tinput.handleHours.value = e.value;
-        } else {
+        else
             tinput.handleMinutes.value = e.value;
-        }
     };
     
     this.clockPressHandler = function(e)
@@ -365,13 +352,11 @@ jda.TimeInput = function(selector, options)
         
         if(tinput.AnalogClock.clockElement.isFirstRun || tinput.AnalogClock.currentHandle == tinput.AnalogClock.handleMinutes)
         {
-            tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.HANDLES.hours);
+            tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleHours);
             tinput.AnalogClock.clockElement.isFirstRun = false;
         }
         else
-        {
-            tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.HANDLES.minutes);
-        }
+            tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleMinutes);
         
         tinput.AnalogClock.currentHandle.style.visibility = 'visible';
         
@@ -379,8 +364,7 @@ jda.TimeInput = function(selector, options)
         var evt = document.createEvent('MouseEvents');
         evt.initMouseEvent('mousedown', false, true, window, 0, 0, 0, elPos[0], elPos[1], false, false, false, false, 0, null);
         tinput.AnalogClock.currentHandle.dispatchEvent(evt);
-        evt.initMouseEvent('mousemove', true, true, window, 0, 0, 0, elPos[0], elPos[1], false, false, false, false, 0, null);
-        tinput.AnalogClock.currentHandle.dispatchEvent(evt);
+        tinput.AnalogClock.setClock(evt);
         
         if (ev.stopPropagation)
             ev.stopPropagation();        
@@ -404,9 +388,6 @@ jda.TimeInput = function(selector, options)
         }
         
         tinput.AnalogClock.currentHandle.style.visibility = 'hidden';
-//        var evt = document.createEvent('MouseEvents');
-//        evt.initMouseEvent('mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-//        document.dispatchEvent(evt);
     }
 
     /**
@@ -442,13 +423,14 @@ jda.TimeInput = function(selector, options)
             
             tinput.meridianButton.checked = true;
         }
+        
         currentHours = jda.Utils.formatDigit(currentHours);
-        tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.HANDLES.hours);
+        tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleHours);
         tinput.updateTime(tinput.handleHours, currentHours);
 
         //  set current minutes
         currentMinutes = currentTime.getMinutes();
-        tinput.AnalogClock.setCurrentHandle(this.AnalogClock.HANDLES.minute);
+        tinput.AnalogClock.setCurrentHandle(this.AnalogClock.handleMinutes);
         currentMinutes = jda.Utils.formatDigit(currentMinutes);
         tinput.updateTime(tinput.handleMinutes, currentMinutes);
 
@@ -466,9 +448,6 @@ jda.TimeInput = function(selector, options)
             document.attachEvent('onMouseup', tinput.clockUpHandler);
         }
     };
-    
-//    if (this.clock)
-//        alert('initing');
         
     this.initialize();
 };
@@ -507,12 +486,16 @@ jda.clientMouse = function(e)
 {
     var posx = 0;
     var posy = 0;
+    
     if (!e) var e = window.event;
-    if (e.pageX || e.pageY)     {
+    
+    if (e.pageX || e.pageY)
+    {
         posx = e.pageX;
         posy = e.pageY;
     }
-    else if (e.clientX || e.clientY)    {
+    else if (e.clientX || e.clientY)
+    {
         posx = e.clientX + document.body.scrollLeft
             + document.documentElement.scrollLeft;
         posy = e.clientY + document.body.scrollTop
