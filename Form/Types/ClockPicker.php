@@ -12,11 +12,12 @@ class ClockPicker extends AbstractType
         parent::buildForm($builder, $options);
         if($options['widget'] == 'text')
         {
+            $group               = '_'.md5(microtime().rand(500, 500000));
             $hourOptions         = $builder->get('hour')->getOptions();
             $minOptions          = $builder->get('minute')->getOptions();
 
-            $hourOptions['attr'] = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockHours', 'data-clockGroup'=> 'start_time'));
-            $minOptions['attr']  = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockMinutes', 'data-clockGroup'=> 'start_time'));
+            $hourOptions['attr'] = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockHours', 'data-clockGroup'=> $group));
+            $minOptions['attr']  = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockMinutes', 'data-clockGroup'=> $group));
 
             $builder->remove('hour')
                     ->add('hour',null,$hourOptions)
@@ -24,7 +25,7 @@ class ClockPicker extends AbstractType
                     ->add('minute',null,$minOptions);
         }
 
-        $attr = array('class'=>'gsClockPicker', 'data-clockGroup'=>'start_time', 'data-clockField'=>'clockMeridian');
+        $attr = array('class'=>'gsClockPicker', 'data-clockGroup'=>$group, 'data-clockField'=>'clockMeridian');
         $builder->add('meridian','checkbox',array('label'=>'AM', 'attr'=>$attr, 'label_attr'=>array('class'=>'meridian','required'=>false)));
     }
 
