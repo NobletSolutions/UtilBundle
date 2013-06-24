@@ -25,7 +25,7 @@ class ClockPicker extends AbstractType
         }
 
         $attr = array('class'=>'gsClockPicker', 'data-clockGroup'=>'start_time', 'data-clockField'=>'clockMeridian');
-        $builder->add('meridian','checkbox',array('label'=>'AM', 'attr'=>$attr, 'label_attr'=>array('class'=>'meridian')));
+        $builder->add('meridian','checkbox',array('label'=>'AM', 'attr'=>$attr, 'label_attr'=>array('class'=>'meridian','required'=>false)));
     }
 
     public function getName()
