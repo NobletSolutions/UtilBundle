@@ -8,9 +8,7 @@
 {% block clockpicker_widget %}
 {% spaceless %}
 <div {{ block('widget_container_attributes') }} class="gsClockPickerFields">
-  {% set hattr = attr|merge({'attr': { 'size': 1, 'maxlength': 2 ,'class': 'gsClockPicker','data-clockField':'clockHours', 'data-clockGroup': 'start_time'}}) %}
-  {% set mattr = attr|merge({'attr': { 'size': 1, 'maxlength': 2 ,'class': 'gsClockPicker','data-clockField':'clockMinutes','data-clockGroup': 'start_time'}}) %}
-  {{ form_widget(form.hour) }}:{{ form_widget(form.minute, mattr) }}
+  {{ form_widget(form.hour) }}:{{ form_widget(form.minute, attr) }}
   {{ form_widget(form.meridian) }}
   {{ form_label(form.meridian) }}
 </div>

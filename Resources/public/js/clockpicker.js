@@ -63,11 +63,21 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
         aclock.angle += stepsSize;
         setTimeout(rotateHandle, 1000);
     };
+    
+    this.recenter = function() {
+        //  Get position for the current handles
+        aclock.hoursPoint = new jda.Point(aclock.handleHours.offsetLeft, aclock.handleHours.offsetTop);
+        aclock.minutesPoint = new jda.Point(aclock.handleMinutes.offsetLeft, aclock.handleMinutes.offsetTop);
+        
+        //  get clock's center point
+        aclock.center.x = aclock.handleHours.offsetLeft;
+        aclock.center.y = aclock.handleHours.offsetTop + aclock.handleHours.offsetHeight * 0.5;
+    }
 
     /**
      * Gets the current angle given by the mouse coordinates
-     * @param {Number} newX The X position relative to the document
-     * @param {Number} newY The Y position relative to the document
+     * @param {Number} newX The X position relative to the element
+     * @param {Number} newY The Y position relative to the element
      */
     this.getAngle = function(newX, newY)
     {
@@ -230,15 +240,11 @@ jda.AnalogClock = function(clock_id, hour_steps, minute_steps)
      * @constructor
      * Initialize component
      */
-    //  Get position for the current handles
-    this.hoursPoint = new jda.Point(this.handleHours.offsetLeft, this.handleHours.offsetTop);
-    this.minutesPoint = new jda.Point(this.handleMinutes.offsetLeft, this.handleMinutes.offsetTop);
     //  set delta
     this.hourStepsSize = 360 / this.HOUR_STEPS;
     this.minStepsSize  = 360 / this.MIN_STEPS;
-    //  get clock's center point
-    this.center.x = this.handleHours.offsetLeft;
-    this.center.y = this.handleHours.offsetTop + this.handleHours.offsetHeight * 0.5;
+    
+    aclock.recenter();
     
     //  add event listeners
     if(document.addEventListener)
@@ -278,6 +284,11 @@ jda.TimeInput = function(selector, options)
     
     this.AnalogClock = new jda.AnalogClock(selector);
     var tinput       = this; //lets just avoid mucking around with scope
+    
+    this.clock.recenter = function()
+    {
+        tinput.AnalogClock.recenter();
+    }
 
     /**
      * @event
@@ -426,13 +437,17 @@ jda.TimeInput = function(selector, options)
         
         currentHours = jda.Utils.formatDigit(currentHours);
         tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleHours);
-        tinput.updateTime(tinput.handleHours, currentHours);
+        
+        if(!tinput.handleHours.value)
+            tinput.updateTime(tinput.handleHours, currentHours);
 
         //  set current minutes
         currentMinutes = currentTime.getMinutes();
         tinput.AnalogClock.setCurrentHandle(this.AnalogClock.handleMinutes);
         currentMinutes = jda.Utils.formatDigit(currentMinutes);
-        tinput.updateTime(tinput.handleMinutes, currentMinutes);
+        
+        if(!tinput.handleMinutes.value)
+            tinput.updateTime(tinput.handleMinutes, currentMinutes);
 
         //  bind for AnalogClock.change event
         if(document.addEventListener)
