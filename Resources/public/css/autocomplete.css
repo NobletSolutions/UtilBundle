@@ -1,6 +1,9 @@
 div.autocompleteResult {
-    background: #ffffff;
-    border: 1px solid #000000;}
+    background: #EBECEC;
+    border: 1px solid #4A4A4C;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    max-height: 300px;
+    overflow-y: scroll;}
 
 div.autocompleteResult ul {
   list-style-type: none;
@@ -8,12 +11,13 @@ div.autocompleteResult ul {
   padding:0;}
 
 div.autocompleteResult ul li.selected {
-    background-color: #ffb;}
+    background-color: #6A8FDA;
+    color: #ffffff;}
 
 div.autocompleteResult ul li {
   display: block;
   margin: 0;
-  padding: 0 0.5em;
+  padding: 0.2em 0.5em;
   cursor: pointer;}
 
 a.autocompleteDelete {
