@@ -22,7 +22,7 @@ class ChoiceTransformer implements DataTransformerInterface
      */
     public function transform($object)
     {
-        if (null === $object) 
+        if (null === $object || !is_object($object)) 
             return "";
 
         return $object->getValue();
