@@ -14,9 +14,14 @@ Event.observe(window, 'load', function(event)
             if(input.getAttribute('data-autocomplete-secondary-field'))
             {
                 var sec = JSON.parse(input.getAttribute('data-autocomplete-secondary-field'));
-                var tgt = input.id.replace(sec.s, sec.r) + '_token_value';                
+                var tgt = input.id.replace(sec.s, sec.r) + '_token_value';
                 var s   = $(tgt);
-                
+                if(!s)
+                {
+                    tgt = input.id.replace(sec.s, sec.r);
+                    s   = $(tgt);
+                }
+
                 if(s)
                 {
                     options['parameters'] = 'secondary-field=' + s.getValue();
@@ -152,7 +157,7 @@ observeToken = function(event)
     delete val[v];
     f.setValue(JSON.stringify(val));
     
-    if(f.getAttribute('data-autocomplete-multiple') != 'true' || !Object.values(val).length)
+    if(f.getAttribute('data-autocomplete-multiple') !== 'true' || !Object.values(val).length)
         t.up().update('');
     else
         t.remove();

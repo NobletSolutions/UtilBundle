@@ -22,7 +22,7 @@ class Ajax
         $this->_templating = $templating;
     }
     
-    public function getAutocomplete($class, $alias, $fields, $limit = 20)
+    public function getAutocomplete($class, $fields, $limit = 20)
     {
         $repo = $this->_manager->getRepository($class);
         
@@ -34,9 +34,11 @@ class Ajax
 
         if(empty($v))
             $v = $this->_request->get('q');
-        
-        $value    = (!empty($secondary))? array('value' => $v,'secondary' => json_decode($secondary,true)) : array('value' => $v);
-        $entities = $repo->getForAutoComplete($alias,$fields,$value,$limit)->getResult();
+
+        $st       = json_decode($secondary,true);
+        $secondary= (($st)?$st:$secondary);
+        $value    = (!empty($secondary))? array('value' => $v,'secondary' => $secondary) : array('value' => $v);
+        $entities = $repo->getForAutoComplete($fields,$value,$limit)->getResult();
         $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
 
         return new Response($content);
