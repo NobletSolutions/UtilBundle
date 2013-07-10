@@ -1,97 +1,106 @@
 Event.observe(window, 'load', function(event)
 {
     document.body.insert({bottom:'<div class="autocompleteResult" id="autocomplete_result"></div>'});
+    activateAutocompleters();
+});
+
+activateAutocompleters = function()
+{
     $$('input[data-autocomplete=true]').each(function(input)
     {
-        var options = {};
-        options['listTitle'] = input.getAttribute('data-autocomplete-listtitle') ? input.getAttribute('data-autocomplete-tokenize') : 'Selected Options:';
-        
-        if(input.getAttribute('data-autocomplete-tokenize') === 'true')
+        if(!input.autocompleterBuilt)
         {
-            options['paramName']          = 'value';
-            options['afterUpdateElement'] = tokenizeResults;
+            var options = {};
+            options['listTitle'] = input.getAttribute('data-autocomplete-listtitle') ? input.getAttribute('data-autocomplete-tokenize') : 'Selected Options:';
             
-            if(input.getAttribute('data-autocomplete-secondary-field'))
+            if(input.getAttribute('data-autocomplete-tokenize') === 'true')
             {
-                var sec = JSON.parse(input.getAttribute('data-autocomplete-secondary-field'));
-                var tgt = input.id.replace(sec.s, sec.r) + '_token_value';
-                var s   = $(tgt);
-                if(!s)
+                options['paramName']          = 'value';
+                options['afterUpdateElement'] = tokenizeResults;
+                
+                if(input.getAttribute('data-autocomplete-secondary-field'))
                 {
-                    tgt = input.id.replace(sec.s, sec.r);
-                    s   = $(tgt);
-                }
-
-                if(s)
-                {
-                    options['parameters'] = 'secondary-field=' + s.getValue();
-                    s.observe('token:success', function(changeevent)
+                    var sec = JSON.parse(input.getAttribute('data-autocomplete-secondary-field'));
+                    var tgt = input.id.replace(sec.s, sec.r) + '_token_value';
+                    var s   = $(tgt);
+                    if(!s)
                     {
-                        input.autocompleter.options.defaultParams = 'secondary-field='+s.getValue();
-                    });
-                }
-            }
-            
-            var id         = input.id;
-            var name       = input.name;
-            var tokendata  = input.getValue();
-            
-            input.removeAttribute('name');
-            
-            var tokenholder = new Element('div',
-            {
-                'class': 'autocomplete-token',
-                'id':    id + '_token'
-            });
-            var tokenvalue = new Element('input',
-            {
-                'type': 'hidden',
-                'id':    id + '_token_value',
-                'name':  name,
-                'value': tokendata,
-                'data-autocomplete-multiple': input.getAttribute('data-autocomplete-multiple')
-            });
-            
-            var wrap = new Element('div', {'class':'autocompleter'});
-            
-            input.wrap(wrap);            
-            input.insert({after:tokenholder});
-            input.insert({after:tokenvalue});
-            
-            if(tokendata)
-            {
-                tokendata = JSON.parse(tokendata);                
-                tokenholder.insert(options['listTitle']);
-            }
-            else
-                tokendata = {};
-            
-            for(var key in tokendata)
-            {
-                if(tokendata.hasOwnProperty(key))
-                {
-                    var token = new Element('a',
-                    {
-                        'class':      'autocompleteDelete',
-                        'data-id':    key,
-                        'data-field': tokenvalue.id
-                    }).update(tokendata[key]);
+                        tgt = input.id.replace(sec.s, sec.r);
+                        s   = $(tgt);
+                    }
     
-                    token.observe('click', function(event)
+                    if(s)
                     {
-                        observeToken(event);
-                    });
-                    
-                    tokenholder.insert(token);
+                        options['parameters'] = 'secondary-field=' + s.getValue();
+                        s.observe('token:success', function(changeevent)
+                        {
+                            input.autocompleter.options.defaultParams = 'secondary-field='+s.getValue();
+                        });
+                    }
                 }
+                
+                var id         = input.id;
+                var name       = input.name;
+                var tokendata  = input.getValue();
+                
+                input.removeAttribute('name');
+                
+                var tokenholder = new Element('div',
+                {
+                    'class': 'autocomplete-token',
+                    'id':    id + '_token'
+                });
+                var tokenvalue = new Element('input',
+                {
+                    'type': 'hidden',
+                    'id':    id + '_token_value',
+                    'name':  name,
+                    'value': tokendata,
+                    'data-autocomplete-multiple': input.getAttribute('data-autocomplete-multiple')
+                });
+                
+                var wrap = new Element('div', {'class':'autocompleter'});
+                
+                input.wrap(wrap);            
+                input.insert({after:tokenholder});
+                input.insert({after:tokenvalue});
+                
+                if(tokendata)
+                {
+                    tokendata = JSON.parse(tokendata);                
+                    tokenholder.insert(options['listTitle']);
+                }
+                else
+                    tokendata = {};
+                
+                for(var key in tokendata)
+                {
+                    if(tokendata.hasOwnProperty(key))
+                    {
+                        var token = new Element('a',
+                        {
+                            'class':      'autocompleteDelete',
+                            'data-id':    key,
+                            'data-field': tokenvalue.id
+                        }).update(tokendata[key]);
+        
+                        token.observe('click', function(event)
+                        {
+                            observeToken(event);
+                        });
+                        
+                        tokenholder.insert(token);
+                    }
+                }
+                
+                input.setValue('');
             }
             
-            input.setValue('');
+            input.autocompleter = new Ajax.Autocompleter(input, 'autocomplete_result', input.getAttribute('data-autocomplete-href'), options);
+            input.autocompleterBuilt = true;
         }
-        
-        input.autocompleter = new Ajax.Autocompleter(input, 'autocomplete_result', input.getAttribute('data-autocomplete-href'), options);
-    });
-});
+    });  
+};
 
 tokenizeResults = function(field, li)
 {
