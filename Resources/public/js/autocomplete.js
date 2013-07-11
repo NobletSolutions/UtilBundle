@@ -32,7 +32,7 @@ activateAutocompleters = function()
                     if(s)
                     {
                         options['parameters'] = 'secondary-field=' + s.getValue();
-                        s.observe('token:success', function(changeevent)
+                        s.observe('change', function(changeevent)
                         {
                             input.autocompleter.options.defaultParams = 'secondary-field='+s.getValue();
                         });
