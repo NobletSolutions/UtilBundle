@@ -33,19 +33,14 @@ class FormFieldToId implements DataTransformerInterface
         if (null === $id)
             return "";
 
-//        if (!$entity instanceof $this->_class)
-//            throw new UnexpectedTypeException($entity, $this->_class);
-//
-//        if (!$entity instanceof AjaxAutocompleteInterface)
-//            throw new UnexpectedTypeException($entity, 'AjaxAutocompleteInterface');
-
-        //$idArray = array($entity->getId() => $entity->getAjaxDisplay());
+        // This should probably test for an interface
+        // We should also make what method we are looking for
         if(is_object($this->_object) && method_exists($this->_object, 'getType'))
             $entity = $this->_em->getRepository($this->_object->getType()->getClassMatch())->find($id);
         else
             $entity = $this->_object;
 
-        return json_encode(array($id=>$entity.' - MyWhateverId '.$id));
+        return json_encode(array($id=>$entity.''));
     }
 
     public function reverseTransform($ids)
