@@ -16,6 +16,7 @@
 
     "require": {
         "php":                                ">=5.3.2",
+        "php-mbstring":                       ">=5.3.2",
 	"symfony/symfony":                    ">=2.1,<2.4"
     },
 
