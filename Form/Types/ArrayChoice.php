@@ -28,7 +28,7 @@ abstract class ArrayChoice extends AbstractType
             {
                 foreach($this->values as $key => $v)
                 {
-                    if(strcasecmp($v, $value))
+                    if(strcasecmp($v, $value) == 0)
                     {
                         $this->current = $key;
                         return $this;

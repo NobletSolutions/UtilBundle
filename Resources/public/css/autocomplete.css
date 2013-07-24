@@ -34,7 +34,8 @@ a.autocompleteDelete {
     background: #4A4A4C url(http://cdn1.iconfinder.com/data/icons/fugue/icon_shadowless/cross-small.png) right center no-repeat;
     color: #cccccc;
     text-decoration: none;
-    width: 78%;}
+    width: 78%;
+    clear: both; }
 
 a.autocompleteDelete:hover {
     background-color: #cccccc;

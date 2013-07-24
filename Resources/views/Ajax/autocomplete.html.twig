@@ -1,5 +1,10 @@
 <ul>
     {% for entity in entities %}
-        <li data-id="{{ entity.id }}" data-string="{{ entity.getAjaxDisplay }}">{{ entity.getAjaxDisplay }}</li>
+        {% if entity.getAjaxDisplay is defined %}
+            {% set entityS = entity.getAjaxDisplay %}
+        {% else %}
+            {% set entityS = entity %}
+        {% endif %}
+        <li data-id="{{ entity.id }}" data-string="{{ entityS }}">{{ entityS }}</li>
     {% endfor %}
 </ul>

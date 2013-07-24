@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormInterface;
 use NS\SecurityBundle\Model\Manager as EntityManager;
 use NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
 use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
+use NS\UtilBundle\Form\Transformers\FormFieldToId;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 /**
  * Description of Autocomplete
@@ -33,7 +36,20 @@ class Autocomplete extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = ($options['collection'] == true) ? new CollectionToAjaxJson($this->_em,$options['class']) : new EntityToAjaxJson($this->_em,$options['class']) ;
+        if(isset($options['use_datatransformer']))
+        {
+            $transformer = new FormFieldToId($this->_em,$options['class']);
+            $builder->addEventListener(
+                        FormEvents::POST_SET_DATA,
+                        function(FormEvent $event) use($transformer)
+                        {
+                            $transformer->setObject($event->getForm()->getParent()->getData());
+                        }
+            );
+        }
+        else
+            $transformer = ($options['collection'] == true) ? new CollectionToAjaxJson($this->_em,$options['class']) : new EntityToAjaxJson($this->_em,$options['class']) ;
+
         $builder->addModelTransformer($transformer);
     }
 
@@ -56,7 +72,9 @@ class Autocomplete extends AbstractType
             'class',
         ));
         
-        $resolver->setOptional(array('secondary-field'));
+        $resolver->setOptional(array(
+            'secondary-field',
+            'use_datatransformer'));
     }
 
     public function getParent()
