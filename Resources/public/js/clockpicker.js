@@ -283,7 +283,7 @@ jda.TimeInput = function(selector, options)
     this.handleMinutes;
     this.meridianButton;
     
-    this.AnalogClock = new jda.AnalogClock(selector);
+    this.AnalogClock = new jda.AnalogClock(selector, options['h_increment'], options['m_increment']);
     var tinput       = this; //lets just avoid mucking around with scope
     
     this.clock.recenter = function()

@@ -4,6 +4,9 @@ document.observe("dom:loaded", function()
         var clockminute    = false;
         var clockeridian   = false;
         var group          = clockhour.getAttribute('data-clockGroup');
+        var h_increment    = clockhour.getAttribute('data-increment');
+        if(!h_increment)
+            h_increment = 1;
         
         $$('input[data-clockField=clockMinutes][data-clockGroup='+group+']').each(function(el){
             clockminute = el;
@@ -12,6 +15,10 @@ document.observe("dom:loaded", function()
         $$('input[data-clockField=clockMeridian][data-clockGroup='+group+']').each(function(el){
             clockmeridian = el;
         });
+        
+        var m_increment    = clockminute.getAttribute('data-increment');
+        if(!m_increment)
+            m_increment = 1;
         
         var meridianlabel  = clockmeridian.next('label');
         
@@ -54,6 +61,6 @@ document.observe("dom:loaded", function()
             $('clock_wrapper_'+clock_id).removeClassName('show');
         });
         
-        new window.jda.TimeInput(clock_id);
+        new window.jda.TimeInput(clock_id, {'h_increment':12/h_increment, 'm_increment':60/m_increment});
     });
 });

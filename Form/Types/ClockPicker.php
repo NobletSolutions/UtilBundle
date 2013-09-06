@@ -16,8 +16,8 @@ class ClockPicker extends AbstractType
             $hourOptions         = $builder->get('hour')->getOptions();
             $minOptions          = $builder->get('minute')->getOptions();
 
-            $hourOptions['attr'] = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockHours', 'data-clockGroup'=> $group));
-            $minOptions['attr']  = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockMinutes', 'data-clockGroup'=> $group));
+            $hourOptions['attr'] = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockHours', 'data-clockGroup'=> $group, 'data-increment'=>1));
+            $minOptions['attr']  = array_merge($minOptions['attr'],array('size'=> 1, 'maxlength'=> 2 ,'class'=> 'gsClockPicker','data-clockField'=>'clockMinutes', 'data-clockGroup'=> $group, 'data-increment'=>5));
 
             $builder->remove('hour')
                     ->add('hour',null,$hourOptions)
