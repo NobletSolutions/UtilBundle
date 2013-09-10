@@ -1,6 +1,13 @@
 document.observe("dom:loaded", function()
 {
+    var clockforms = new Array();
     $$('input[data-clockField=clockHours]').each(function(clockhour){
+        var f = clockhour.up('form');
+        if(!f.found)
+        {
+            f.found = true;
+            clockforms.push(f);
+        }
         var clockminute    = false;
         var clockeridian   = false;
         var group          = clockhour.getAttribute('data-clockGroup');
@@ -63,4 +70,18 @@ document.observe("dom:loaded", function()
         
         new window.jda.TimeInput(clock_id, {'h_increment':12/h_increment, 'm_increment':60/m_increment});
     });
+    
+    for(var i=0; i<clockforms.length; i++)
+    {
+        var f = clockforms[i];
+        f.observe('submit', function(ev)
+        {
+            f.select('input.jdaClockHours').each(function(input)
+            {
+                var merid = input.next('.meridian_mask').down('input.jdaClockMeridian');
+                if(merid.checked)
+                    input.setValue(parseInt(input.getValue())+12);
+            });
+        });
+    }
 });
