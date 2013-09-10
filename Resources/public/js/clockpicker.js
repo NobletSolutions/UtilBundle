@@ -427,27 +427,29 @@ jda.TimeInput = function(selector, options)
         tinput.handleHours.onkeyup = tinput.handle_changeHandler;
         tinput.handleMinutes.onfocus = tinput.handleMinutes_focusHandler;
         tinput.handleMinutes.onkeyup = tinput.handle_changeHandler;
-
-        //  set current hour
-        if (currentTime.getHours() < 12) {
-            currentHours = currentTime.getHours();
-            tinput.meridianButton.checked = false;
-        }
-        else
+        
+        if(!tinput.handleHours.value)
         {
-            currentHours = currentTime.getHours() - 12;
+            //  set current hour
+            if (currentTime.getHours() < 12) {
+                currentHours = currentTime.getHours();
+                tinput.meridianButton.checked = false;
+            }
+            else
+            {
+                currentHours = currentTime.getHours() - 12;
+                
+                if(!currentHours && tinput.AnalogClock.HOUR_STEPS != 24)
+                    currentHours = 12;
+                
+                tinput.meridianButton.checked = true;
+            }
             
-            if(!currentHours && tinput.AnalogClock.HOUR_STEPS != 24)
-                currentHours = 12;
-            
-            tinput.meridianButton.checked = true;
+            tinput.updateTime(tinput.handleHours, currentHours);
         }
         
         currentHours = jda.Utils.formatDigit(currentHours);
         tinput.AnalogClock.setCurrentHandle(tinput.AnalogClock.handleHours);
-        
-        if(!tinput.handleHours.value)
-            tinput.updateTime(tinput.handleHours, currentHours);
 
         //  set current minutes
         currentMinutes = currentTime.getMinutes();

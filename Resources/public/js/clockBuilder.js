@@ -68,6 +68,14 @@ document.observe("dom:loaded", function()
             $('clock_wrapper_'+clock_id).removeClassName('show');
         });
         
+        var cv = parseInt(clockhour.getValue());
+        
+        if(cv > 12)
+        {
+            clockhour.setValue(cv-12);
+            clockmeridian.checked = true;
+        }
+        
         new window.jda.TimeInput(clock_id, {'h_increment':12/h_increment, 'm_increment':60/m_increment});
     });
     
