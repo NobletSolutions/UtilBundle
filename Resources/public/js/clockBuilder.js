@@ -3,7 +3,7 @@ document.observe("dom:loaded", function()
     var clockforms = new Array();
     $$('input[data-clockField=clockHours]').each(function(clockhour){
         var f = clockhour.up('form');
-        if(!f.found)
+        if(f != undefined && !f.found)
         {
             f.found = true;
             clockforms.push(f);
