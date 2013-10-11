@@ -23,10 +23,6 @@ class Configuration implements ConfigurationInterface
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
-        $rootNode
-            ->children()
-            ->scalarNode('model_manager')->defaultValue('@doctrine.orm.entity_manager')->end()
-            ->end();
 
         return $treeBuilder;
     }

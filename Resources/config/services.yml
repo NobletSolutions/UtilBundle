@@ -1,5 +1,5 @@
 parameters:
-  ns_util.model_manager.service: "@doctrine.orm.entity_manager"
+  ns_util.example.class: NS\UtilBundle\Example
 
 services:
   ns.form.dateclockpicker:
@@ -16,10 +16,10 @@ services:
         - { name: form.type, alias: datepicker }
   ns.form.types.autocomplete:
       class: NS\UtilBundle\Form\Types\Autocomplete
-      arguments: [ %ns_util.model_manager.service%, "@router" ]
+      arguments: ["@ns.model_manager", "@router" ]
       tags:
         - { name: form.type, alias: ns_autocomplete }
   ns.ajax_autocompleter:
     class: NS\UtilBundle\Service\Ajax
-    arguments: [ %ns_util.model_manager.service%, "@request", "@templating" ]
+    arguments: [ "@ns.model_manager", "@request", "@templating" ]
     scope: request

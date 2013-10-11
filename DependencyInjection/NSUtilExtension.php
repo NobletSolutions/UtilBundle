@@ -24,8 +24,5 @@ class NSUtilExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-
-        if(isset($config['model_manager']))
-            $container->setParameter('ns_util.model_manager.service',$config['model_manager']);
     }
 }
