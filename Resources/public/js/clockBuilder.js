@@ -87,8 +87,11 @@ document.observe("dom:loaded", function()
             f.select('input.jdaClockHours').each(function(input)
             {
                 var merid = input.next('.meridian_mask').down('input.jdaClockMeridian');
-                if(merid.checked)
+                
+                if(merid.checked && parseInt(input.getValue()) < 12)
                     input.setValue(parseInt(input.getValue())+12);
+                else if(!merid.checked && parseInt(input.getValue()) == 12)
+                    input.setValue(0);
             });
         });
     }
