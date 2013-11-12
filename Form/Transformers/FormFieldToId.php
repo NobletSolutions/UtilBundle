@@ -3,7 +3,7 @@ namespace NS\UtilBundle\Form\Transformers;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use NS\SecurityBundle\Model\Manager as EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * Description of FormFieldToId
@@ -16,7 +16,7 @@ class FormFieldToId implements DataTransformerInterface
 
     private $_object;
 
-    public function __construct(EntityManager $em)
+    public function __construct(ObjectManager $em)
     {
         $this->_em   = $em;
 
