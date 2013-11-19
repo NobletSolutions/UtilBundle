@@ -1,11 +1,10 @@
 <?php
 namespace NS\UtilBundle\Service;
 
-//TODO abstract this out to not require the model manager but something that can return a repository for a class
-use \NS\SecurityBundle\Model\Manager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class Ajax
 {
@@ -15,7 +14,7 @@ class Ajax
     
     private $_templating;
     
-    public function __construct(Manager $manager, Request $request, TwigEngine $templating)
+    public function __construct(ObjectManager $manager, Request $request, TwigEngine $templating)
     {
         $this->_manager    = $manager;
         $this->_request    = $request;

@@ -2,7 +2,7 @@
     "name": "ns/util-bundle",
     "type": "symfony-bundle",
     "description": "Various Utilitity Services and Classes",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "Nathanael David Noblet",

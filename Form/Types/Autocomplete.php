@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-use NS\SecurityBundle\Model\Manager as EntityManager;
+use \Doctrine\Common\Persistence\ObjectManager;
 use NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
 use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 use NS\UtilBundle\Form\Transformers\FormFieldToId;
@@ -26,7 +26,7 @@ class Autocomplete extends AbstractType
     private $_em;
     private $_router;
 
-    public function __construct(EntityManager $em, Router $router)
+    public function __construct(ObjectManager $em, Router $router)
     {
         $this->_em     = $em;
         $this->_router = $router;
