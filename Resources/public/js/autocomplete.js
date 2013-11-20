@@ -64,6 +64,10 @@ activateAutocompleters = function()
                         {
                             input.autocompleter.options.defaultParams = 'secondary-field='+s.getValue();
                         });
+                        s.observe('change', function(changeevent)
+                        {
+                            input.autocompleter.options.defaultParams = 'secondary-field='+s.getValue();
+                        });
                     }
                 }
                
