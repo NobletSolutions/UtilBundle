@@ -40,7 +40,7 @@ class Autocomplete extends AbstractType
         {
             $transformer = new FormFieldToId($this->_em,$options['class']);
             $builder->addEventListener(
-                        FormEvents::POST_SET_DATA,
+                        FormEvents::PRE_SET_DATA,
                         function(FormEvent $event) use($transformer)
                         {
                             $transformer->setObject($event->getForm()->getParent()->getData());
