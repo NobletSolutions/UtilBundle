@@ -30,12 +30,6 @@ class NewArrayChoiceCommand extends ContainerAwareCommand
                 InputArgument::REQUIRED,
                 'Target Bundle?'
             )
-//            ->addOption(
-//               'yell',
-//               null,
-//               InputOption::VALUE_NONE,
-//               'If set, the task will yell in uppercase letters'
-//            )
         ; 
     }
     
