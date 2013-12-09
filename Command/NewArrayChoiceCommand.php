@@ -50,7 +50,7 @@ use NS\UtilBundle\Entity\Types\ArrayChoice;
 
 class CLASSNAME extends ArrayChoice
 {
-    protected \$convert_class = 'NMSPACE\Form\Type\CLASSNAME';
+    protected \$convert_class = 'NMSPACE\Form\Types\CLASSNAME';
 
     public function getName()
     {
