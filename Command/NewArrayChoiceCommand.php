@@ -97,10 +97,10 @@ class CLASSNAME extends ArrayChoice
         $output->writeln("Class Created");
         $output->writeln("");
         $output->writeln("Add to services.yml");
-        $output->writeln("  ns.sentinel.form.type.gavi:");
-        $output->writeln("    class: NS\SentinelBundle\Form\Types\GAVIEligible");
+        $output->writeln("  ns.sentinel.form.type.". strtolower($class).":");
+        $output->writeln("    class: $target\\Form\\\Types\\$class");
         $output->writeln("    tags:");
-        $output->writeln("      - { name: form.type, alias: GAVIEligible }");
+        $output->writeln("      - { name: form.type, alias: $class }");
         $output->writeln("");
         
         $output->writeln("Add to app/config/config.yml");
