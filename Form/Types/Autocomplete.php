@@ -56,6 +56,7 @@ class Autocomplete extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'tokenize'         => true,
             'collection'       => false,
             'invalid_message'  => 'The selected entity does not exist',
             'attr'             => array(
@@ -73,6 +74,7 @@ class Autocomplete extends AbstractType
         ));
         
         $resolver->setOptional(array(
+            'tokenize',
             'secondary-field',
             'use_datatransformer'));
     }
@@ -97,5 +99,8 @@ class Autocomplete extends AbstractType
         
         if(isset($options['secondary-field']))
             $view->vars['attr']['data-autocomplete-secondary-field'] = json_encode($options['secondary-field']);
+        
+        if($options['tokenize'] == false)
+            $view->vars['attr']['data-autocomplete-tokenize'] = "false";
     }
 }
