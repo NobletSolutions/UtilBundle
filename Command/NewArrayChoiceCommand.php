@@ -93,6 +93,23 @@ class CLASSNAME extends ArrayChoice
             mkdir($path."Form/Types");
         
         file_put_contents($path."Form/Types/$class.php",$o2);
+        
+        $output->writeln("Class Created");
+        $output->writeln("");
+        $output->writeln("Add to services.yml");
+        $output->writeln("  ns.sentinel.form.type.gavi:");
+        $output->writeln("    class: NS\SentinelBundle\Form\Types\GAVIEligible");
+        $output->writeln("    tags:");
+        $output->writeln("      - { name: form.type, alias: GAVIEligible }");
+        $output->writeln("");
+        
+        $output->writeln("Add to app/config/config.yml");
+        $output->writeln("");
+        $output->writeln("doctrine:");
+        $output->writeln("  dbal:");
+        $output->writeln("    types:");
+        $output->writeln("      $class: $target\\Entity\\Types\\$class");
+        $output->writeln("    mapping_types:");
+        $output->writeln("      $class: $class");
     }
-
-}
+} 
