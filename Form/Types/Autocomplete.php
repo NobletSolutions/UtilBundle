@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-use NS\SecurityBundle\Model\Manager as EntityManager;
+use \Doctrine\Common\Persistence\ObjectManager;
 use NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
 use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 use NS\UtilBundle\Form\Transformers\FormFieldToId;
@@ -26,7 +26,7 @@ class Autocomplete extends AbstractType
     private $_em;
     private $_router;
 
-    public function __construct(EntityManager $em, Router $router)
+    public function __construct(ObjectManager $em, Router $router)
     {
         $this->_em     = $em;
         $this->_router = $router;
@@ -40,7 +40,7 @@ class Autocomplete extends AbstractType
         {
             $transformer = new FormFieldToId($this->_em,$options['class']);
             $builder->addEventListener(
-                        FormEvents::POST_SET_DATA,
+                        FormEvents::PRE_SET_DATA,
                         function(FormEvent $event) use($transformer)
                         {
                             $transformer->setObject($event->getForm()->getParent()->getData());
@@ -56,6 +56,7 @@ class Autocomplete extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'tokenize'         => true,
             'collection'       => false,
             'invalid_message'  => 'The selected entity does not exist',
             'attr'             => array(
@@ -73,6 +74,7 @@ class Autocomplete extends AbstractType
         ));
         
         $resolver->setOptional(array(
+            'tokenize',
             'secondary-field',
             'use_datatransformer'));
     }
@@ -97,5 +99,8 @@ class Autocomplete extends AbstractType
         
         if(isset($options['secondary-field']))
             $view->vars['attr']['data-autocomplete-secondary-field'] = json_encode($options['secondary-field']);
+        
+        if($options['tokenize'] == false)
+            $view->vars['attr']['data-autocomplete-tokenize'] = "false";
     }
 }

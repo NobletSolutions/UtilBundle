@@ -3,7 +3,7 @@ namespace NS\UtilBundle\Form\Transformers;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use NS\SecurityBundle\Model\Manager as EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use NS\UtilBundle\Service\AjaxAutocompleteInterface;
 
 /**
@@ -17,7 +17,7 @@ class EntityToAjaxJson implements DataTransformerInterface
     
     private $_class;
 
-    public function __construct(EntityManager $em,$class)
+    public function __construct(ObjectManager $em,$class)
     {
         $this->_em    = $em;
         $this->_class = $class;

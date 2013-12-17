@@ -1,11 +1,11 @@
 <?php
 namespace NS\UtilBundle\Form\Transformers;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use NS\SecurityBundle\Model\Manager as EntityManager;
 
 /**
  * Description of SuppliersToID
@@ -15,14 +15,14 @@ use NS\SecurityBundle\Model\Manager as EntityManager;
 class CollectionToAjaxJson implements DataTransformerInterface
 {
     private $_em;
-    
+
     private $_class;
 
-    public function __construct(EntityManager $em,$class)
+    public function __construct(ObjectManager $em,$class)
     {
         $this->_em    = $em;
         $this->_class = $class;
-        
+
         return $this;
     }
 
@@ -33,15 +33,15 @@ class CollectionToAjaxJson implements DataTransformerInterface
 
         if (!$entities instanceof PersistentCollection && !$entities instanceof ArrayCollection)
             throw new UnexpectedTypeException($entities, 'PersistentCollection or ArrayCollection');
-        
+
         $idsArray = array();
         // check for interface...
         foreach ($entities as $entity)
             $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
-        
+
         if(empty($idsArray))
             return null;
-        
+
         return json_encode($idsArray);
     }
 
@@ -49,10 +49,10 @@ class CollectionToAjaxJson implements DataTransformerInterface
     {
         if ('' === $ids || null === $ids)
             return new ArrayCollection();
-        
+
         if (!is_string($ids))
             throw new UnexpectedTypeException($ids, 'string');
-        
+
         $idsArray = json_decode($ids,true);
 
         if(empty($idsArray))
