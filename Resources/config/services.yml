@@ -2,6 +2,10 @@ parameters:
   ns_util.example.class: NS\UtilBundle\Example
 
 services:
+  ns.form.datetimepicker:
+    class: NS\UtilBundle\Form\Types\DateTimePicker
+    tags:
+      - { name: form.type, alias: datetimepicker }
   ns.form.dateclockpicker:
     class: NS\UtilBundle\Form\Types\DateClockPicker
     tags:
