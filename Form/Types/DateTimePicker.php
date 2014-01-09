@@ -18,6 +18,13 @@ class DateTimePicker extends AbstractType
         
         $builder->remove('date')
                 ->add('date', 'datepicker', $dateOptions);
+
+        if(isset($options['preferred_choices']))
+        {
+            $timeOptions = array_merge($timeOptions,array('preferred_choices'=>$options['preferred_choices']));
+            $builder->remove('time')
+                    ->add('time','time',$timeOptions);
+        }
     }
     
     /**
@@ -26,8 +33,13 @@ class DateTimePicker extends AbstractType
     public function setDefaultOptions( OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'date_widget' => 'single_text'
+            'date_widget' => 'single_text',
+            'empty_value'=>array('hour'=>'HR','minute'=>'MIN')
         ));
+
+        $resolver->setOptional(array(
+            'preferred_choices'
+            ));
     }
 
     public function getName()
