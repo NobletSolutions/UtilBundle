@@ -64,6 +64,7 @@ class TimeType extends AbstractType
                 // Only pass a subset of the options to children
                 $hourOptions['choices'] = $hours;
                 $hourOptions['empty_value'] = $options['empty_value']['hour'];
+                $hourOptions['preferred_choices'] = $options['preferred_choices']['hours'];
 
                 if ($options['with_minutes']) {
                     foreach ($options['minutes'] as $minute) {
@@ -84,6 +85,7 @@ class TimeType extends AbstractType
 
                     $secondOptions['choices'] = $seconds;
                     $secondOptions['empty_value'] = $options['empty_value']['second'];
+                    $secondOptions['preferred_choices'] = $options['preferred_choices']['seconds'];                    
                 }
 
                 // Append generic carry-along options
