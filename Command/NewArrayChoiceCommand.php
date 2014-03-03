@@ -57,8 +57,6 @@ $formClass = "<?php
 namespace NMSPACE\Form\Types;
 
 use NS\UtilBundle\Form\Types\ArrayChoice;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Description of CLASSNAME
@@ -74,7 +72,7 @@ class CLASSNAME extends ArrayChoice
 
     public function getName()
     {
-        return 'CLASSNAME_STRTOLOWER';
+        return 'CLASSNAME';
     }
 }\n";
          
@@ -98,7 +96,7 @@ class CLASSNAME extends ArrayChoice
         $output->writeln("");
         $output->writeln("Add to services.yml");
         $output->writeln("  ns.sentinel.form.type.". strtolower($class).":");
-        $output->writeln("    class: $target\\Form\\\Types\\$class");
+        $output->writeln("    class: $target\\Form\\Types\\$class");
         $output->writeln("    tags:");
         $output->writeln("      - { name: form.type, alias: $class }");
         $output->writeln("");
