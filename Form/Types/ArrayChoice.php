@@ -89,4 +89,15 @@ abstract class ArrayChoice extends AbstractType
     {
         return 'choice';
     }
+
+    public function equal($var)
+    {
+        if(is_integer($var))
+            return ($this->current == $var);
+
+        if(is_string($var))
+            return ($this->values[$this->current] == $var);
+
+        return false;
+    }
 }
