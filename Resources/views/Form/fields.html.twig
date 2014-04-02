@@ -1,3 +1,4 @@
+
 {% block datepicker_widget %}
 {% spaceless %}
     {{ form_widget(form) }}
@@ -14,3 +15,26 @@
 </div>
 {% endspaceless %}
 {% endblock clockpicker_widget %}
+
+{% block choice_widget_options %}
+{% spaceless %}
+    {% for group_label, choice in options %}
+        {% if choice is iterable %}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{ block('choice_widget_options') }}
+            </optgroup>
+        {% else %}
+            {%set specialvalue = null %}
+            {%if special_values is defined %}
+                {% for v in special_values %}
+                    {%if v.value == choice.value %}
+                        {%set specialvalue = 'data-context-field='~v.context %}
+                    {%endif%}
+                {%endfor%}
+            {%endif%}
+            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}{{specialvalue}}>{{ choice.label|trans({}, translation_domain) }}</option>
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
+{% endblock choice_widget_options %}
