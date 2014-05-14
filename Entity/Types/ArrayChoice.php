@@ -21,7 +21,9 @@ class ArrayChoice extends IntegerType
  
         if(is_object($value))
             return $value->getValue();
+        else if(is_numeric($value))
+            return $value;
         else
-            throw new \InvalidArgumentException('Value is neither an unexpected object!');
+            return null;
     }
 }
