@@ -3,7 +3,8 @@ div.autocompleteResult {
     border: 1px solid #4A4A4C;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
     max-height: 300px;
-    overflow-y: scroll;}
+    overflow-y: scroll;
+    z-index: 100;}
 
 div.autocompleteResult ul {
   list-style-type: none;
