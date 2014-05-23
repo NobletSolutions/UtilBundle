@@ -68,7 +68,7 @@ abstract class SetChoice extends AbstractType
     public function __construct($assignValues = null)
     {
         if(empty($this->groupedSet) && empty($this->set))
-            throw new \Exception("protected variables set and groupedSet are both empty");
+            throw new \UnexpectedValueException("protected variables set and groupedSet are both empty");
         
         if(!empty($this->groupedSet))
             $this->set = $this->flattenGroups();
