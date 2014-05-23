@@ -11,6 +11,9 @@ use \JMS\TranslationBundle\Model\Message;
  */
 abstract class TranslatableSetChoice extends SetChoice
 {
+    // return either set or groupedSet
+    abstract public function getValues();
+
     static function getTranslationMessages()
     {
         $class = get_called_class();

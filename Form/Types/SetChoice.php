@@ -4,6 +4,8 @@ namespace NS\UtilBundle\Form\Types;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormBuilderInterface;
+use NS\UtilBundle\Form\Transformers\SetChoiceTransformer;
 
 /**
  * Description of SetChoice
@@ -203,13 +205,14 @@ abstract class SetChoice extends AbstractType
             {
                 if(is_array($value))
                 {
-                    foreach($value as $k=>$v)
+                    foreach($value as $v)
                         $ret[$key][$v] = $v;
                 }
                 else
                     $ret[$value] = $value;
             }
         }
+
         return $ret;
     }
 
@@ -324,10 +327,10 @@ abstract class SetChoice extends AbstractType
         
         return $ret;
     }
-    
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) 
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new \NS\UtilBundle\Form\Transformers\SetChoiceTransformer(get_called_class());
+        $transformer = new SetChoiceTransformer(get_called_class());
         $builder->addModelTransformer($transformer);
     }
 
