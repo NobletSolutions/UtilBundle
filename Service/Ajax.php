@@ -14,11 +14,20 @@ class Ajax
     
     private $_templating;
     
+    private $_useTemplate;
+    
     public function __construct(ObjectManager $manager, Request $request, TwigEngine $templating)
     {
-        $this->_manager    = $manager;
-        $this->_request    = $request;
-        $this->_templating = $templating;
+        $this->_manager     = $manager;
+        $this->_request     = $request;
+        $this->_templating  = $templating;
+        $this->_useTemplate = true;
+    }
+    
+    public function setUseTemplate($useTemplate = true)
+    {
+        $this->_useTemplate = $useTemplate;
+        return $this;
     }
     
     public function getAutocomplete($class, $fields, $limit = 20)
@@ -38,8 +47,29 @@ class Ajax
         $secondary= (($st)?$st:$secondary);
         $value    = (!empty($secondary))? array('value' => $v,'secondary' => $secondary) : array('value' => $v);
         $entities = $repo->getForAutoComplete($fields,$value,$limit)->getResult();
-        $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
-
-        return new Response($content);
+        
+        if($this->_useTemplate)
+        {
+            $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
+            return new Response($content);
+        }
+        else
+        {
+            $out = array();
+            foreach($entities as $id => $entity)
+            {
+                if(method_exists($entity, 'getAjaxDisplay'))
+                    $entityS = $entity->getAjaxDisplay();
+                else
+                    $entityS = $entity->__toString();
+                
+                $out[] = array('id'=>$entity->getId(), 'name'=>$entityS);
+            }
+            
+            $response = new Response(json_encode($out));
+            $response->headers->set('Content-Type', 'application/json');
+            
+            return $response;
+        }
     }
 }
