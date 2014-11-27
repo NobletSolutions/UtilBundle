@@ -17,7 +17,7 @@ class ChoiceTransformer implements DataTransformerInterface
     /**
      * Transforms an object (ArrayChoice) to a string (number).
      *
-     * @param  ArrayChoice|null $issue
+     * @param  ArrayChoice|null $object
      * @return integer
      */
     public function transform($object)
