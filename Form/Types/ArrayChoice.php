@@ -13,46 +13,41 @@ abstract class ArrayChoice extends AbstractType
     const NO_SELECTION = -1;
 
     protected $values  = array(self::NO_SELECTION => 'N/A');
-
-    protected $current = self::NO_SELECTION; 
+    protected $current = self::NO_SELECTION;
 
     public function __construct($value = null)
     {
-        if(!is_null($value))
-        {
-            if(is_numeric($value))
-            {
-                if(!isset($this->values[$value]) && $value != self::NO_SELECTION)
-                    throw new \UnexpectedValueException(__LINE__.' Invalid choice value: '.$value.' for '.  get_called_class());
+        if (!is_null($value)) {
+            if (is_numeric($value)) {
+                if (!isset($this->values[$value]) && $value != self::NO_SELECTION) {
+                    throw new \UnexpectedValueException('Invalid numeric choice value: ' . $value . ' for ' . get_called_class());
+                }
 
                 $this->current = $value;
             }
-            else if(is_string($value))
-            {
-                foreach($this->values as $key => $v)
-                {
-                    if(strcasecmp($v, $value) == 0)
-                    {
+            else if (is_string($value)) {
+                foreach ($this->values as $key => $v) {
+                    if (strcasecmp($v, $value) == 0) {
                         $this->current = $key;
                         return $this;
                     }
                 }
 
-                throw new \UnexpectedValueException(__LINE__.' Invalid choice value: '.$value);
+                throw new \UnexpectedValueException('Invalid string choice value: ' . $value);
             }
         }
     }
 
     public function __toString()
     {
-        return (isset($this->values[$this->current]) ? $this->values[$this->current]: "");
-    }    
+        return (isset($this->values[$this->current]) ? $this->values[$this->current] : "");
+    }
 
     public function setValue($value)
     {
         $this->current = ($value == null || !isset($this->values[$value])) ? 0 : $value;
     }
-    
+
     public function getValues()
     {
         return $this->values;
@@ -77,8 +72,9 @@ abstract class ArrayChoice extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         parent::buildView($view, $form, $options);
-        if(isset($options['special_values']))
+        if (isset($options['special_values'])) {
             $view->vars['special_values'] = $options['special_values'];
+        }
     }
 
     // Form AbstractType functions
@@ -92,7 +88,7 @@ abstract class ArrayChoice extends AbstractType
 
         $resolver->setOptional(array('special_values'));
 
-        $resolver->addAllowedTypes(array('special_values'=>'array'));
+        $resolver->addAllowedTypes(array('special_values' => 'array'));
     }
 
     public function isValid()
@@ -107,12 +103,15 @@ abstract class ArrayChoice extends AbstractType
 
     public function equal($var)
     {
-        if(is_integer($var))
+        if (is_integer($var)) {
             return ($this->current == $var);
+        }
 
-        if(is_string($var))
+        if (is_string($var)) {
             return ($this->values[$this->current] == $var);
+        }
 
         return false;
     }
+
 }
