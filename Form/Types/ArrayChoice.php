@@ -2,11 +2,12 @@
 
 namespace NS\UtilBundle\Form\Types;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
+use \NS\UtilBundle\Form\Transformers\ChoiceTransformer;
+use \Symfony\Component\Form\AbstractType;
+use \Symfony\Component\Form\FormBuilderInterface;
+use \Symfony\Component\Form\FormInterface;
+use \Symfony\Component\Form\FormView;
+use \Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class ArrayChoice extends AbstractType
 {
@@ -65,7 +66,7 @@ abstract class ArrayChoice extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new \NS\UtilBundle\Form\Transformers\ChoiceTransformer(get_called_class());
+        $transformer = new ChoiceTransformer(get_called_class());
         $builder->addModelTransformer($transformer);
     }
 
