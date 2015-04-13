@@ -72,7 +72,6 @@ abstract class ArrayChoice extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        parent::buildView($view, $form, $options);
         if (isset($options['special_values'])) {
             $view->vars['special_values'] = $options['special_values'];
         }
@@ -81,7 +80,6 @@ abstract class ArrayChoice extends AbstractType
     // Form AbstractType functions
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
             'choices'     => $this->values,
             'empty_value' => 'Please Select...',
