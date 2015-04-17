@@ -9,7 +9,7 @@ use \Symfony\Component\Form\FormInterface;
 use \Symfony\Component\Form\FormView;
 use \Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-abstract class ArrayChoice extends AbstractType
+abstract class ArrayChoice extends AbstractType implements \Iterator
 {
     const NO_SELECTION = -1;
 
@@ -113,4 +113,34 @@ abstract class ArrayChoice extends AbstractType
         return false;
     }
 
+    public function current()
+    {
+        return current($this->values);
+    }
+
+    public function next()
+    {
+        next($this->values);
+    }
+
+    public function key()
+    {
+        return key($this->values);
+    }
+
+    public function valid()
+    {
+        return isset($this->values[$this->key()]);
+    }
+
+    public function rewind()
+    {
+        reset($this->values);
+    }
+
+    public function reverse()
+    {
+        $this->values = array_reverse($this->values);
+        $this->rewind();
+    }
 }
