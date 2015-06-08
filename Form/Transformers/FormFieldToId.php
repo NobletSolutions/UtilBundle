@@ -1,4 +1,5 @@
 <?php
+
 namespace NS\UtilBundle\Form\Transformers;
 
 use Symfony\Component\Form\DataTransformerInterface;
@@ -12,51 +13,79 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class FormFieldToId implements DataTransformerInterface
 {
-    private $_em;
+    private $entityMgr;
 
-    private $_object;
+    private $obj;
 
-    public function __construct(ObjectManager $em)
+    /**
+     *
+     * @param ObjectManager $entityMgr
+     * @return \NS\UtilBundle\Form\Transformers\FormFieldToId
+     */
+    public function __construct(ObjectManager $entityMgr)
     {
-        $this->_em   = $em;
+        $this->entityMgr = $entityMgr;
 
         return $this;
     }
 
+    /**
+     *
+     * @param object $object
+     */
     public function setObject($object)
     {
-        $this->_object = $object;
+        $this->obj = $object;
     }
 
+    /**
+     *
+     * @param integer $id
+     * @return string
+     */
     public function transform($id)
     {
-        if (null === $id)
+        if (null === $id) {
             return "";
+        }
 
         // This should probably test for an interface
         // We should also make what method we are looking for configurable
-        if(is_object($this->_object) && method_exists($this->_object, 'getType'))
-            $entity = $this->_em->getRepository($this->_object->getType()->getClassMatch())->find($id);
-        else
-            $entity = $this->_object;
+        if (is_object($this->obj) && method_exists($this->obj, 'getType')) {
+            $entity = $this->entityMgr->getRepository($this->obj->getType()->getClassMatch())->find($id);
+        }
+        else {
+            $entity = $this->obj;
+        }
 
-        return json_encode(array($id=>$entity.''));
+        return json_encode(array($id => $entity . ''));
     }
 
+    /**
+     *
+     * @param type $ids
+     * @return type
+     * @throws UnexpectedTypeException
+     * @throws \Exception
+     */
     public function reverseTransform($ids)
     {
-        if ('' === $ids || null === $ids)
+        if ('' === $ids || null === $ids) {
             return null;
+        }
 
-        if (!is_string($ids))
+        if (!is_string($ids)) {
             throw new UnexpectedTypeException($ids, 'string');
+        }
 
-        $idsArray = json_decode($ids,true);
+        $idsArray = json_decode($ids, true);
 
-        if(empty($idsArray))
+        if (empty($idsArray)) {
             return null;
-        else if(count($idsArray) > 1)
+        }
+        elseif (count($idsArray) > 1) {
             throw new \Exception('Too many ids');
+        }
 
         return key($idsArray);
     }
