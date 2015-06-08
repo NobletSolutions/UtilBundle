@@ -23,6 +23,8 @@
     "autoload": {
         "psr-0": { "NS\\UtilBundle": "" }
     },
-    "target-dir": "NS/UtilBundle"
+    "target-dir": "NS/UtilBundle",
+    "require-dev": {
+        "liip/rmt": "^1.1"
+    }
 }
-
