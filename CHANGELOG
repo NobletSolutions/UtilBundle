@@ -3,6 +3,7 @@ VERSION 1  INITIAL RELEASE
 ==========================
 
    Version 1.0 - Initial release
+      18/06/2015 11:55  1.0.2  Fix validator namespace issue
       18/06/2015 11:08  1.0.1  Updated ArrayChoice Validator
       08/06/2015 09:51  1.0.0  initial release
 
