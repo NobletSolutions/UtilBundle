@@ -2,6 +2,7 @@
 
 namespace NS\UtilBundle\Validator\Constraints;
 
+use \NS\UtilBundle\Form\Types\ArrayChoice;
 use \Symfony\Component\Validator\Constraint;
 use \Symfony\Component\Validator\ConstraintValidator;
 
@@ -12,16 +13,23 @@ use \Symfony\Component\Validator\ConstraintValidator;
  */
 class ArrayChoiceValidator extends ConstraintValidator
 {
+    /**
+     * @param ArrayChoice $value
+     * @param Constraint $constraint
+     */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value instanceof \NS\UtilBundle\Form\Types\ArrayChoice || $value->getValue() == \NS\UtilBundle\Form\Types\ArrayChoice::NO_SELECTION) {
-            // If you're using the new 2.5 validation API (you probably are!)
-//            $this->context->buildViolation($constraint->message)
-//                ->setParameter('%string%', $value)
-//                ->addViolation();
-
-            // If you're using the old 2.4 validation API
-            $this->context->addViolation($constraint->message);
+        if ($this->isValid($value)) {
+            $this->context->buildViolation($constraint->message)->addViolation();
         }
+    }
+
+    /**
+     * @param ArrayChoice $value
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        return ($value instanceof ArrayChoice && $value->getValue() != ArrayChoice::NO_SELECTION);
     }
 }
