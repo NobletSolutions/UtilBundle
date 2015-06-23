@@ -25,6 +25,7 @@
     },
     "target-dir": "NS/UtilBundle",
     "require-dev": {
-        "liip/rmt": "^1.1"
+        "liip/rmt": "^1.1",
+        "phpunit/phpunit": "^4.7"
     }
 }

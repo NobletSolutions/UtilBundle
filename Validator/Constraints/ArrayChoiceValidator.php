@@ -18,7 +18,7 @@ class ArrayChoiceValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if ($this->isValid($value)) {
+        if (!$this->isValid($value)) {
             // If you're using the new 2.5 validation API (you probably are!)
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
