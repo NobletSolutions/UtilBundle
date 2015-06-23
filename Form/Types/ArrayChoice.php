@@ -13,6 +13,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
 {
     const NO_SELECTION = -1;
 
+    protected $groupedValues = null;
     protected $values  = array(self::NO_SELECTION => 'N/A');
     protected $current = self::NO_SELECTION;
 
@@ -81,7 +82,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'choices'     => $this->values,
+            'choices'     => ($this->groupedValues)?:$this->values,
             'empty_value' => 'Please Select...',
         ));
 
