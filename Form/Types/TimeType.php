@@ -159,6 +159,11 @@ class TimeType extends AbstractType
             return $options['required'] ? null : '';
         };
 
+        // for BC with the "empty_value" option
+        $placeholder = function (Options $options) {
+            return $options['empty_value'];
+        };
+
         $emptyValueNormalizer = function (Options $options, $emptyValue) use ($emptyValueDefault) {
             if (is_array($emptyValue)) {
                 $default = $emptyValueDefault($options);
@@ -205,6 +210,8 @@ class TimeType extends AbstractType
             'model_timezone' => null,
             'view_timezone'  => null,
             'empty_value'    => $emptyValue,
+            'placeholder' => $placeholder,
+            'html5' => true,
             // Don't modify \DateTime classes by reference, we treat
             // them like immutable value objects
             'by_reference'   => false,
