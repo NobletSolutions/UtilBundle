@@ -3,6 +3,7 @@ VERSION 1  INITIAL RELEASE
 ==========================
 
    Version 1.0 - Initial release
+      23/07/2015 19:27  1.0.7  Added out of range and docblocks
       30/06/2015 10:32  1.0.6  Updated time type with new options
       23/06/2015 16:41  1.0.5  Grouped ArrayChoices have been implemented
       18/06/2015 12:39  1.0.4  Updated tests and array choice validator
