@@ -22,9 +22,8 @@
     },
 
     "autoload": {
-        "psr-0": { "NS\\UtilBundle": "" }
+        "psr-4": { "NS\\UtilBundle\\": "" }
     },
-    "target-dir": "NS/UtilBundle",
     "require-dev": {
         "liip/rmt": "^1.1",
         "phpunit/phpunit": "^4.7"
