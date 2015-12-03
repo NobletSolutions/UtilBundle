@@ -3,6 +3,7 @@ VERSION 1  INITIAL RELEASE
 ==========================
 
    Version 1.0 - Initial release
+      03/12/2015 15:49  1.0.9  Removed deprecated functions
       16/11/2015 12:22  1.0.8  Allow inline editing to have classes
       23/07/2015 19:27  1.0.7  Added out of range and docblocks
       30/06/2015 10:32  1.0.6  Updated time type with new options
