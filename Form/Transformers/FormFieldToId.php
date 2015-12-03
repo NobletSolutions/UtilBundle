@@ -13,8 +13,14 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class FormFieldToId implements DataTransformerInterface
 {
+    /**
+     * @var ObjectManager
+     */
     private $entityMgr;
 
+    /**
+     * @var
+     */
     private $obj;
 
     /**
@@ -53,8 +59,7 @@ class FormFieldToId implements DataTransformerInterface
         // We should also make what method we are looking for configurable
         if (is_object($this->obj) && method_exists($this->obj, 'getType')) {
             $entity = $this->entityMgr->getRepository($this->obj->getType()->getClassMatch())->find($id);
-        }
-        else {
+        } else {
             $entity = $this->obj;
         }
 
@@ -63,8 +68,8 @@ class FormFieldToId implements DataTransformerInterface
 
     /**
      *
-     * @param type $ids
-     * @return type
+     * @param mixed $ids
+     * @return int
      * @throws UnexpectedTypeException
      * @throws \Exception
      */
@@ -82,8 +87,7 @@ class FormFieldToId implements DataTransformerInterface
 
         if (empty($idsArray)) {
             return null;
-        }
-        elseif (count($idsArray) > 1) {
+        } elseif (count($idsArray) > 1) {
             throw new \Exception('Too many ids');
         }
 

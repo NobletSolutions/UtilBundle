@@ -63,8 +63,8 @@ abstract class TranslatableArrayChoice extends ArrayChoice
     static function getTranslationMessages()
     {
         $class = get_called_class();
-        $obj   = new $class();
-        $res   = array();
+        $obj = new $class();
+        $res = array();
 
         foreach ($obj->getValues() as $val) {
             if (is_numeric($val)) {
@@ -73,7 +73,7 @@ abstract class TranslatableArrayChoice extends ArrayChoice
 
             $message = new Message($val);
 //            $message->addSource(new ArraySource("$class Choice"));
-            $res[]   = $message;
+            $res[] = $message;
         }
 
         return $res;

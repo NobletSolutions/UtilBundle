@@ -7,11 +7,18 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ChoiceTransformer implements DataTransformerInterface
 {
-    private $_class;
-    
+    /**
+     * @var string
+     */
+    private $className;
+
+    /**
+     * ChoiceTransformer constructor.
+     * @param $class
+     */
     public function __construct($class)
     {
-        $this->_class = $class;
+        $this->className = $class;
     }
 
     /**
@@ -22,8 +29,9 @@ class ChoiceTransformer implements DataTransformerInterface
      */
     public function transform($object)
     {
-        if (null === $object || !is_object($object)) 
+        if (null === $object || !is_object($object)) {
             return "";
+        }
 
         return $object->getValue();
     }
@@ -37,18 +45,16 @@ class ChoiceTransformer implements DataTransformerInterface
      */
     public function reverseTransform($number)
     {
-        if (!empty($number) && !is_numeric($number))
+        if (!empty($number) && !is_numeric($number)) {
             throw new TransformationFailedException('Unable to transform non numeric types');
-
-        try
-        {
-            $obj = new $this->_class($number);
         }
-        catch(\UnexpectedValueException $e)
-        {
+
+        try {
+            $obj = new $this->className($number);
+        } catch (\UnexpectedValueException $e) {
             throw new TransformationFailedException($e->getMessage());
         }
-        
+
         return $obj;
     }
 }

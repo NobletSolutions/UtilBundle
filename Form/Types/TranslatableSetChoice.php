@@ -17,16 +17,16 @@ abstract class TranslatableSetChoice extends SetChoice
     static function getTranslationMessages()
     {
         $class = get_called_class();
-        $obj   = new $class();
-        $res   = array();
+        $obj = new $class();
+        $res = array();
 
-        foreach($obj->getValues() as $val)
-        {
-            if(is_numeric($val))
+        foreach ($obj->getValues() as $val) {
+            if (is_numeric($val)) {
                 continue;
+            }
 
             $message = new Message($val);
-            $res[]   = $message;
+            $res[] = $message;
         }
 
         return $res;

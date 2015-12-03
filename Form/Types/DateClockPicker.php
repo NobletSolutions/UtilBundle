@@ -4,7 +4,7 @@ namespace NS\UtilBundle\Form\Types;
 
 use \Symfony\Component\Form\AbstractType;
 use \Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use \Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DateClockPicker extends AbstractType
 {
@@ -25,7 +25,7 @@ class DateClockPicker extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions( OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'date_widget' => 'single_text',
@@ -33,11 +33,17 @@ class DateClockPicker extends AbstractType
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'dateclockpicker';
     }
-    
+
+    /**
+     * @return string
+     */
     public function getParent()
     {
         return 'datetime';

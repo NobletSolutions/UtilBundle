@@ -3,7 +3,7 @@
 namespace NS\UtilBundle\Form\Types;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use NS\UtilBundle\Form\Transformers\SetChoiceTransformer;
 
@@ -56,6 +56,9 @@ abstract class SetChoice extends AbstractType
      */
     protected $setValues = array();
 
+    /**
+     * @var array
+     */
     protected $groupedSet = array();
     
     /**
@@ -69,38 +72,45 @@ abstract class SetChoice extends AbstractType
      */
     public function __construct($assignValues = null)
     {
-        if(empty($this->groupedSet) && empty($this->set))
+        if(empty($this->groupedSet) && empty($this->set)) {
             throw new \UnexpectedValueException("protected variables set and groupedSet are both empty");
+        }
         
-        if(!empty($this->groupedSet))
+        if(!empty($this->groupedSet)) {
             $this->set = $this->flattenGroups();
+        }
         
-        if (count($this->set) > self::MAX_VALUES_IN_SET)
+        if (count($this->set) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
+        }
 
-        if(count($assignValues) > self::MAX_VALUES_IN_SET)
+        if(count($assignValues) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
+        }
         
         //prepare setValues as assoc array
         $this->setValues = array_fill_keys($this->set, 0);
         
-        if (!is_null($assignValues))
+        if (!is_null($assignValues)) {
             $this->assign($assignValues);
+        }
     }
 
+    /**
+     * @return array
+     */
     public function flattenGroups()
     {
         $set = array();
-        foreach($this->groupedSet as $key=>$value)
-        {
-            if(is_array($value))
-            {
-                foreach($value as $k=>$v)
+
+        foreach ($this->groupedSet as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $k => $v)
                     $set[] = $v;
-            }
-            else
+            } else
                 $set[] = $value;
         }
+
         return $set;
     }
 
@@ -168,8 +178,9 @@ abstract class SetChoice extends AbstractType
     public function inSet($value)
     {
         //true returned when key exists and is set to 1
-        if (array_key_exists($value, $this->setValues))
+        if (array_key_exists($value, $this->setValues)) {
             return ($this->setValues[$value] == 1);
+        }
 
         return false;
     }
@@ -182,34 +193,36 @@ abstract class SetChoice extends AbstractType
     public function toArray()
     {
         $ret = array();
-        foreach ($this->setValues as $key => $value)
-        {
-            if (0 != $value) 
+
+        foreach ($this->setValues as $key => $value) {
+            if (0 != $value) {
                 $ret[] = $key;
+            }
         }
         
         return $ret;
     }
 
+    /**
+     * @return array
+     */
     public function getValueArray()
     {
         $ret = array();
-        if(empty($this->groupedSet))
-        {
-            foreach($this->set as $value)
+
+        if (empty($this->groupedSet)) {
+            foreach ($this->set as $value) {
                 $ret[$value] = $value;
-        }
-        else
-        {
-            foreach($this->groupedSet as $key=>$value)
-            {
-                if(is_array($value))
-                {
-                    foreach($value as $v)
+            }
+        } else {
+            foreach ($this->groupedSet as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $v) {
                         $ret[$key][$v] = $v;
-                }
-                else
+                    }
+                } else {
                     $ret[$value] = $value;
+                }
             }
         }
 
@@ -224,12 +237,16 @@ abstract class SetChoice extends AbstractType
     public function toInteger()
     {
         $bitString = '';
-        foreach ($this->setValues as $value)
+        foreach ($this->setValues as $value) {
             $bitString = $value . $bitString;
+        }
         
         return bindec($bitString);
     }
-    
+
+    /**
+     * @return int
+     */
     public function getValue()
     {
         return $this->toInteger();
@@ -246,39 +263,44 @@ abstract class SetChoice extends AbstractType
     {
         if ($allPossible) 
         {
-            if (is_numeric($values)) 
+            if (is_numeric($values)) {
                 $values = $this->fromInteger((integer)$values);
-            else if ($values instanceof self) 
-                $values = (string) $values;
-            else if (is_string($values)) 
+            } elseif ($values instanceof self) {
+                $values = (string)$values;
+            } elseif (is_string($values)) {
                 $values = explode(',', $values);
-            else if (is_null($values)) 
+            } elseif (is_null($values)) {
                 $values = array();
-            else if(!is_array($values))
+            } elseif(!is_array($values)) {
                 throw new \InvalidArgumentException(sprintf('Parameter should be any of the following type array|%s|integer|string.', __CLASS__), self::IAE_UNSUPPORTED_TYPE);
+            }
         }
         else 
         {
-            if (is_string($values)) 
+            if (is_string($values)) {
                 $values = explode(',', $values);
-            else if(!is_array($values))
+            } else if(!is_array($values)) {
                 throw new \InvalidArgumentException('Values parameter should be either array or string.', self::IAE_ARRAY_OR_STRING);
+            }
         }
         
         //trim whitespace
         $ar = array();
-        foreach ($values as $pv)
+        foreach ($values as $pv) {
             array_push($ar, trim($pv));
+        }
         
         $values = $ar;
         
         //no duplicates allowed
-        if (count(array_unique($values)) != count($values))
+        if (count(array_unique($values)) != count($values)) {
             throw new \InvalidArgumentException('Values parameter contains Duplicate values.', self::IAE_DUPLICATES);
+        }
         
         //32 items is the limit, as we are optimizing this for 32bit platform
-        if (count($values) > self::MAX_VALUES_IN_SET)
+        if (count($values) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
+        }
         
         return $values;
     }
@@ -297,10 +319,11 @@ abstract class SetChoice extends AbstractType
         
         foreach ($values as $value)
         {
-            if (array_key_exists($value, $this->setValues)) 
+            if (array_key_exists($value, $this->setValues)) {
                 $this->setValues[$value] = $val;
-            else
+            } else {
                 throw new \InvalidArgumentException(sprintf('\'%s\' is not valid value for this set. Valid values are: %s.', $value, implode(',', $this->set)), self::IAE_NO_VALUE_IN_SET);
+            }
         }
     }
 
@@ -319,8 +342,9 @@ abstract class SetChoice extends AbstractType
         
         while ($key = array_shift($possible)) 
         {
-            if (1 == ($values & 0x01))
+            if (1 == ($values & 0x01)) {
                 $ret[] = $key;
+            }
 
             $values = $values >> 1;
         }
@@ -328,16 +352,21 @@ abstract class SetChoice extends AbstractType
         return $ret;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new SetChoiceTransformer(get_called_class());
         $builder->addModelTransformer($transformer);
     }
 
-    // Form AbstractType functions
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
             'choices'     => $this->getValueArray(),
             'multiple'    => true,
@@ -345,6 +374,9 @@ abstract class SetChoice extends AbstractType
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getParent()
     {
         return 'choice';

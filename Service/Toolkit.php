@@ -9,11 +9,19 @@ namespace NS\UtilBundle\Service;
  */
 class Toolkit
 {
+    /**
+     * @param $text
+     * @return mixed|string
+     */
     public function stripTextAndHtmlEntities($text)
     {
         return $this->stripText(ereg_replace('&([a-z]+);', '', $text));
     }
 
+    /**
+     * @param $text
+     * @return mixed|string
+     */
     public function stripText($text)
     {
         $text = mb_strtolower(trim($text), 'UTF-8');

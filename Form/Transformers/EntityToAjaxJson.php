@@ -13,49 +13,75 @@ use NS\UtilBundle\Service\AjaxAutocompleteInterface;
  */
 class EntityToAjaxJson implements DataTransformerInterface
 {
-    private $_em;
-    
-    private $_class;
+    /**
+     * @var ObjectManager
+     */
+    private $entityMgr;
 
-    public function __construct(ObjectManager $em,$class)
+    /**
+     * @var string
+     */
+    private $className;
+
+    /**
+     * EntityToAjaxJson constructor.
+     * @param ObjectManager $em
+     * @param $class
+     */
+    public function __construct(ObjectManager $em, $class)
     {
-        $this->_em    = $em;
-        $this->_class = $class;
+        $this->entityMgr    = $em;
+        $this->className = $class;
         
         return $this;
     }
 
+    /**
+     * @param mixed $entity
+     * @return string
+     */
     public function transform($entity)
     {
-        if (null === $entity)
+        if (null === $entity) {
             return "";
+        }
 
-        if (!$entity instanceof $this->_class)
-            throw new UnexpectedTypeException($entity, $this->_class);
+        if (!$entity instanceof $this->className) {
+            throw new UnexpectedTypeException($entity, $this->className);
+        }
         
-        if (!$entity instanceof AjaxAutocompleteInterface)
+        if (!$entity instanceof AjaxAutocompleteInterface) {
             throw new UnexpectedTypeException($entity, 'AjaxAutocompleteInterface');
+        }
         
         $idArray = array($entity->getId() => $entity->getAjaxDisplay());
 
         return json_encode($idArray);
     }
 
+    /**
+     * @param mixed $ids
+     * @return null|object
+     * @throws \Exception
+     */
     public function reverseTransform($ids)
     {
-        if ('' === $ids || null === $ids)
+        if ('' === $ids || null === $ids) {
             return null;
+        }
         
-        if (!is_string($ids))
+        if (!is_string($ids)) {
             throw new UnexpectedTypeException($ids, 'string');
+        }
         
         $idsArray = json_decode($ids,true);
 
-        if(empty($idsArray))
+        if(empty($idsArray)) {
             return null;
-        else if(count($idsArray) > 1)
+        } else if(count($idsArray) > 1) {
             throw new \Exception('Too many ids');
+        }
         
-        return $this->_em->getRepository($this->_class)->find(key($idsArray));
+        return $this->entityMgr->getRepository($this->className)->find(key($idsArray));
     }
 }

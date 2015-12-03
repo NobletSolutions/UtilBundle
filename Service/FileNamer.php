@@ -12,44 +12,67 @@ use \Symfony\Component\HttpFoundation\Request;
  */
 class FileNamer
 {
+    /**
+     * @var Toolkit
+     */
     private $toolkit;
+    /**
+     * @var
+     */
     private $request;
 
+    /**
+     * FileNamer constructor.
+     */
     public function __construct()
     {
         $this->toolkit = new Toolkit();
     }
 
+    /**
+     * @param Request $request
+     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
     }
 
+    /**
+     * @param UploadedFile $file
+     * @param array $previous_files
+     * @param bool|false $split_language
+     * @return string
+     */
     public function cleanFilename(UploadedFile $file, $previous_files = array(), $split_language = false)
     {
         $ext = '.'.$file->getClientOriginalExtension();
         $f   = $this->toolkit->stripText($this->stripExtension($file));
 
-        if($this->request && $split_language === true)
-            $f .= '-'.$this->request->getLocale();
+        if($this->request && $split_language === true) {
+            $f .= '-' . $this->request->getLocale();
+        }
 
         $x   = 0;
         $t   = $f.$ext;
 
-        while(in_array($t,$previous_files))
-        {
+        while (in_array($t, $previous_files)) {
             $x++;
-            $t = $f.'-'.$x.$ext;
+            $t = $f . '-' . $x . $ext;
         }
 
-        if($x > 0)
-            $f = $f.'-'.$x;
+        if($x > 0) {
+            $f = $f . '-' . $x;
+        }
 
         $previous_files[] = $f.$ext;
 
         return $f.$ext;
     }
 
+    /**
+     * @param UploadedFile $file
+     * @return string
+     */
     public function stripExtension(UploadedFile $file)
     {
         $fname = $file->getClientOriginalName();
@@ -58,6 +81,10 @@ class FileNamer
         return substr($fname, 0, strpos($fname, '.'.$fext));
     }
 
+    /**
+     * @param $err
+     * @return string
+     */
     public function getUploadErrorString($err)
     {
         $str = 'No match';

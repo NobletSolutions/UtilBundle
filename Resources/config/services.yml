@@ -3,9 +3,9 @@ parameters:
 
 services:
   ns.form.time:
-      class: NS\UtilBundle\Form\Types\TimeType
-      tags:
-        - { name: form.type, alias: time }    
+    class: NS\UtilBundle\Form\Types\TimeType
+    tags:
+      - { name: form.type, alias: time }
   ns.form.datetimepicker:
     class: NS\UtilBundle\Form\Types\DateTimePicker
     tags:
@@ -19,15 +19,14 @@ services:
     tags:
       - { name: form.type, alias: clockpicker }
   ns.form.datepicker:
-      class: NS\UtilBundle\Form\Types\DatePickerType
-      tags:
-        - { name: form.type, alias: datepicker }
+    class: NS\UtilBundle\Form\Types\DatePickerType
+    tags:
+      - { name: form.type, alias: datepicker }
   ns.form.types.autocomplete:
-      class: NS\UtilBundle\Form\Types\Autocomplete
-      arguments: ["@doctrine.orm.entity_manager", "@router" ]
-      tags:
-        - { name: form.type, alias: ns_autocomplete }
+    class: NS\UtilBundle\Form\Types\Autocomplete
+    arguments: ["@doctrine.orm.entity_manager", "@router" ]
+    tags:
+      - { name: form.type, alias: ns_autocomplete }
   ns.ajax_autocompleter:
     class: NS\UtilBundle\Service\Ajax
-    arguments: [ "@doctrine.orm.entity_manager", "@request", "@templating" ]
-    scope: request
+    arguments: [ "@doctrine.orm.entity_manager", "@request_stack", "@templating" ]

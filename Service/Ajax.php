@@ -3,42 +3,69 @@ namespace NS\UtilBundle\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class Ajax
 {
-    private $_manager;
-    
-    private $_request;
-    
-    private $_templating;
-    
-    public function __construct(ObjectManager $manager, Request $request, TwigEngine $templating)
+    /**
+     * @var ObjectManager
+     */
+    private $entityMgr;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @var TwigEngine
+     */
+    private $templating;
+
+    /**
+     * Ajax constructor.
+     * @param ObjectManager $manager
+     * @param RequestStack $requestStack
+     * @param TwigEngine $templating
+     */
+    public function __construct(ObjectManager $manager, RequestStack $requestStack, TwigEngine $templating)
     {
-        $this->_manager    = $manager;
-        $this->_request    = $request;
-        $this->_templating = $templating;
+        $this->entityMgr    = $manager;
+        $this->requestStack = $requestStack;
+        $this->templating   = $templating;
     }
-    
+
+    /**
+     * @param $class
+     * @param $fields
+     * @param int $limit
+     * @return Response
+     * @throws \Exception
+     * @throws \Twig_Error
+     */
     public function getAutocomplete($class, $fields, $limit = 20)
     {
-        $repo = $this->_manager->getRepository($class);
+        $repo = $this->entityMgr->getRepository($class);
         
-        if(!$repo instanceof AjaxAutocompleteRepositoryInterface)
-            throw new \Exception("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
-        
-        $secondary = $this->_request->get('secondary-field');
-        $v         = $this->_request->request->get('value');
+        if(!$repo instanceof AjaxAutocompleteRepositoryInterface) {
+            throw new \RuntimeException("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
+        }
+        $request   = $this->requestStack->getCurrentRequest();
 
-        if(empty($v))
-            $v = $this->_request->get('q');
+        $secondary = $request->get('secondary-field');
+        $v         = $request->request->get('value');
+
+        if(empty($v)) {
+            $v = $request->get('q');
+        }
 
         $st       = json_decode($secondary,true);
         $secondary= (($st)?$st:$secondary);
         $value    = (!empty($secondary))? array('value' => $v,'secondary' => $secondary) : array('value' => $v);
         $entities = $repo->getForAutoComplete($fields,$value,$limit)->getResult();
-        $content  = $this->_templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
+        $content  = $this->templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
 
         return new Response($content);
     }
