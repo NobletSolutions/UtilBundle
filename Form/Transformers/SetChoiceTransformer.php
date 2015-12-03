@@ -3,6 +3,7 @@
 namespace NS\UtilBundle\Form\Transformers;
 
 use NS\UtilBundle\Form\Types\ArrayChoice;
+use NS\UtilBundle\Form\Types\SetChoice;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -32,8 +33,8 @@ class SetChoiceTransformer implements DataTransformerInterface
     {
         if (null === $object) {
             return null;
-        } elseif(!$object instanceof ArrayChoice) {
-            throw new \InvalidArgumentException(sprintf('Argument is expected to be of type ArrayChoice got: %s',get_class($object)));
+        } elseif(!$object instanceof SetChoice) {
+            throw new \InvalidArgumentException(sprintf('Argument is expected to be of type SetChoice got: %s',get_class($object)));
         }
 
         return $object->toArray();
