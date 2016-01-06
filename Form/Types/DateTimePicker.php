@@ -21,7 +21,7 @@ class DateTimePicker extends AbstractType
 
         if(isset($options['preferred_choices']))
         {
-            $timeOptions = array_merge($timeOptions,array('preferred_choices'=>$options['preferred_choices']));
+            $timeOptions = array_merge($timeOptions,array('hours'=>$options['preferred_choices']['hours'],'minutes'=>$options['preferred_choices']['minutes']));
             $builder->remove('time')
                     ->add('time','time',$timeOptions);
         }
