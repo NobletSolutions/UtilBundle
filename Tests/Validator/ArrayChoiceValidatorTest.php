@@ -2,11 +2,14 @@
 
 namespace NS\UtilBundle\Tests\Validator;
 
+use \NS\UtilBundle\Validator\Constraints\ArrayChoiceConstraint;
+use \NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator;
+
 class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsValid()
     {
-        $validator  = new \NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator();
+        $validator  = new ArrayChoiceValidator();
         $this->assertFalse($validator->isValid(' '));
         $demoChoice = new DemoArrayChoice();
         $this->assertFalse($validator->isValid($demoChoice));
@@ -22,10 +25,10 @@ class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->never())
             ->method('buildViolation');
 
-        $validator  = new \NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator();
+        $validator  = new ArrayChoiceValidator();
         $demoChoice = new DemoArrayChoice(1);
 
-        $validator->validate($demoChoice, new \NS\UtilBundle\Validator\Constraints\ArrayChoice());
+        $validator->validate($demoChoice, new ArrayChoiceConstraint());
     }
 
     public function testValidateNotValid()
@@ -45,10 +48,10 @@ class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('buildViolation')
             ->willReturn($builder);
 
-        $validator  = new \NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator();
+        $validator  = new ArrayChoiceValidator();
         $validator->initialize($context);
         $demoChoice = new DemoArrayChoice();
 
-        $validator->validate($demoChoice, new \NS\UtilBundle\Validator\Constraints\ArrayChoice());
+        $validator->validate($demoChoice, new ArrayChoiceConstraint());
     }
 }
