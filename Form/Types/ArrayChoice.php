@@ -30,8 +30,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
                 }
 
                 $this->current = $value;
-            }
-            elseif (is_string($value)) {
+            } elseif (is_string($value)) {
                 foreach ($this->values as $key => $v) {
                     if (strcasecmp($v, $value) == 0) {
                         $this->current = $key;
@@ -57,7 +56,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function setValue($value)
     {
-        $this->current = ($value == null || !isset($this->values[$value])) ? 0 : $value;
+        $this->current = ($value === null || !isset($this->values[$value])) ? 0 : $value;
     }
 
     /**

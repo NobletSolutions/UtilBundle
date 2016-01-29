@@ -61,7 +61,7 @@ class Autocomplete extends AbstractType
                 }
             );
         } else {
-            $transformer = ($options['collection'] == true) ? new CollectionToAjaxJson($this->entityMgr, $options['class']) : new EntityToAjaxJson($this->entityMgr, $options['class']);
+            $transformer = ($options['collection'] === true) ? new CollectionToAjaxJson($this->entityMgr, $options['class']) : new EntityToAjaxJson($this->entityMgr, $options['class']);
         }
 
         $builder->addModelTransformer($transformer);

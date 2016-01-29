@@ -16,14 +16,16 @@ class ArrayChoice extends IntegerType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if($value == null)
+        if($value === null) {
             return null;
+        }
  
-        if(is_object($value))
+        if(is_object($value)) {
             return $value->getValue();
-        else if(is_numeric($value))
+        } elseif(is_numeric($value)) {
             return $value;
-        else
+        } else {
             return null;
+        }
     }
 }
