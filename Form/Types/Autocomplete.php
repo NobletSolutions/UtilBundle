@@ -129,7 +129,7 @@ class Autocomplete extends AbstractType
             $view->vars['attr']['data-autocomplete-secondary-field'] = json_encode($options['secondary-field']);
         }
 
-        if ($options['tokenize'] == false) {
+        if ($options['tokenize'] === false) {
             $view->vars['attr']['data-autocomplete-tokenize'] = "false";
         }
     }
