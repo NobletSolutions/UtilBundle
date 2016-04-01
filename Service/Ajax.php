@@ -21,24 +21,26 @@ class Ajax
     /**
      * @var TwigEngine
      */
-    private $templating;
+    private $twig;
 
     /**
-     * @var bool
+     * @var string Defaults to NSUtilBundle:Ajax:autocomplete.json.twig
      */
-    private $template = 'NSUtilBundle:Ajax:autocomplete.json.twig';
+    private $template;
 
     /**
      * Ajax constructor.
      * @param ObjectManager $manager
      * @param RequestStack $requestStack
-     * @param TwigEngine $templating
+     * @param TwigEngine $twig
+     * @param string $template
      */
-    public function __construct(ObjectManager $manager, RequestStack $requestStack, TwigEngine $templating, $template = null)
+    public function __construct(ObjectManager $manager, RequestStack $requestStack, TwigEngine $twig, $template)
     {
         $this->entityMgr    = $manager;
         $this->requestStack = $requestStack;
-        $this->templating   = $templating;
+        $this->twig         = $twig;
+        $this->template     = $template;
     }
 
     /**
@@ -52,12 +54,12 @@ class Ajax
     public function getAutocomplete($class, $fields, $limit = 20)
     {
         $repo = $this->entityMgr->getRepository($class);
-        
+
         if(!$repo instanceof AjaxAutocompleteRepositoryInterface) {
             throw new \RuntimeException("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
         }
-        $request   = $this->requestStack->getCurrentRequest();
 
+        $request   = $this->requestStack->getCurrentRequest();
         $secondary = $request->get('secondary-field');
         $v         = $request->request->get('value');
 
@@ -69,7 +71,7 @@ class Ajax
         $secondary= (($st)?$st:$secondary);
         $value    = (!empty($secondary))? array('value' => $v,'secondary' => $secondary) : array('value' => $v);
         $entities = $repo->getForAutoComplete($fields,$value,$limit)->getResult();
-        $content  = $this->templating->render($this->template,array('entities'=>$entities));
+        $content  = $this->twig->render($this->template,array('entities'=>$entities));
 
         return new Response($content);
     }
