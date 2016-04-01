@@ -1,32 +1,35 @@
-parameters:
-  ns_util.example.class: NS\UtilBundle\Example
-
 services:
-  ns.form.time:
+  ns_util.form.time:
     class: NS\UtilBundle\Form\Types\TimeType
     tags:
       - { name: form.type, alias: time }
-  ns.form.datetimepicker:
+
+  ns_util.form.datetimepicker:
     class: NS\UtilBundle\Form\Types\DateTimePicker
     tags:
       - { name: form.type, alias: datetimepicker }
-  ns.form.dateclockpicker:
+
+  ns_util.form.dateclockpicker:
     class: NS\UtilBundle\Form\Types\DateClockPicker
     tags:
       - { name: form.type, alias: dateclockpicker }
-  ns.form.clockpicker:
+
+  ns_util.form.clockpicker:
     class: NS\UtilBundle\Form\Types\ClockPicker
     tags:
       - { name: form.type, alias: clockpicker }
-  ns.form.datepicker:
+
+  ns_util.form.datepicker:
     class: NS\UtilBundle\Form\Types\DatePickerType
     tags:
       - { name: form.type, alias: datepicker }
-  ns.form.types.autocomplete:
+
+  ns_util.form.types.autocomplete:
     class: NS\UtilBundle\Form\Types\Autocomplete
-    arguments: ["@doctrine.orm.entity_manager", "@router" ]
+    arguments: [ "@doctrine.orm.entity_manager", "@router" ]
     tags:
       - { name: form.type, alias: ns_autocomplete }
+
   ns.ajax_autocompleter:
     class: NS\UtilBundle\Service\Ajax
     arguments: [ "@doctrine.orm.entity_manager", "@request_stack", "@templating", "%ns_util.autocompleter_template%" ]
