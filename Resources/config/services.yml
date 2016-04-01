@@ -29,4 +29,4 @@ services:
       - { name: form.type, alias: ns_autocomplete }
   ns.ajax_autocompleter:
     class: NS\UtilBundle\Service\Ajax
-    arguments: [ "@doctrine.orm.entity_manager", "@request_stack", "@templating" ]
+    arguments: [ "@doctrine.orm.entity_manager", "@request_stack", "@templating", "%ns_util.autocompleter_template%" ]

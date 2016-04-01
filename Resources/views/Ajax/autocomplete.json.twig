@@ -1,0 +1,7 @@
+{% spaceless %}[
+{% for entity in entities %}
+    { "id": "{{ entity.id }}", "name": "{% if entity.getAjaxDisplay is defined %}{{ entity.getAjaxDisplay }}{% else %}{{ entity }}{% endif %}" }
+    {% if not loop.last %},{% endif %}
+{% endfor %}
+]
+{% endspaceless %}

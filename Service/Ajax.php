@@ -1,7 +1,6 @@
 <?php
 namespace NS\UtilBundle\Service;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +24,17 @@ class Ajax
     private $templating;
 
     /**
+     * @var bool
+     */
+    private $template = 'NSUtilBundle:Ajax:autocomplete.json.twig';
+
+    /**
      * Ajax constructor.
      * @param ObjectManager $manager
      * @param RequestStack $requestStack
      * @param TwigEngine $templating
      */
-    public function __construct(ObjectManager $manager, RequestStack $requestStack, TwigEngine $templating)
+    public function __construct(ObjectManager $manager, RequestStack $requestStack, TwigEngine $templating, $template = null)
     {
         $this->entityMgr    = $manager;
         $this->requestStack = $requestStack;
@@ -65,7 +69,7 @@ class Ajax
         $secondary= (($st)?$st:$secondary);
         $value    = (!empty($secondary))? array('value' => $v,'secondary' => $secondary) : array('value' => $v);
         $entities = $repo->getForAutoComplete($fields,$value,$limit)->getResult();
-        $content  = $this->templating->render('NSUtilBundle:Ajax:autocomplete.html.twig',array('entities'=>$entities));
+        $content  = $this->templating->render($this->template,array('entities'=>$entities));
 
         return new Response($content);
     }

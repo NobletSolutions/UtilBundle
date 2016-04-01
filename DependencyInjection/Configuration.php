@@ -18,6 +18,9 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('ns_util');
+
+        $rootNode->children()->scalarNode('template')->defaultValue('NSUtilBundle:Ajax:autocomplete.json.twig')->end();
 
         return $treeBuilder;
     }
