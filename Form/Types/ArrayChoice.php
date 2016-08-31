@@ -7,6 +7,8 @@ use \Symfony\Component\Form\AbstractType;
 use \Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Component\Form\FormInterface;
 use \Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Options;
 use \Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class ArrayChoice extends AbstractType implements \Iterator
@@ -111,14 +113,33 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $values = $this->values;
+        $groupedValues = $this->groupedValues;
+
         $resolver->setDefaults(array(
-            'choices'     => ($this->groupedValues)?:$this->values,
             'empty_value' => 'Please Select...',
+            'exclude_choices' => null,
+            'choices' => function (Options $options) use ($values, $groupedValues) {
+                if ($groupedValues !== null) {
+                    return $groupedValues;
+                }
+
+                if (!empty($options['exclude_choices'])) {
+                    foreach ($options['exclude_choices'] as $excludedChoice) {
+                        if (!isset($values[$excludedChoice])) {
+                            throw new InvalidOptionsException(sprintf('%s is not a valid option value to exclude', $excludedChoice));
+                        }
+
+                        unset($values[$excludedChoice]);
+                    }
+                }
+
+                return $values;
+            }
         ));
 
         $resolver->setDefined(array('special_values'));
-
-        $resolver->addAllowedTypes(array('special_values' => 'array'));
+        $resolver->setAllowedTypes('special_values','array');
     }
 
     /**
