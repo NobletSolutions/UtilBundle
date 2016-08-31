@@ -17,10 +17,11 @@ use JMS\TranslationBundle\Model\SourceInterface;
  */
 class ArraySource implements SourceInterface
 {
+    /** @var string */
     private $name;
 
     /**
-     * @param null $name
+     * @param string|null $name
      */
     public function __construct($name = null)
     {
@@ -28,7 +29,7 @@ class ArraySource implements SourceInterface
     }
 
     /**
-     * @return null
+     * @return string|null
      */
     public function getName()
     {
@@ -36,7 +37,7 @@ class ArraySource implements SourceInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return $this
      */
     public function setName($name)
@@ -46,7 +47,7 @@ class ArraySource implements SourceInterface
     }
 
     /**
-     * @return null
+     * @return string|null
      */
     public function __toString()
     {
