@@ -5,6 +5,7 @@ namespace NS\UtilBundle\Form\Types;
 use \Symfony\Component\Form\AbstractType;
 use \Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DateClockPicker extends AbstractType
 {
@@ -21,7 +22,15 @@ class DateClockPicker extends AbstractType
                 ->remove('time')
                 ->add('time','clockpicker',$timeOptions);
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
     /**
      * {@inheritdoc}
      */

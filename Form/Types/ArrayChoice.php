@@ -2,12 +2,13 @@
 
 namespace NS\UtilBundle\Form\Types;
 
-use \NS\UtilBundle\Form\Transformers\ChoiceTransformer;
-use \Symfony\Component\Form\AbstractType;
-use \Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Component\Form\FormInterface;
-use \Symfony\Component\Form\FormView;
-use \Symfony\Component\OptionsResolver\OptionsResolver;
+use NS\UtilBundle\Form\Transformers\ChoiceTransformer;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class ArrayChoice extends AbstractType implements \Iterator
 {
@@ -106,6 +107,14 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
     // Form AbstractType functions
     /**
      * @param OptionsResolver $resolver
@@ -117,7 +126,11 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
             'empty_value' => 'Please Select...',
         ));
 
-        $resolver->setDefined(array('special_values'));
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined(array('special_values'));
+        } else {
+            $resolver->setOptional(array('special_values'));
+        }
 
         $resolver->addAllowedTypes(array('special_values' => 'array'));
     }

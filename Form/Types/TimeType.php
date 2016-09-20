@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransfo
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class TimeType extends AbstractType
 {
@@ -135,6 +136,14 @@ class TimeType extends AbstractType
         if ('single_text' === $options['widget']) {
             $view->vars['type'] = 'time';
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
     }
 
     /**

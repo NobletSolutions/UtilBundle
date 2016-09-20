@@ -5,6 +5,7 @@ namespace NS\UtilBundle\Form\Types;
 use \Symfony\Component\Form\AbstractType;
 use \Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DateTimePicker extends AbstractType
 {
@@ -26,7 +27,15 @@ class DateTimePicker extends AbstractType
                     ->add('time','time',$timeOptions);
         }
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -37,9 +46,11 @@ class DateTimePicker extends AbstractType
             'empty_value'=>array('hour'=>'HR','minute'=>'MIN')
         ));
 
-        $resolver->setDefined(array(
-            'preferred_choices'
-            ));
+        if(method_exists($resolver,'setDefined')) {
+            $resolver->setDefined(array('preferred_choices'));
+        } else {
+            $resolver->setOptional(array('preferred_choices'));
+        }
     }
 
     /**

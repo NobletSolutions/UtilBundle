@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use NS\UtilBundle\Form\Transformers\SetChoiceTransformer;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Description of SetChoice
@@ -256,8 +257,9 @@ abstract class SetChoice extends AbstractType
      * Prepares input so we can set the values
      *
      * @param mixed $values array|string comma separated string of possible values
-     * @param bool  $allPossible, try to convert from all possible types
-     * @throws InvalidArgumentException
+     * @param bool $allPossible , try to convert from all possible types
+     * @return array|int|mixed|string
+     * @throws \InvalidArgumentException
      */
     private function prepareValues($values, $allPossible)
     {
@@ -360,6 +362,14 @@ abstract class SetChoice extends AbstractType
     {
         $transformer = new SetChoiceTransformer(get_called_class());
         $builder->addModelTransformer($transformer);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
     }
 
     /**

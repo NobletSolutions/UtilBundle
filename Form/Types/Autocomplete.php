@@ -9,12 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-use \Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
 use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 use NS\UtilBundle\Form\Transformers\FormFieldToId;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Description of Autocomplete
@@ -68,6 +69,14 @@ class Autocomplete extends AbstractType
     }
 
     /**
+     * @inheritDoc
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -90,10 +99,16 @@ class Autocomplete extends AbstractType
             'class',
         ));
 
-        $resolver->setDefined(array(
+        $defined = array(
             'tokenize',
             'secondary-field',
-            'use_datatransformer'));
+            'use_datatransformer');
+
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined($defined);
+        } else {
+            $resolver->setOptional($defined);
+        }
     }
 
     /**
