@@ -27,8 +27,7 @@ class ArrayChoiceValidator extends ConstraintValidator
                     ->buildViolation($constraint->message)
                     ->addViolation();
             } else {
-                $this->buildViolation($constraint->multipleMessage)
-                    ->addViolation();
+                $this->context->addViolation($constraint->message);
             }
         }
     }
