@@ -5,6 +5,8 @@ namespace NS\UtilBundle\Validator\Constraints;
 use \Symfony\Component\Validator\Constraint;
 use \Symfony\Component\Validator\ConstraintValidator;
 use \NS\UtilBundle\Form\Types\ArrayChoice;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 /**
  * Description of ArrayChoiceValidator
  *
@@ -20,9 +22,14 @@ class ArrayChoiceValidator extends ConstraintValidator
     {
         if (!$this->isValid($value)) {
             // If you're using the new 2.5 validation API (you probably are!)
-            $this->context
-                ->buildViolation($constraint->message)
-                ->addViolation();
+            if ($this->context instanceof ExecutionContextInterface) {
+                $this->context
+                    ->buildViolation($constraint->message)
+                    ->addViolation();
+            } else {
+                $this->buildViolation($constraint->multipleMessage)
+                    ->addViolation();
+            }
         }
     }
 
