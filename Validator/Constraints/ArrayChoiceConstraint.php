@@ -11,7 +11,12 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Annotation
  */
-class ArrayChoice extends Constraint
+class ArrayChoiceConstraint extends Constraint
 {
     public $message = 'No option was selected';
+
+    public function validatedBy()
+    {
+        return 'NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator';
+    }
 }
