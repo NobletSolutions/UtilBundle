@@ -3,6 +3,7 @@
 namespace NS\UtilBundle\Form\Types;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use NS\UtilBundle\Form\Transformers\SetChoiceTransformer;
@@ -18,22 +19,22 @@ abstract class SetChoice extends AbstractType
      * exception code when input values are not array or string
      */
     const IAE_NOT_ARRAY_OR_STRING = 1;
-    
+
     /**
      * exception code when input values are not any of supported types
      */
-    const IAE_UNSUPPORTED_TYPE= 2;
+    const IAE_UNSUPPORTED_TYPE = 2;
 
     /**
      * exception code when input value contains duplicate values
      */
     const IAE_DUPLICATES = 3;
-    
+
     /**
      * exception code when input contains values that are not in initial set
      */
     const IAE_NO_VALUE_IN_SET = 4;
-    
+
     /**
      * exception code when set is larger than MAX_VALUES_IN_SET elements
      */
@@ -60,7 +61,7 @@ abstract class SetChoice extends AbstractType
      * @var array
      */
     protected $groupedSet = array();
-    
+
     /**
      *
      * Set dataype
@@ -68,29 +69,30 @@ abstract class SetChoice extends AbstractType
      * @param mixed $possibleValues array|string with comma separated values for this set
      * @param mixed $assignValues null|array|App_Set|integer|string with comma separated values
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function __construct($assignValues = null)
     {
-        if(empty($this->groupedSet) && empty($this->set)) {
+        if (empty($this->groupedSet) && empty($this->set)) {
             throw new \UnexpectedValueException("protected variables set and groupedSet are both empty");
         }
-        
-        if(!empty($this->groupedSet)) {
+
+        if (!empty($this->groupedSet)) {
             $this->set = $this->flattenGroups();
         }
-        
+
         if (count($this->set) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
 
-        if(count($assignValues) > self::MAX_VALUES_IN_SET) {
+        if (count($assignValues) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
-        
+
         //prepare setValues as assoc array
         $this->setValues = array_fill_keys($this->set, 0);
-        
+
         if (!is_null($assignValues)) {
             $this->assign($assignValues);
         }
@@ -122,7 +124,7 @@ abstract class SetChoice extends AbstractType
     public function __toString()
     {
         $values = $this->toArray();
-        
+
         return implode(',', $values);
     }
 
@@ -131,7 +133,7 @@ abstract class SetChoice extends AbstractType
      *
      * @param mixed $values array|App_Set|integer|string with comma separated values
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      */
     public function assign($values)
@@ -145,12 +147,12 @@ abstract class SetChoice extends AbstractType
      *
      * @param @param mixed $values array|App_Set|integer|string with comma separated values to add to this set
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setValue($values)
     {
         $values = $this->prepareValues($values, true);
-        
+
         $this->setUnset($values, true);
     }
 
@@ -159,12 +161,12 @@ abstract class SetChoice extends AbstractType
      *
      * @param @param mixed $values array|App_Set|integer|string with comma separated values to remove from this set
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function unsetValue($values)
     {
         $values = $this->prepareValues($values, true);
-        
+
         $this->setUnset($values, false);
     }
 
@@ -199,7 +201,7 @@ abstract class SetChoice extends AbstractType
                 $ret[] = $key;
             }
         }
-        
+
         return $ret;
     }
 
@@ -240,7 +242,7 @@ abstract class SetChoice extends AbstractType
         foreach ($this->setValues as $value) {
             $bitString = $value . $bitString;
         }
-        
+
         return bindec($bitString);
     }
 
@@ -256,13 +258,12 @@ abstract class SetChoice extends AbstractType
      * Prepares input so we can set the values
      *
      * @param mixed $values array|string comma separated string of possible values
-     * @param bool  $allPossible, try to convert from all possible types
-     * @throws InvalidArgumentException
+     * @param bool $allPossible , try to convert from all possible types
+     * @throws \InvalidArgumentException
      */
     private function prepareValues($values, $allPossible)
     {
-        if ($allPossible) 
-        {
+        if ($allPossible) {
             if (is_numeric($values)) {
                 $values = $this->fromInteger((integer)$values);
             } elseif ($values instanceof self) {
@@ -271,37 +272,35 @@ abstract class SetChoice extends AbstractType
                 $values = explode(',', $values);
             } elseif (is_null($values)) {
                 $values = array();
-            } elseif(!is_array($values)) {
+            } elseif (!is_array($values)) {
                 throw new \InvalidArgumentException(sprintf('Parameter should be any of the following type array|%s|integer|string.', __CLASS__), self::IAE_UNSUPPORTED_TYPE);
             }
-        }
-        else 
-        {
+        } else {
             if (is_string($values)) {
                 $values = explode(',', $values);
-            } else if(!is_array($values)) {
+            } else if (!is_array($values)) {
                 throw new \InvalidArgumentException('Values parameter should be either array or string.', self::IAE_ARRAY_OR_STRING);
             }
         }
-        
+
         //trim whitespace
         $ar = array();
         foreach ($values as $pv) {
             array_push($ar, trim($pv));
         }
-        
+
         $values = $ar;
-        
+
         //no duplicates allowed
         if (count(array_unique($values)) != count($values)) {
             throw new \InvalidArgumentException('Values parameter contains Duplicate values.', self::IAE_DUPLICATES);
         }
-        
+
         //32 items is the limit, as we are optimizing this for 32bit platform
         if (count($values) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
-        
+
         return $values;
     }
 
@@ -311,14 +310,13 @@ abstract class SetChoice extends AbstractType
      * @param array $values array of values to set/unset
      * @param bool $set true sets them, false unsets
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function setUnset($values, $set)
     {
         $val = $set ? 1 : 0;
-        
-        foreach ($values as $value)
-        {
+
+        foreach ($values as $value) {
             if (array_key_exists($value, $this->setValues)) {
                 $this->setValues[$value] = $val;
             } else {
@@ -336,19 +334,18 @@ abstract class SetChoice extends AbstractType
      */
     private function fromInteger($values)
     {
-        $values   = (integer)$values;
+        $values = (integer)$values;
         $possible = $this->set;
-        $ret      = array();
-        
-        while ($key = array_shift($possible)) 
-        {
+        $ret = array();
+
+        while ($key = array_shift($possible)) {
             if (1 == ($values & 0x01)) {
                 $ret[] = $key;
             }
 
             $values = $values >> 1;
         }
-        
+
         return $ret;
     }
 
@@ -368,8 +365,8 @@ abstract class SetChoice extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'choices'     => $this->getValueArray(),
-            'multiple'    => true,
+            'choices' => array_flip($this->getValueArray()),
+            'multiple' => true,
             'empty_value' => 'Please Select...',
         ));
     }
@@ -379,6 +376,6 @@ abstract class SetChoice extends AbstractType
      */
     public function getParent()
     {
-        return 'choice';
-    }    
+        return ChoiceType::class;
+    }
 }

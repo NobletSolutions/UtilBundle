@@ -4,6 +4,7 @@ namespace NS\UtilBundle\Form\Types;
 
 use \NS\UtilBundle\Form\Transformers\ChoiceTransformer;
 use \Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use \Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Component\Form\FormInterface;
 use \Symfony\Component\Form\FormView;
@@ -113,7 +114,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $values = $this->values;
+        $values = array_flip($this->values);
         $groupedValues = $this->groupedValues;
 
         $resolver->setDefaults(array(
@@ -155,7 +156,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function getParent()
     {
-        return 'choice';
+        return ChoiceType::class;
     }
 
     /**
