@@ -114,7 +114,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $values = array_flip($this->values);
+        $values = (Kernel::MAJOR_VERSION === 2) ? $this->values: array_flip($this->values);
         $groupedValues = $this->groupedValues;
 
         $resolver->setDefaults(array(
