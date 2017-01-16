@@ -3,6 +3,7 @@ VERSION 3  SF3 SUPPORT OF CHOICES
 =================================
 
    Version 3.0 - SF3 support of choices
+      16/01/2017 14:22  3.0.1  Handle choice fields with sf3
       15/11/2016 23:27  3.0.0  initial release
 
 VERSION 2  UPDATED TO SYMFONY 2.7 REQUIREMENTS
