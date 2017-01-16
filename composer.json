@@ -22,7 +22,10 @@
     },
 
     "autoload": {
-        "psr-4": { "NS\\UtilBundle\\": "" }
+        "psr-4": { "NS\\UtilBundle\\": "src" }
+    },
+    "autoload-dev": {
+        "psr-4": { "NS\\UtilBundle\\Tests\\": "Tests" }
     },
     "require-dev": {
         "liip/rmt": "^1.1",
