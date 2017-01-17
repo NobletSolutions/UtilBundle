@@ -6,7 +6,7 @@ use JMS\TranslationBundle\Model\Message;
 
 abstract class TranslatableArrayChoice extends ArrayChoice
 {
-    static function getTranslationMessages()
+    static public function getTranslationMessages()
     {
         $class = get_called_class();
         $obj = new $class();
