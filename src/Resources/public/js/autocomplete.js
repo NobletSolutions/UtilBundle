@@ -52,7 +52,7 @@ activateAutocompleters = function()
                     var s   = $(tgt);
                     if(!s)
                     {
-                        //TODO This should probably be removed.. in what case would this work??
+                        // This should probably be removed.. in what case would this work??
                         tgt = input.id.replace(sec.s, sec.r);
                         s   = $(tgt);
                     }
