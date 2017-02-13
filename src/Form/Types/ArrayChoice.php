@@ -115,8 +115,12 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $values = (Kernel::MAJOR_VERSION === 2) ? $this->values: array_flip($this->values);
+        $values = $this->values;
         $groupedValues = $this->groupedValues;
+
+        if (Kernel::MAJOR_VERSION == 2) {
+            $resolver->setDefault('choices_as_values', true);
+        }
 
         $resolver->setDefaults(array(
             'empty_value' => 'Please Select...',
@@ -136,7 +140,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
                     }
                 }
 
-                return $values;
+                return (Kernel::MAJOR_VERSION === 3) ? array_flip($values) : $values;
             }
         ));
 

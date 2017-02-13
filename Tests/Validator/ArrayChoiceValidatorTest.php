@@ -4,6 +4,8 @@ namespace NS\UtilBundle\Tests\Validator;
 
 use \NS\UtilBundle\Validator\Constraints\ArrayChoiceConstraint;
 use \NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,10 +21,9 @@ class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateIsValid()
     {
-        $context = $this->getMockBuilder('\Symfony\Component\Validator\ExecutionContextInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $context->expects($this->never())
+        $context = $this->createMock(ExecutionContextInterface::class);
+        $context
+            ->expects($this->never())
             ->method('buildViolation');
 
         $validator  = new ArrayChoiceValidator();
@@ -33,17 +34,12 @@ class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateNotValid()
     {
-        $builder = $this->getMockBuilder('\Symfony\Component\Validator\Context\ConstraintViolationBuilderInterface')
-            ->setMethods(array('atPath','setParameter','setParameters','setTranslationDomain','setInvalidValue','setPlural','setCode','setCause','addViolation',))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $builder->expects($this->once())
+        $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
+        $builder
+            ->expects($this->once())
             ->method('addViolation');
 
-        $context = $this->getMockBuilder('\Symfony\Component\Validator\ExecutionContextInterface')
-            ->setMethods(array('buildViolation','addViolation','addViolationAt','validate','validateValue','getViolations','getRoot','getMetadata','getValue','getClassName','getGroup','getMetadataFactory','getPropertyName','getPropertyPath'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(ExecutionContextInterface::class);
         $context->expects($this->once())
             ->method('buildViolation')
             ->willReturn($builder);

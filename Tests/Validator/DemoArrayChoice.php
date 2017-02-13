@@ -2,11 +2,15 @@
 
 namespace NS\UtilBundle\Tests\Validator;
 
-class DemoArrayChoice extends \NS\UtilBundle\Form\Types\ArrayChoice
+use NS\UtilBundle\Form\Types\ArrayChoice;
+
+class DemoArrayChoice extends ArrayChoice
 {
     const FIRST = 1;
 
-    protected $values = array(self::FIRST=>'First');
+    protected $values = [
+        self::FIRST => 'First'
+    ];
 
     public function getName()
     {
