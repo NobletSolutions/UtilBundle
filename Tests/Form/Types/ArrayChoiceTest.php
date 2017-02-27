@@ -22,6 +22,32 @@ class ArrayChoiceTest extends TypeTestCase
         SubArrayChoice::CHOICE_FOUR => 'Four',
     ];
 
+    /**
+     * @param $current
+     * @param $value
+     * @param $expected
+     *
+     * @dataProvider getChoices
+     */
+    public function testEqual($current, $value, $expected)
+    {
+        $choice = new SubArrayChoice($current);
+        $this->assertEquals($expected,$choice->equal($value));
+    }
+
+    public function getChoices()
+    {
+        return [
+            [null, SubArrayChoice::CHOICE_ONE, false],
+            [SubArrayChoice::CHOICE_ONE, SubArrayChoice::CHOICE_ONE, true],
+            [SubArrayChoice::CHOICE_ONE, "1", true],
+            [SubArrayChoice::CHOICE_ONE, "One", true],
+            [SubArrayChoice::CHOICE_ONE, "Two", false],
+            [SubArrayChoice::CHOICE_ONE, "2", false],
+            [SubArrayChoice::CHOICE_ONE, 2, false],
+        ];
+    }
+
     public function testFlip()
     {
         if (Kernel::MAJOR_VERSION == 2) {

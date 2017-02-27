@@ -27,7 +27,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function __construct($value = null)
     {
-        if (!is_null($value)) {
+        if ($value !== null) {
             if (is_numeric($value)) {
                 if (!isset($this->values[$value]) && $value != self::NO_SELECTION && $value != self::OUT_OF_RANGE) {
                     throw new \UnexpectedValueException('Invalid numeric choice value: ' . $value . ' for ' . get_called_class());
@@ -170,15 +170,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function equal($var)
     {
-        if (is_integer($var)) {
-            return ($this->current == $var);
-        }
-
-        if (is_string($var)) {
-            return ($this->values[$this->current] == $var);
-        }
-
-        return false;
+        return ($var == $this->current || (isset($this->values[$this->current]) && $this->values[$this->current] == $var));
     }
 
     /**
