@@ -34,7 +34,7 @@ class DateTimePicker extends AbstractType
     {
         $resolver->setDefaults(array(
             'date_widget' => 'single_text',
-            'empty_value'=>array('hour'=>'HR','minute'=>'MIN')
+            'placeholder'=>array('hour'=>'HR','minute'=>'MIN')
         ));
 
         $resolver->setDefined(array(

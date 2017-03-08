@@ -54,7 +54,7 @@ class TimeType extends AbstractType
 
                 // Only pass a subset of the options to children
                 $hourOptions['choices'] = $hours;
-                $hourOptions['empty_value'] = $options['empty_value']['hour'];
+                $hourOptions['placeholder'] = $options['placeholder']['hour'];
                 $hourOptions['preferred_choices'] = $options['preferred_choices']['hours'];
 
                 if ($options['with_minutes']) {
@@ -63,7 +63,7 @@ class TimeType extends AbstractType
                     }
 
                     $minuteOptions['choices'] = $minutes;
-                    $minuteOptions['empty_value'] = $options['empty_value']['minute'];
+                    $minuteOptions['placeholder'] = $options['placeholder']['minute'];
                     $minuteOptions['preferred_choices'] = $options['preferred_choices']['minutes'];
                 }
 
@@ -75,7 +75,7 @@ class TimeType extends AbstractType
                     }
 
                     $secondOptions['choices'] = $seconds;
-                    $secondOptions['empty_value'] = $options['empty_value']['second'];
+                    $secondOptions['placeholder'] = $options['placeholder']['second'];
                     $secondOptions['preferred_choices'] = $options['preferred_choices']['seconds'];                    
                 }
 
@@ -150,9 +150,9 @@ class TimeType extends AbstractType
             return $options['required'] ? null : '';
         };
 
-        // for BC with the "empty_value" option
+        // for BC with the "placeholder" option
         $placeholder = function (Options $options) {
-            return $options['empty_value'];
+            return $options['placeholder'];
         };
 
         $emptyValueNormalizer = function (Options $options, $emptyValue) use ($emptyValueDefault) {
@@ -200,7 +200,7 @@ class TimeType extends AbstractType
             'with_seconds'   => false,
             'model_timezone' => null,
             'view_timezone'  => null,
-            'empty_value'    => $emptyValue,
+            'placeholder'    => $emptyValue,
             'placeholder' => $placeholder,
             'html5' => true,
             // Don't modify \DateTime classes by reference, we treat
@@ -216,7 +216,7 @@ class TimeType extends AbstractType
         ));
 
         $resolver->setNormalizers(array(
-            'empty_value' => $emptyValueNormalizer,
+            'placeholder' => $emptyValueNormalizer,
             'preferred_choices' => $preferredChoicesNormalizer,
         ));
 

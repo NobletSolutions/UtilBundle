@@ -367,7 +367,7 @@ abstract class SetChoice extends AbstractType
         $resolver->setDefaults(array(
             'choices' => array_flip($this->getValueArray()),
             'multiple' => true,
-            'empty_value' => 'Please Select...',
+            'placeholder' => 'Please Select...',
         ));
     }
 

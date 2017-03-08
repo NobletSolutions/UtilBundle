@@ -123,7 +123,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
         }
 
         $resolver->setDefaults(array(
-            'empty_value' => 'Please Select...',
+            'placeholder' => 'Please Select...',
             'exclude_choices' => null,
             'choices' => function (Options $options) use ($values, $groupedValues) {
                 if ($groupedValues !== null) {
