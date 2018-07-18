@@ -1,16 +1,14 @@
 <?php
 namespace NS\UtilBundle\Service;
 
-use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Templating\EngineInterface;
 
 class Ajax
 {
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     private $entityMgr;
 
     /**
@@ -19,7 +17,7 @@ class Ajax
     private $requestStack;
 
     /**
-     * @var TwigEngine
+     * @var EngineInterface
      */
     private $twig;
 
@@ -32,10 +30,10 @@ class Ajax
      * Ajax constructor.
      * @param ObjectManager $manager
      * @param RequestStack $requestStack
-     * @param TwigEngine $twig
+     * @param EngineInterface $twig
      * @param string $template
      */
-    public function __construct(ObjectManager $manager, RequestStack $requestStack, TwigEngine $twig, $template)
+    public function __construct(ObjectManager $manager, RequestStack $requestStack, EngineInterface $twig, $template)
     {
         $this->entityMgr    = $manager;
         $this->requestStack = $requestStack;
