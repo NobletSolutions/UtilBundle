@@ -3,6 +3,7 @@ VERSION 3  SF3 SUPPORT OF CHOICES
 =================================
 
    Version 3.0 - SF3 support of choices
+      18/07/2018 09:44  3.0.6  Fixed typehint
       07/03/2017 21:37  3.0.5  Fixed deprecated empty_valu option
       27/02/2017 15:24  3.0.4  Improved equality code with tests
       13/02/2017 14:17  3.0.3  Fix exclude_choices with sf3
