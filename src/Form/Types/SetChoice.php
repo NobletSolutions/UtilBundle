@@ -86,14 +86,14 @@ abstract class SetChoice extends AbstractType
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
 
-        if (count($assignValues) > self::MAX_VALUES_IN_SET) {
+        if ($assignValues !== null && count($assignValues) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
 
         //prepare setValues as assoc array
         $this->setValues = array_fill_keys($this->set, 0);
 
-        if (!is_null($assignValues)) {
+        if ($assignValues !== null) {
             $this->assign($assignValues);
         }
     }
