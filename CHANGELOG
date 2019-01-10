@@ -3,6 +3,7 @@ VERSION 3  SF3 SUPPORT OF CHOICES
 =================================
 
    Version 3.0 - SF3 support of choices
+      10/01/2019 14:40  3.0.8  Fixed SetChoice on php7.2
       07/11/2018 16:06  3.0.7  Fixed null assignment
       18/07/2018 09:44  3.0.6  Fixed typehint
       07/03/2017 21:37  3.0.5  Fixed deprecated empty_valu option
