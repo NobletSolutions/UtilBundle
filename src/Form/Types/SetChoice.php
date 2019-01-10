@@ -75,7 +75,7 @@ abstract class SetChoice extends AbstractType
     public function __construct($assignValues = null)
     {
         if (empty($this->groupedSet) && empty($this->set)) {
-            throw new \UnexpectedValueException("protected variables set and groupedSet are both empty");
+            throw new \UnexpectedValueException('protected variables set and groupedSet are both empty');
         }
 
         if (!empty($this->groupedSet)) {
@@ -86,7 +86,7 @@ abstract class SetChoice extends AbstractType
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
 
-        if ($assignValues !== null && count($assignValues) > self::MAX_VALUES_IN_SET) {
+        if ($assignValues !== null && (is_array($assignValues) || $assignValues instanceof \Countable) && count($assignValues) > self::MAX_VALUES_IN_SET) {
             throw new \InvalidArgumentException(sprintf('%d is the maximum number of values you can have in a set.', self::MAX_VALUES_IN_SET), self::IAE_SET_TO_LONG);
         }
 
@@ -107,10 +107,12 @@ abstract class SetChoice extends AbstractType
 
         foreach ($this->groupedSet as $key => $value) {
             if (is_array($value)) {
-                foreach ($value as $k => $v)
+                foreach ($value as $k => $v) {
                     $set[] = $v;
-            } else
+                }
+            } else {
                 $set[] = $value;
+            }
         }
 
         return $set;
@@ -181,7 +183,7 @@ abstract class SetChoice extends AbstractType
     {
         //true returned when key exists and is set to 1
         if (array_key_exists($value, $this->setValues)) {
-            return ($this->setValues[$value] == 1);
+            return $this->setValues[$value] == 1;
         }
 
         return false;
@@ -270,7 +272,7 @@ abstract class SetChoice extends AbstractType
                 $values = (string)$values;
             } elseif (is_string($values)) {
                 $values = explode(',', $values);
-            } elseif (is_null($values)) {
+            } elseif ($values === null) {
                 $values = array();
             } elseif (!is_array($values)) {
                 throw new \InvalidArgumentException(sprintf('Parameter should be any of the following type array|%s|integer|string.', __CLASS__), self::IAE_UNSUPPORTED_TYPE);
@@ -292,7 +294,7 @@ abstract class SetChoice extends AbstractType
         $values = $ar;
 
         //no duplicates allowed
-        if (count(array_unique($values)) != count($values)) {
+        if (count(array_unique($values)) !== count($values)) {
             throw new \InvalidArgumentException('Values parameter contains Duplicate values.', self::IAE_DUPLICATES);
         }
 
@@ -343,7 +345,7 @@ abstract class SetChoice extends AbstractType
                 $ret[] = $key;
             }
 
-            $values = $values >> 1;
+            $values >>= 1;
         }
 
         return $ret;
