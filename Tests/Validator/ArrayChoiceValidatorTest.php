@@ -4,10 +4,11 @@ namespace NS\UtilBundle\Tests\Validator;
 
 use \NS\UtilBundle\Validator\Constraints\ArrayChoiceConstraint;
 use \NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-class ArrayChoiceValidatorTest extends \PHPUnit_Framework_TestCase
+class ArrayChoiceValidatorTest extends TestCase
 {
     public function testIsValid()
     {

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gnat
- * Date: 13/02/17
- * Time: 12:44 PM
- */
 
 namespace NS\UtilBundle\Tests\Form\Types;
 
@@ -32,7 +26,7 @@ class ArrayChoiceTest extends TypeTestCase
     public function testEqual($current, $value, $expected)
     {
         $choice = new SubArrayChoice($current);
-        $this->assertEquals($expected,$choice->equal($value));
+        $this->assertEquals($expected, $choice->equal($value));
     }
 
     public function getChoices()
@@ -40,30 +34,19 @@ class ArrayChoiceTest extends TypeTestCase
         return [
             [null, SubArrayChoice::CHOICE_ONE, false],
             [SubArrayChoice::CHOICE_ONE, SubArrayChoice::CHOICE_ONE, true],
-            [SubArrayChoice::CHOICE_ONE, "1", true],
-            [SubArrayChoice::CHOICE_ONE, "One", true],
-            [SubArrayChoice::CHOICE_ONE, "Two", false],
-            [SubArrayChoice::CHOICE_ONE, "2", false],
+            [SubArrayChoice::CHOICE_ONE, '1', true],
+            [SubArrayChoice::CHOICE_ONE, 'One', true],
+            [SubArrayChoice::CHOICE_ONE, 'Two', false],
+            [SubArrayChoice::CHOICE_ONE, '2', false],
             [SubArrayChoice::CHOICE_ONE, 2, false],
         ];
     }
 
-    public function testFlip()
-    {
-        if (Kernel::MAJOR_VERSION == 2) {
-            $this->assertEquals($this->values[SubArrayChoice::CHOICE_FOUR], 'Four');
-        } else {
-            $vars = array_flip($this->values);
-            $this->assertArrayHasKey('Four',$vars);
-            $this->assertEquals($vars['Four'],4);
-        }
-    }
-
     public function testConstructor()
     {
-        $form = $this->factory->create(SubArrayChoice::class);
-        $choices = $form->getConfig()->getOption('choices');
-        $expected = (Kernel::MAJOR_VERSION == 2) ?  $this->values : array_flip($this->values);
+        $form     = $this->factory->create(SubArrayChoice::class);
+        $choices  = $form->getConfig()->getOption('choices');
+        $expected = array_flip($this->values);
 
         $this->assertCount(4, $choices);
         $this->assertEquals($expected, $choices);
@@ -75,7 +58,7 @@ class ArrayChoiceTest extends TypeTestCase
         $choices = $form->getConfig()->getOption('choices');
 
         unset($this->values[SubArrayChoice::CHOICE_FOUR]);
-        $expected = (Kernel::MAJOR_VERSION == 2) ?  $this->values : array_flip($this->values);
+        $expected = array_flip($this->values);
 
         $this->assertCount(3, $choices);
         $this->assertEquals($expected, $choices);

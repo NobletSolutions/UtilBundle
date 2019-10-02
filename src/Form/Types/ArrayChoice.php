@@ -19,7 +19,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
     const NO_SELECTION = -1;
 
     protected $groupedValues = null;
-    protected $values  = array(self::NO_SELECTION => 'N/A');
+    protected $values = [self::NO_SELECTION => 'N/A'];
     protected $current = self::NO_SELECTION;
 
     /**
@@ -89,7 +89,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -98,9 +98,9 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
     }
 
     /**
-     * @param FormView $view
+     * @param FormView      $view
      * @param FormInterface $form
-     * @param array $options
+     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -110,22 +110,19 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
     }
 
     // Form AbstractType functions
+
     /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $values = $this->values;
+        $values        = $this->values;
         $groupedValues = $this->groupedValues;
 
-        if (Kernel::MAJOR_VERSION == 2) {
-            $resolver->setDefault('choices_as_values', true);
-        }
-
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'placeholder' => 'Please Select...',
             'exclude_choices' => null,
-            'choices' => function (Options $options) use ($values, $groupedValues) {
+            'choices' => static function (Options $options) use ($values, $groupedValues) {
                 if ($groupedValues !== null) {
                     return $groupedValues;
                 }
@@ -140,12 +137,12 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
                     }
                 }
 
-                return (Kernel::MAJOR_VERSION === 3) ? array_flip($values) : $values;
-            }
-        ));
+                return array_flip($values);
+            },
+        ]);
 
-        $resolver->setDefined(array('special_values'));
-        $resolver->setAllowedTypes('special_values','array');
+        $resolver->setDefined(['special_values']);
+        $resolver->setAllowedTypes('special_values', 'array');
     }
 
     /**
@@ -153,7 +150,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function isValid()
     {
-        return ($this->current != self::NO_SELECTION && isset($this->values[$this->current]));
+        return ($this->current !== self::NO_SELECTION && isset($this->values[$this->current]));
     }
 
     /**
@@ -166,6 +163,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
 
     /**
      * @param $var
+     *
      * @return bool
      */
     public function equal($var)
@@ -205,17 +203,11 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
         return isset($this->values[$this->key()]);
     }
 
-    /**
-     *
-     */
     public function rewind()
     {
         reset($this->values);
     }
 
-    /**
-     *
-     */
     public function reverse()
     {
         $this->values = array_reverse($this->values);
