@@ -5,33 +5,19 @@ namespace NS\UtilBundle\Service;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 use \Symfony\Component\HttpFoundation\Request;
 
-/**
- * Description of File
- *
- * @author gnat
- */
 class FileNamer
 {
-    /**
-     * @var Toolkit
-     */
+    /** @var Toolkit */
     private $toolkit;
-    /**
-     * @var
-     */
+
+    /** @var Request */
     private $request;
 
-    /**
-     * FileNamer constructor.
-     */
     public function __construct()
     {
         $this->toolkit = new Toolkit();
     }
 
-    /**
-     * @param Request $request
-     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
@@ -39,38 +25,40 @@ class FileNamer
 
     /**
      * @param UploadedFile $file
-     * @param array $previous_files
-     * @param bool|false $split_language
+     * @param array        $previous_files
+     * @param bool|false   $split_language
+     *
      * @return string
      */
-    public function cleanFilename(UploadedFile $file, $previous_files = array(), $split_language = false)
+    public function cleanFilename(UploadedFile $file, $previous_files = [], $split_language = false)
     {
-        $ext = '.'.$file->getClientOriginalExtension();
+        $ext = '.' . $file->getClientOriginalExtension();
         $f   = $this->toolkit->stripText($this->stripExtension($file));
 
-        if($this->request && $split_language === true) {
+        if ($this->request && $split_language === true) {
             $f .= '-' . $this->request->getLocale();
         }
 
-        $x   = 0;
-        $t   = $f.$ext;
+        $x = 0;
+        $t = $f . $ext;
 
         while (in_array($t, $previous_files)) {
             $x++;
             $t = $f . '-' . $x . $ext;
         }
 
-        if($x > 0) {
+        if ($x > 0) {
             $f = $f . '-' . $x;
         }
 
-        $previous_files[] = $f.$ext;
+        $previous_files[] = $f . $ext;
 
-        return $f.$ext;
+        return $f . $ext;
     }
 
     /**
      * @param UploadedFile $file
+     *
      * @return string
      */
     public function stripExtension(UploadedFile $file)
@@ -78,18 +66,18 @@ class FileNamer
         $fname = $file->getClientOriginalName();
         $fext  = $file->getClientOriginalExtension();
 
-        return substr($fname, 0, strpos($fname, '.'.$fext));
+        return substr($fname, 0, strpos($fname, '.' . $fext));
     }
 
     /**
      * @param $err
+     *
      * @return string
      */
     public function getUploadErrorString($err)
     {
         $str = 'No match';
-        switch($err)
-        {
+        switch ($err) {
             case UPLOAD_ERR_OK:
                 $str = 'File upload success.';
                 break;

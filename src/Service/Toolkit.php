@@ -2,11 +2,6 @@
 
 namespace NS\UtilBundle\Service;
 
-/**
- * Description of Toolkit
- *
- * @author gnat
- */
 class Toolkit
 {
     /**

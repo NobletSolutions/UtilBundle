@@ -1,7 +1,7 @@
 {
     "name": "ns/util-bundle",
     "type": "symfony-bundle",
-    "description": "Various Utilitity Services and Classes",
+    "description": "Various Utility Services and Classes",
     "license": "MIT",
     "minimum-stability": "stable",
     "authors": [
@@ -17,7 +17,10 @@
     "require": {
         "php":             ">=5.5.9",
         "ext-mbstring":    "*",
-        "symfony/symfony": "^3.0||^4.0"
+        "twig/twig": "^2.0",
+        "doctrine/persistence": "^2.0",
+        "symfony/form": "^3.0||^4.0",
+        "symfony/validator": "^3.0||^4.0"
     },
     "autoload": {
         "psr-4": { "NS\\UtilBundle\\": "src" }

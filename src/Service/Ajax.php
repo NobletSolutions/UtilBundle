@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class Ajax
 {
@@ -16,9 +17,7 @@ class Ajax
      */
     private $requestStack;
 
-    /**
-     * @var EngineInterface
-     */
+    /** @var Environment */
     private $twig;
 
     /**
@@ -33,7 +32,7 @@ class Ajax
      * @param EngineInterface $twig
      * @param string $template
      */
-    public function __construct(ObjectManager $manager, RequestStack $requestStack, EngineInterface $twig, $template)
+    public function __construct(ObjectManager $manager, RequestStack $requestStack, EngineInterface $twig, string $template)
     {
         $this->entityMgr    = $manager;
         $this->requestStack = $requestStack;
