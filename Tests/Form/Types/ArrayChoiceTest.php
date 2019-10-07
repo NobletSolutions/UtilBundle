@@ -35,6 +35,7 @@ class ArrayChoiceTest extends TypeTestCase
             [null, SubArrayChoice::CHOICE_ONE, false],
             [SubArrayChoice::CHOICE_ONE, SubArrayChoice::CHOICE_ONE, true],
             [SubArrayChoice::CHOICE_ONE, '1', true],
+            [SubArrayChoice::CHOICE_ONE, new SubArrayChoice('1'), true],
             [SubArrayChoice::CHOICE_ONE, 'One', true],
             [SubArrayChoice::CHOICE_ONE, 'Two', false],
             [SubArrayChoice::CHOICE_ONE, '2', false],

@@ -8,7 +8,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,7 +37,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
                 foreach ($this->values as $key => $v) {
                     if (strcasecmp($v, $value) == 0) {
                         $this->current = $key;
-                        return $this;
+                        return;
                     }
                 }
 
@@ -52,7 +51,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      */
     public function __toString()
     {
-        return (isset($this->values[$this->current]) ? $this->values[$this->current] : "");
+        return isset($this->values[$this->current]) ? $this->values[$this->current] : '';
     }
 
     /**
@@ -166,9 +165,13 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
      *
      * @return bool
      */
-    public function equal($var)
+    public function equal($compared)
     {
-        return ($var == $this->current || (isset($this->values[$this->current]) && $this->values[$this->current] == $var));
+        if ($compared instanceof ArrayChoice) {
+            return ($compared->getValue() == $this->current);
+        }
+
+        return ($compared == $this->current || (isset($this->values[$this->current]) && $this->values[$this->current] == $compared));
     }
 
     /**
