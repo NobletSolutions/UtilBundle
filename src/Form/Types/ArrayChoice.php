@@ -171,7 +171,7 @@ abstract class ArrayChoice extends AbstractType implements \Iterator
             return ($compared->getValue() == $this->current);
         }
 
-        return ($compared == $this->current || (isset($this->values[$this->current]) && $this->values[$this->current] == $compared));
+        return ($compared == $this->current || (isset($this->values[$this->current]) && $this->values[$this->current] === $compared));
     }
 
     /**

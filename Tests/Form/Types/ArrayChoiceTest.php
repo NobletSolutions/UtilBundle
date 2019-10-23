@@ -2,6 +2,7 @@
 
 namespace NS\UtilBundle\Tests\Form\Types;
 
+use NS\UtilBundle\Form\Types\ArrayChoice;
 use NS\UtilBundle\Tests\Form\Fixtures\SubArrayChoice;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -9,6 +10,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class ArrayChoiceTest extends TypeTestCase
 {
     private $values = [
+        SubArrayChoice::CHOICE_ZERO => 'Zero',
         SubArrayChoice::CHOICE_ONE => 'One',
         SubArrayChoice::CHOICE_TWO => 'Two',
         SubArrayChoice::CHOICE_THREE => 'Three',
@@ -39,6 +41,7 @@ class ArrayChoiceTest extends TypeTestCase
             [SubArrayChoice::CHOICE_ONE, 'Two', false],
             [SubArrayChoice::CHOICE_ONE, '2', false],
             [SubArrayChoice::CHOICE_ONE, 2, false],
+            [ArrayChoice::NO_SELECTION, 0, false],
         ];
     }
 
@@ -48,7 +51,7 @@ class ArrayChoiceTest extends TypeTestCase
         $choices  = $form->getConfig()->getOption('choices');
         $expected = array_flip($this->values);
 
-        $this->assertCount(4, $choices);
+        $this->assertCount(5, $choices);
         $this->assertEquals($expected, $choices);
     }
 
@@ -60,7 +63,7 @@ class ArrayChoiceTest extends TypeTestCase
         unset($this->values[SubArrayChoice::CHOICE_FOUR]);
         $expected = array_flip($this->values);
 
-        $this->assertCount(3, $choices);
+        $this->assertCount(4, $choices);
         $this->assertEquals($expected, $choices);
     }
 
