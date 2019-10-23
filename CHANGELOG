@@ -3,6 +3,7 @@ VERSION 4  SUPPORT SF4
 ======================
 
    Version 4.0 - Support SF4
+      23/10/2019 16:25  4.0.5  Improved equality test
       23/10/2019 09:50  4.0.4  Added doctrine comment method
       07/10/2019 13:50  4.0.3  Improved ArrayChoice equality
       02/10/2019 12:38  4.0.2  more fixes
