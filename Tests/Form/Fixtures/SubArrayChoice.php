@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gnat
- * Date: 13/02/17
- * Time: 12:46 PM
- */
 
 namespace NS\UtilBundle\Tests\Form\Fixtures;
 

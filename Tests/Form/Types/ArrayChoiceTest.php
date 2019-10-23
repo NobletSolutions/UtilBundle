@@ -5,7 +5,6 @@ namespace NS\UtilBundle\Tests\Form\Types;
 use NS\UtilBundle\Tests\Form\Fixtures\SubArrayChoice;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Component\HttpKernel\Kernel;
 
 class ArrayChoiceTest extends TypeTestCase
 {
