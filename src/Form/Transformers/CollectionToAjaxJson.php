@@ -1,22 +1,15 @@
 <?php
 namespace NS\UtilBundle\Form\Transformers;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
-/**
- * Description of SuppliersToID
- *
- * @author gnat
- */
 class CollectionToAjaxJson implements DataTransformerInterface
 {
-    /**
-     * @var ObjectManager
-     */
+    /** @var EntityManagerInterface */
     private $entityMgr;
 
     /**
@@ -26,15 +19,13 @@ class CollectionToAjaxJson implements DataTransformerInterface
 
     /**
      * CollectionToAjaxJson constructor.
-     * @param ObjectManager $em
+     * @param EntityManagerInterface $em
      * @param $class
      */
-    public function __construct(ObjectManager $em, $class)
+    public function __construct(EntityManagerInterface $em, $class)
     {
         $this->entityMgr = $em;
         $this->className = $class;
-
-        return $this;
     }
 
     /**

@@ -24,13 +24,13 @@ class ArrayChoiceTest extends TypeTestCase
      *
      * @dataProvider getChoices
      */
-    public function testEqual($current, $value, $expected)
+    public function testEqual($current, $value, $expected): void
     {
         $choice = new SubArrayChoice($current);
         $this->assertEquals($expected, $choice->equal($value));
     }
 
-    public function getChoices()
+    public function getChoices(): array
     {
         return [
             [null, SubArrayChoice::CHOICE_ONE, false],
@@ -45,7 +45,7 @@ class ArrayChoiceTest extends TypeTestCase
         ];
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $form     = $this->factory->create(SubArrayChoice::class);
         $choices  = $form->getConfig()->getOption('choices');
@@ -55,7 +55,7 @@ class ArrayChoiceTest extends TypeTestCase
         $this->assertEquals($expected, $choices);
     }
 
-    public function testExcluded()
+    public function testExcluded(): void
     {
         $form = $this->factory->create(SubArrayChoice::class, null, ['exclude_choices' => [SubArrayChoice::CHOICE_FOUR]]);
         $choices = $form->getConfig()->getOption('choices');

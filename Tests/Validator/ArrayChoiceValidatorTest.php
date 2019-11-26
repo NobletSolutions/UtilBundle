@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class ArrayChoiceValidatorTest extends TestCase
 {
-    public function testIsValid()
+    public function testIsValid(): void
     {
         $validator  = new ArrayChoiceValidator();
         $this->assertFalse($validator->isValid(' '));
@@ -20,7 +20,7 @@ class ArrayChoiceValidatorTest extends TestCase
         $this->assertTrue($validator->isValid($demoChoice));
     }
 
-    public function testValidateIsValid()
+    public function testValidateIsValid(): void
     {
         $context = $this->createMock(ExecutionContextInterface::class);
         $context
@@ -33,7 +33,7 @@ class ArrayChoiceValidatorTest extends TestCase
         $validator->validate($demoChoice, new ArrayChoiceConstraint());
     }
 
-    public function testValidateNotValid()
+    public function testValidateNotValid(): void
     {
         $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
         $builder

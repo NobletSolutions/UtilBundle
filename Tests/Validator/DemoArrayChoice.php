@@ -6,13 +6,13 @@ use NS\UtilBundle\Form\Types\ArrayChoice;
 
 class DemoArrayChoice extends ArrayChoice
 {
-    const FIRST = 1;
+    public const FIRST = 1;
 
     protected $values = [
         self::FIRST => 'First'
     ];
 
-    public function getName()
+    public function getName(): string
     {
         return 'DemoArrayChoice';
     }     

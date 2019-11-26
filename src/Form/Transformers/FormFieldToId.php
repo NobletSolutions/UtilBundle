@@ -4,42 +4,25 @@ namespace NS\UtilBundle\Form\Transformers;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Description of FormFieldToId
- *
- * @author gnat
- */
 class FormFieldToId implements DataTransformerInterface
 {
-    /**
-     * @var ObjectManager
-     */
+    /** @var EntityManagerInterface */
     private $entityMgr;
 
-    /**
-     * @var
-     */
     private $obj;
 
-    /**
-     *
-     * @param ObjectManager $entityMgr
-     * @return \NS\UtilBundle\Form\Transformers\FormFieldToId
-     */
-    public function __construct(ObjectManager $entityMgr)
+    public function __construct(EntityManagerInterface $entityMgr)
     {
         $this->entityMgr = $entityMgr;
-
-        return $this;
     }
 
     /**
      *
      * @param object $object
      */
-    public function setObject($object)
+    public function setObject($object): void
     {
         $this->obj = $object;
     }
@@ -49,10 +32,10 @@ class FormFieldToId implements DataTransformerInterface
      * @param integer $id
      * @return string
      */
-    public function transform($id)
+    public function transform($id): string
     {
         if (null === $id) {
-            return "";
+            return '';
         }
 
         // This should probably test for an interface
@@ -87,7 +70,9 @@ class FormFieldToId implements DataTransformerInterface
 
         if (empty($idsArray)) {
             return null;
-        } elseif (count($idsArray) > 1) {
+        }
+
+        if (count($idsArray) > 1) {
             throw new \Exception('Too many ids');
         }
 

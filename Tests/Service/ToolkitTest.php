@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ToolkitTest extends TestCase
 {
-    public function testPregReplace()
+    public function testPregReplace(): void
     {
         $input = 'something &amp; and &#123; another';
         $tookit = new Toolkit();

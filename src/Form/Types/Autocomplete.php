@@ -2,61 +2,44 @@
 
 namespace NS\UtilBundle\Form\Types;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-
-use \Doctrine\Common\Persistence\ObjectManager;
 use NS\UtilBundle\Form\Transformers\EntityToAjaxJson;
 use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 use NS\UtilBundle\Form\Transformers\FormFieldToId;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
-/**
- * Description of Autocomplete
- *
- * @author gnat
- */
 class Autocomplete extends AbstractType
 {
-    /**
-     * @var ObjectManager
-     */
+    /** @var EntityManagerInterface */
     private $entityMgr;
 
-    /**
-     * @var Router
-     */
+    /** @var RouterInterface */
     private $router;
 
-    /**
-     * Autocomplete constructor.
-     * @param ObjectManager $em
-     * @param Router $router
-     */
-    public function __construct(ObjectManager $em, Router $router)
+    public function __construct(EntityManagerInterface $em, RouterInterface $router)
     {
         $this->entityMgr = $em;
         $this->router = $router;
-
-        return $this;
     }
 
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (isset($options['use_datatransformer'])) {
             $transformer = new FormFieldToId($this->entityMgr, $options['class']);
             $builder->addEventListener(
                 FormEvents::PRE_SET_DATA,
-                function (FormEvent $event) use ($transformer) {
+                static function (FormEvent $event) use ($transformer) {
                     $transformer->setObject($event->getForm()->getParent()->getData());
                 }
             );
@@ -67,20 +50,17 @@ class Autocomplete extends AbstractType
         $builder->addModelTransformer($transformer);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'tokenize' => true,
             'collection' => false,
             'invalid_message' => 'The selected entity does not exist',
             'attr' => array(
-                'data-autocomplete' => "true",
+                'data-autocomplete' => 'true',
                 'data-autocomplete-href' => '',
-                'data-autocomplete-tokenize' => "true",
-                'data-autocomplete-multiple' => "false"
+                'data-autocomplete-tokenize' => 'true',
+                'data-autocomplete-multiple' => 'false'
             ),
         ));
 
@@ -96,33 +76,17 @@ class Autocomplete extends AbstractType
             'use_datatransformer'));
     }
 
-    /**
-     * @return string
-     */
-    public function getParent()
+    public function getParent(): string
     {
-        return 'text';
+        return TextType::class;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'ns_autocomplete';
-    }
-
-    /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['attr']['data-autocomplete-href'] = $this->router->generate($options['route']);
 
         if ($options['collection']) {
-            $view->vars['attr']['data-autocomplete-multiple'] = "true";
+            $view->vars['attr']['data-autocomplete-multiple'] = 'true';
         }
 
         if (isset($options['secondary-field'])) {
@@ -130,7 +94,7 @@ class Autocomplete extends AbstractType
         }
 
         if ($options['tokenize'] === false) {
-            $view->vars['attr']['data-autocomplete-tokenize'] = "false";
+            $view->vars['attr']['data-autocomplete-tokenize'] = 'false';
         }
     }
 }

@@ -1,39 +1,27 @@
 <?php
 namespace NS\UtilBundle\Form\Transformers;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Doctrine\Common\Persistence\ObjectManager;
 use NS\UtilBundle\Service\AjaxAutocompleteInterface;
 
-/**
- * Description of SuppliersToID
- *
- * @author gnat
- */
 class EntityToAjaxJson implements DataTransformerInterface
 {
-    /**
-     * @var ObjectManager
-     */
+    /** @var EntityManagerInterface */
     private $entityMgr;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $className;
 
     /**
-     * EntityToAjaxJson constructor.
-     * @param ObjectManager $em
-     * @param $class
+     * @param EntityManagerInterface $em
+     * @param string $class
      */
-    public function __construct(ObjectManager $em, $class)
+    public function __construct(EntityManagerInterface $em, $class)
     {
         $this->entityMgr    = $em;
         $this->className = $class;
-        
-        return $this;
     }
 
     /**
