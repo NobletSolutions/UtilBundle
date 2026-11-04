@@ -3,6 +3,8 @@
 namespace NS\UtilBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,19 +12,13 @@ use Twig\Environment;
 
 class Ajax
 {
-    /** @var EntityManagerInterface */
-    private $entityMgr;
+    private EntityManagerInterface $entityMgr;
 
-    /** @var RequestStack */
-    private $requestStack;
+    private RequestStack $requestStack;
 
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
-    /**
-     * @var string  Defaults to NSUtilBundle:Ajax:autocomplete.json.twig
-     */
-    private $template;
+    private string $template;
 
     public function __construct(EntityManagerInterface $manager, RequestStack $requestStack, Environment $twig, string $template)
     {
@@ -38,14 +34,14 @@ class Ajax
      * @param int         $limit
      *
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAutocomplete(string $class, $fields, int $limit = 20)
     {
         $repo = $this->entityMgr->getRepository($class);
 
         if (!$repo instanceof AjaxAutocompleteRepositoryInterface) {
-            throw new \RuntimeException("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
+            throw new RuntimeException("$class Repository doesn't implement AjaxAutocompleteRepositoryInterface");
         }
 
         /** @var Request|null $request */
@@ -60,7 +56,7 @@ class Ajax
             $v = $request->get('q');
         }
 
-        $st        = json_decode($secondary, true);
+        $st        = is_string($secondary) ? json_decode($secondary, true) : null;
         $secondary = $st ?: $secondary;
         $value     = (!empty($secondary)) ? ['value' => $v, 'secondary' => $secondary] : ['value' => $v];
         $entities  = $repo->getForAutoComplete($fields, $value, $limit)->getResult();

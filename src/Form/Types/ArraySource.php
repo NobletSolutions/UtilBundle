@@ -17,49 +17,34 @@ use JMS\TranslationBundle\Model\SourceInterface;
  */
 class ArraySource implements SourceInterface
 {
-    /** @var string */
-    private $name;
+    private ?string $name = null;
 
     /**
      * @param string|null $name
      */
-    public function __construct($name = null)
+    public function __construct(?string $name = null)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
-    /**
-     * @param SourceInterface $source
-     * @return bool
-     */
-    public function equals(SourceInterface $source)
+    public function equals(SourceInterface $source): bool
     {
-        return ($source->__toString() == $this->name);
+        return ($source->__toString() === $this->name);
     }
 }

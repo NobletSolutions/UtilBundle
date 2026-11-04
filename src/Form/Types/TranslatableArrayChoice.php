@@ -10,7 +10,7 @@ abstract class TranslatableArrayChoice extends ArrayChoice
     {
         $class = get_called_class();
         $obj = new $class();
-        $res = array();
+        $res = [];
 
         foreach ($obj->getValues() as $val) {
             if (is_numeric($val)) {

@@ -2,16 +2,14 @@
 
 namespace NS\UtilBundle\Service;
 
-use \Symfony\Component\HttpFoundation\File\UploadedFile;
-use \Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 
 class FileNamer
 {
-    /** @var Toolkit */
-    private $toolkit;
+    private Toolkit $toolkit;
 
-    /** @var Request */
-    private $request;
+    private ?Request $request = null;
 
     public function __construct()
     {

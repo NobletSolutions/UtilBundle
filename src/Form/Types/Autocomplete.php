@@ -14,14 +14,13 @@ use NS\UtilBundle\Form\Transformers\CollectionToAjaxJson;
 use NS\UtilBundle\Form\Transformers\FormFieldToId;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Routing\RouterInterface;
 
 class Autocomplete extends AbstractType
 {
-    /** @var EntityManagerInterface */
-    private $entityMgr;
+    private EntityManagerInterface $entityMgr;
 
-    /** @var RouterInterface */
-    private $router;
+    private RouterInterface $router;
 
     public function __construct(EntityManagerInterface $em, RouterInterface $router)
     {
@@ -36,11 +35,11 @@ class Autocomplete extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (isset($options['use_datatransformer'])) {
-            $transformer = new FormFieldToId($this->entityMgr, $options['class']);
+            $transformer = new FormFieldToId($this->entityMgr);
             $builder->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 static function (FormEvent $event) use ($transformer) {
-                    $transformer->setObject($event->getForm()->getParent()->getData());
+                    $transformer->setObject($event->getForm()->getParent()?->getData());
                 }
             );
         } else {
@@ -52,28 +51,28 @@ class Autocomplete extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'tokenize' => true,
             'collection' => false,
             'invalid_message' => 'The selected entity does not exist',
-            'attr' => array(
+            'attr' => [
                 'data-autocomplete' => 'true',
                 'data-autocomplete-href' => '',
                 'data-autocomplete-tokenize' => 'true',
                 'data-autocomplete-multiple' => 'false'
-            ),
-        ));
+            ],
+        ]);
 
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'route',
             'collection',
             'class',
-        ));
+        ]);
 
-        $resolver->setDefined(array(
+        $resolver->setDefined([
             'tokenize',
             'secondary-field',
-            'use_datatransformer'));
+            'use_datatransformer']);
     }
 
     public function getParent(): string

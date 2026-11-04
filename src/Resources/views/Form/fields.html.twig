@@ -1,25 +1,27 @@
 {% block datepicker_widget %}
-{% spaceless %}
-    {{ form_widget(form) }}
-    <script type="text/javascript" > var picker = new Pikaday({field: $('{{id}}')}); </script>
-{% endspaceless %}
+
+    {{ block('form_widget_simple') }}
+    <script type="text/javascript" > var picker = new Pikaday({field: document.getElementById({{ id|json_encode|raw }})}); </script>
+
 {% endblock %}
 
 {% block clockpicker_widget %}
-{% spaceless %}
-<div {{ block('widget_container_attributes') }} class="gsClockPickerFields">
-  {{ form_widget(form.hour) }}:{{ form_widget(form.minute, attr) }}
+
+{% set attr = attr|merge({class: (attr.class|default('') ~ ' gsClockPickerFields')|trim}) %}
+<div {{ block('widget_container_attributes') }}>
+  {{ form_widget(form.hour) }}{% if form.minute is defined %}:{{ form_widget(form.minute) }}{% endif %}
+  {% if form.second is defined %}:{{ form_widget(form.second) }}{% endif %}
   {{ form_widget(form.meridian) }}
   {{ form_label(form.meridian) }}
 </div>
-{% endspaceless %}
+
 {% endblock clockpicker_widget %}
 
 {% block choice_widget_options %}
-{% spaceless %}
+
     {% for group_label, choice in options %}
         {% if choice is iterable %}
-            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+            <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
                 {% set options = choice %}
                 {{ block('choice_widget_options') }}
             </optgroup>
@@ -28,13 +30,13 @@
             {%if special_values is defined %}
                 {% for v in special_values %}
                     {%if v.value == choice.value %}
-                        {%set specialvalue = 'data-context-field='~v.context %}
+                        {%set specialvalue = v.context %}
                     {%endif%}
                 {%endfor%}
             {%endif%}
-            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}{{specialvalue}}>{{ choice.label|trans({}, translation_domain) }}</option>
+            <option value="{{ choice.value }}"{% if choice.attr %}{% with {attr: choice.attr} %}{{ block('attributes') }}{% endwith %}{% endif %}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}{% if specialvalue is not null %} data-context-field="{{ specialvalue }}"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans(choice.labelTranslationParameters, choice_translation_domain) }}</option>
         {% endif %}
     {% endfor %}
-{% endspaceless %}
+
 {% endblock choice_widget_options %}
 

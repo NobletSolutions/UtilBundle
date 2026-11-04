@@ -2,59 +2,52 @@
 
 namespace NS\UtilBundle\Form\Types;
 
-use \Symfony\Component\Form\AbstractType;
-use \Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DateTimePicker extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
-    public function buildForm( FormBuilderInterface $builder, array $options)
+    public function buildForm( FormBuilderInterface $builder, array $options): void
     {
+        if ($options['widget'] === 'single_text') {
+            return;
+        }
+
         $dateOptions = $builder->get('date')->getOptions();
         $timeOptions = $builder->get('time')->getOptions();
-        
-        $builder->remove('date')
-                ->add('date', 'datepicker', $dateOptions);
 
-        if(isset($options['preferred_choices']))
-        {
-            $timeOptions = array_merge($timeOptions,array('hours'=>$options['preferred_choices']['hours'],'minutes'=>$options['preferred_choices']['minutes']));
+        $builder->remove('date')
+                ->add('date', DatePickerType::class, $dateOptions);
+
+        if (isset($options['preferred_choices'])) {
+            $timeOptions = array_merge($timeOptions, ['hours' =>$options['preferred_choices']['hours'], 'minutes' =>$options['preferred_choices']['minutes']]);
             $builder->remove('time')
-                    ->add('time','time',$timeOptions);
+                    ->add('time', TimeType::class,$timeOptions);
         }
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function configureOptions( OptionsResolver $resolver)
+    public function configureOptions( OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'date_widget' => 'single_text',
-            'placeholder'=>array('hour'=>'HR','minute'=>'MIN')
-        ));
+            'placeholder'=> ['hour' =>'HR', 'minute' =>'MIN']
+        ]);
 
-        $resolver->setDefined(array(
+        $resolver->setDefined([
             'preferred_choices'
-            ));
+        ]);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getParent(): string
     {
-        return 'datetimepicker';
-    }
-
-    /**
-     * @return string
-     */
-    public function getParent()
-    {
-        return 'datetime';
+        return DateTimeType::class;
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class ArrayChoiceTest extends TypeTestCase
 {
-    private $values = [
+    private array $values = [
         SubArrayChoice::CHOICE_ZERO => 'Zero',
         SubArrayChoice::CHOICE_ONE => 'One',
         SubArrayChoice::CHOICE_TWO => 'Two',
@@ -18,13 +18,9 @@ class ArrayChoiceTest extends TypeTestCase
     ];
 
     /**
-     * @param $current
-     * @param $value
-     * @param $expected
-     *
      * @dataProvider getChoices
      */
-    public function testEqual($current, $value, $expected): void
+    public function testEqual(?int $current, int|string|object|null $value, bool $expected): void
     {
         $choice = new SubArrayChoice($current);
         $this->assertEquals($expected, $choice->equal($value));

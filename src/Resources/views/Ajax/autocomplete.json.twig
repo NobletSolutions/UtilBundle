@@ -1,7 +1,8 @@
-{% spaceless %}[
+{% set results = [] %}
 {% for entity in entities %}
-    { "id": "{{ entity.id }}", "name": "{% if entity.getAjaxDisplay is defined %}{{ entity.getAjaxDisplay }}{% else %}{{ entity }}{% endif %}" }
-    {% if not loop.last %},{% endif %}
+    {% set results = results|merge([{
+        id: entity.id ~ '',
+        name: entity.getAjaxDisplay is defined ? entity.getAjaxDisplay : entity ~ ''
+    }]) %}
 {% endfor %}
-]
-{% endspaceless %}
+{{ results|json_encode|raw }}

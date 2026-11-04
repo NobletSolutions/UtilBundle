@@ -2,78 +2,84 @@
 
 namespace NS\UtilBundle\Form\Transformers;
 
+use JsonException;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FormFieldToId implements DataTransformerInterface
 {
-    /** @var EntityManagerInterface */
-    private $entityMgr;
+    private EntityManagerInterface $entityMgr;
 
-    private $obj;
+    private ?object $obj = null;
 
     public function __construct(EntityManagerInterface $entityMgr)
     {
         $this->entityMgr = $entityMgr;
     }
 
-    /**
-     *
-     * @param object $object
-     */
-    public function setObject($object): void
+    public function setObject(?object $object): void
     {
         $this->obj = $object;
     }
 
     /**
+     * @param integer $value
      *
-     * @param integer $id
      * @return string
      */
-    public function transform($id): string
+    public function transform(mixed $value): string
     {
-        if (null === $id) {
+        if (null === $value) {
             return '';
         }
 
         // This should probably test for an interface
         // We should also make what method we are looking for configurable
         if (is_object($this->obj) && method_exists($this->obj, 'getType')) {
-            $entity = $this->entityMgr->getRepository($this->obj->getType()->getClassMatch())->find($id);
+            $entity = $this->entityMgr->getRepository($this->obj->getType()->getClassMatch())->find($value);
         } else {
             $entity = $this->obj;
         }
 
-        return json_encode(array($id => $entity . ''));
+        try {
+            return json_encode([$value => (string)$entity], JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new TransformationFailedException('Invalid autocomplete JSON.', 0, $e);
+        }
     }
 
     /**
-     *
-     * @param mixed $ids
-     * @return int
+     * @param ?string $value The ids
      * @throws UnexpectedTypeException
-     * @throws \Exception
      */
-    public function reverseTransform($ids)
+    public function reverseTransform(mixed $value): ?int
     {
-        if ('' === $ids || null === $ids) {
+        if ('' === $value || null === $value) {
             return null;
         }
 
-        if (!is_string($ids)) {
-            throw new UnexpectedTypeException($ids, 'string');
+        if (!is_string($value)) {
+            throw new UnexpectedTypeException($value, 'string');
         }
 
-        $idsArray = json_decode($ids, true);
+        try {
+            $idsArray = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new TransformationFailedException('Invalid autocomplete JSON.', 0, $e);
+        }
+
+        if (!is_array($idsArray)) {
+            throw new TransformationFailedException('Autocomplete data must be a JSON object or array.');
+        }
 
         if (empty($idsArray)) {
             return null;
         }
 
         if (count($idsArray) > 1) {
-            throw new \Exception('Too many ids');
+            throw new TransformationFailedException('Too many ids');
         }
 
         return key($idsArray);

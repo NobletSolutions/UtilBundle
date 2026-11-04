@@ -1,28 +1,28 @@
 <?php
+
 namespace NS\UtilBundle\Form\Transformers;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use JsonException;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 class CollectionToAjaxJson implements DataTransformerInterface
 {
-    /** @var EntityManagerInterface */
-    private $entityMgr;
+    private EntityManagerInterface $entityMgr;
 
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
     /**
      * CollectionToAjaxJson constructor.
+     *
      * @param EntityManagerInterface $em
-     * @param $class
+     * @param                        $class
      */
-    public function __construct(EntityManagerInterface $em, $class)
+    public function __construct(EntityManagerInterface $em, string $class)
     {
         $this->entityMgr = $em;
         $this->className = $class;
@@ -30,25 +30,26 @@ class CollectionToAjaxJson implements DataTransformerInterface
 
     /**
      * @param mixed $entities
+     *
      * @return null|string
      */
-    public function transform($entities)
+    public function transform(mixed $entities)
     {
-        if (null === $entities || empty($entities)) {
+        if (empty($entities)) {
             return "";
         }
 
-        if (!$entities instanceof PersistentCollection && !$entities instanceof ArrayCollection) {
-            throw new UnexpectedTypeException($entities, 'PersistentCollection or ArrayCollection');
+        if (!$entities instanceof Collection) {
+            throw new UnexpectedTypeException($entities, Collection::class);
         }
 
-        $idsArray = array();
+        $idsArray = [];
         // check for interface...
         foreach ($entities as $entity) {
             $idsArray[$entity->getId()] = $entity->getAjaxDisplay();
         }
 
-        if(empty($idsArray)) {
+        if (empty($idsArray)) {
             return null;
         }
 
@@ -56,22 +57,31 @@ class CollectionToAjaxJson implements DataTransformerInterface
     }
 
     /**
-     * @param mixed $ids
+     * @param mixed $value
+     *
      * @return ArrayCollection|null
      */
-    public function reverseTransform($ids)
+    public function reverseTransform($value)
     {
-        if ('' === $ids || null === $ids) {
+        if ('' === $value || null === $value) {
             return new ArrayCollection();
         }
 
-        if (!is_string($ids)) {
-            throw new UnexpectedTypeException($ids, 'string');
+        if (!is_string($value)) {
+            throw new UnexpectedTypeException($value, 'string');
         }
 
-        $idsArray = json_decode($ids,true);
+        try {
+            $idsArray = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new TransformationFailedException('Invalid autocomplete JSON.', 0, $e);
+        }
 
-        if(empty($idsArray)) {
+        if (!is_array($idsArray)) {
+            throw new TransformationFailedException('Autocomplete data must be a JSON object or array.');
+        }
+
+        if (empty($idsArray)) {
             return null;
         }
 

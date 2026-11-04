@@ -2,23 +2,18 @@
 
 namespace NS\UtilBundle\Form\Transformers;
 
+use InvalidArgumentException;
 use NS\UtilBundle\Form\Types\ArrayChoice;
 use NS\UtilBundle\Form\Types\SetChoice;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use UnexpectedValueException;
 
 class SetChoiceTransformer implements DataTransformerInterface
 {
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
-    /**
-     * SetChoiceTransformer constructor.
-     * @param $class
-     */
-    public function __construct($class)
+    public function __construct(string $class)
     {
         $this->className = $class;
     }
@@ -26,36 +21,38 @@ class SetChoiceTransformer implements DataTransformerInterface
     /**
      * Transforms an object (ArrayChoice) to a string (number).
      *
-     * @param mixed $object
+     * @param mixed $value
      * @return int
      */
-    public function transform($object)
+    public function transform($value)
     {
-        if (null === $object) {
+        if (null === $value) {
             return null;
-        } elseif(!$object instanceof SetChoice) {
-            throw new \InvalidArgumentException(sprintf('Argument is expected to be of type SetChoice got: %s',get_class($object)));
+        } elseif(!$value instanceof SetChoice) {
+            throw new InvalidArgumentException(sprintf('Argument is expected to be of type SetChoice got: %s',get_debug_type($value)));
         }
 
-        return $object->toArray();
+        return $value->toArray();
     }
 
     /**
      * Transforms a string (number) to an object (ArrayChoice).
      *
-     * @param  string $number
+     * @param  string $value
      * @return ArrayChoice|null
      * @throws TransformationFailedException if object (issue) is not found.
      */
-    public function reverseTransform($number)
+    public function reverseTransform($value)
     {
-        if (!is_array($number)) {
+        $value ??= [];
+
+        if (!is_array($value)) {
             throw new TransformationFailedException('Unable to transform non numeric types');
         }
 
         try {
-            $obj = new $this->className($number);
-        } catch (\UnexpectedValueException $e) {
+            $obj = new $this->className($value);
+        } catch (UnexpectedValueException $e) {
             throw new TransformationFailedException($e->getMessage());
         }
 

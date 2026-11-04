@@ -2,7 +2,7 @@
 
 namespace NS\UtilBundle\Form\Types;
 
-use \JMS\TranslationBundle\Model\Message;
+use JMS\TranslationBundle\Model\Message;
 
 /**
  * Description of TranslatableSetChoice
@@ -18,7 +18,7 @@ abstract class TranslatableSetChoice extends SetChoice
     {
         $class = get_called_class();
         $obj = new $class();
-        $res = array();
+        $res = [];
 
         foreach ($obj->getValues() as $val) {
             if (is_numeric($val)) {

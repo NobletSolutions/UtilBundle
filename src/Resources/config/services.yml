@@ -1,35 +1,39 @@
 services:
-  ns_util.form.time:
-    class: NS\UtilBundle\Form\Types\TimeType
-    tags:
-      - { name: form.type, alias: time }
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
-  ns_util.form.datetimepicker:
-    class: NS\UtilBundle\Form\Types\DateTimePicker
-    tags:
-      - { name: form.type, alias: datetimepicker }
+    NS\UtilBundle\Form\Types\:
+        resource: '../../Form/Types/'
+        exclude: '../../Form/Types/ArraySource.php'
 
-  ns_util.form.dateclockpicker:
-    class: NS\UtilBundle\Form\Types\DateClockPicker
-    tags:
-      - { name: form.type, alias: dateclockpicker }
+    NS\UtilBundle\Service\:
+        resource: '../../Service/'
 
-  ns_util.form.clockpicker:
-    class: NS\UtilBundle\Form\Types\ClockPicker
-    tags:
-      - { name: form.type, alias: clockpicker }
+    NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator: ~
 
-  ns_util.form.datepicker:
-    class: NS\UtilBundle\Form\Types\DatePickerType
-    tags:
-      - { name: form.type, alias: datepicker }
+    NS\UtilBundle\Service\Ajax:
+        arguments:
+            $template: '%ns_util.autocompleter_template%'
 
-  ns_util.form.types.autocomplete:
-    class: NS\UtilBundle\Form\Types\Autocomplete
-    arguments: [ "@doctrine.orm.entity_manager", "@router" ]
-    tags:
-      - { name: form.type, alias: ns_autocomplete }
+    # Keep existing service IDs available as aliases.
+    ns_util.form.time:
+        alias: NS\UtilBundle\Form\Types\TimeType
 
-  ns.ajax_autocompleter:
-    class: NS\UtilBundle\Service\Ajax
-    arguments: [ "@doctrine.orm.entity_manager", "@request_stack", "@templating", "%ns_util.autocompleter_template%" ]
+    ns_util.form.datetimepicker:
+        alias: NS\UtilBundle\Form\Types\DateTimePicker
+
+    ns_util.form.dateclockpicker:
+        alias: NS\UtilBundle\Form\Types\DateClockPicker
+
+    ns_util.form.clockpicker:
+        alias: NS\UtilBundle\Form\Types\ClockPicker
+
+    ns_util.form.datepicker:
+        alias: NS\UtilBundle\Form\Types\DatePickerType
+
+    ns_util.form.types.autocomplete:
+        alias: NS\UtilBundle\Form\Types\Autocomplete
+
+    ns.ajax_autocompleter:
+        alias: NS\UtilBundle\Service\Ajax

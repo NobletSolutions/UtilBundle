@@ -2,50 +2,44 @@
 
 namespace NS\UtilBundle\Form\Types;
 
-use \Symfony\Component\Form\AbstractType;
-use \Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DateClockPicker extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
-    public function buildForm( FormBuilderInterface $builder, array $options)
+    public function buildForm( FormBuilderInterface $builder, array $options): void
     {
+        if ($options['widget'] === 'single_text') {
+            return;
+        }
+
         $dateOptions = $builder->get('date')->getOptions();
         $timeOptions = $builder->get('time')->getOptions();
-        
+
         $builder->remove('date')
-                ->add('date', 'datepicker', $dateOptions)
+                ->add('date', DatePickerType::class, $dateOptions)
                 ->remove('time')
-                ->add('time','clockpicker',$timeOptions);
+                ->add('time', ClockPicker::class,$timeOptions);
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'date_widget' => 'single_text',
             'time_widget' => 'text'
-        ));
+        ]);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getParent(): string
     {
-        return 'dateclockpicker';
-    }
-
-    /**
-     * @return string
-     */
-    public function getParent()
-    {
-        return 'datetime';
+        return DateTimeType::class;
     }
 }

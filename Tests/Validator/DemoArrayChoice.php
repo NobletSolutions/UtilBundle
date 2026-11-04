@@ -8,7 +8,7 @@ class DemoArrayChoice extends ArrayChoice
 {
     public const FIRST = 1;
 
-    protected $values = [
+    protected array $values = [
         self::FIRST => 'First'
     ];
 

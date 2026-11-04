@@ -2,9 +2,9 @@
 
 namespace NS\UtilBundle\Validator\Constraints;
 
-use \Symfony\Component\Validator\Constraint;
-use \Symfony\Component\Validator\ConstraintValidator;
-use \NS\UtilBundle\Form\Types\ArrayChoice;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
+use NS\UtilBundle\Form\Types\ArrayChoice;
 /**
  * Description of ArrayChoiceValidator
  *
@@ -13,10 +13,10 @@ use \NS\UtilBundle\Form\Types\ArrayChoice;
 class ArrayChoiceValidator extends ConstraintValidator
 {
     /**
-     * @param \NS\UtilBundle\Form\Types\ArrayChoice $value
-     * @param Constraint $constraint
+     * @param ArrayChoice $value
+     * @param Constraint  $constraint
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$this->isValid($value)) {
             // If you're using the new 2.5 validation API (you probably are!)
@@ -28,7 +28,8 @@ class ArrayChoiceValidator extends ConstraintValidator
 
     /**
      *
-     * @param \NS\UtilBundle\Form\Types\ArrayChoice $value
+     * @param ArrayChoice $value
+     *
      * @return boolean
      */
     public function isValid($value)

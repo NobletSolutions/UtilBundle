@@ -2,8 +2,10 @@
 
 namespace NS\UtilBundle\Form\Types;
 
+use IntlDateFormatter;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
@@ -14,30 +16,29 @@ use Symfony\Component\Form\FormInterface;
  */
 class DatePickerType extends AbstractType
 {
-    const DEFAULT_FORMAT = \IntlDateFormatter::MEDIUM;
+    public const DEFAULT_FORMAT = IntlDateFormatter::MEDIUM;
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::setDefaultOptions($resolver);
-        $resolver->setDefaults(array(
-            'widget'    => 'single_text',
-            'compound'  => false,
-        ));
+        $resolver->setDefaults([
+            'widget'   => 'single_text',
+            'compound' => false,
+            'html5' => false,
+        ]);
     }
 
-    public function finishView( FormView $view, FormInterface $form, array $options)
+    public function finishView( FormView $view, FormInterface $form, array $options): void
     {
-        parent::finishView($view, $form, $options);
         $view->vars['type'] = 'text';
     }
 
-    public function getName()
+    public function getParent(): string
+    {
+        return DateType::class;
+    }
+    public function getBlockPrefix(): string
     {
         return 'datepicker';
     }
-    
-    public function getParent()
-    {
-        return 'date';
-    }
+
 }

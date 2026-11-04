@@ -12,7 +12,7 @@ class SubArrayChoice extends ArrayChoice
     const CHOICE_THREE = 3;
     const CHOICE_FOUR = 4;
 
-    protected $values = [
+    protected array $values = [
         self::CHOICE_ZERO => 'Zero',
         self::CHOICE_ONE => 'One',
         self::CHOICE_TWO => 'Two',

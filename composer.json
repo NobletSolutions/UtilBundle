@@ -15,16 +15,18 @@
         }
     ],
     "require": {
-        "php":                  ">=7.1",
+        "php":                  ">=8.1",
         "ext-json":             "*",
         "ext-mbstring":         "*",
         "twig/twig":            "^2.0|^3.0",
         "doctrine/persistence": "^1.0|^2.0",
         "doctrine/dbal":        "^2.0|^3.0",
         "doctrine/orm":         "^1.0|^2.0",
-        "symfony/form":         "^4.0|^5.0",
-        "symfony/validator":    "^4.0|^5.0",
-        "symfony/routing":      "^4.0|^5.0"
+        "symfony/framework-bundle": "^6.0",
+        "symfony/form":         "^6.0",
+        "symfony/validator":    "^6.0",
+        "symfony/routing":      "^6.0",
+        "jms/translation-bundle": "^2.7"
     },
     "autoload": {
         "psr-4": { "NS\\UtilBundle\\": "src" }
@@ -34,8 +36,12 @@
     },
     "require-dev": {
         "liip/rmt": "^1.1",
-        "phpunit/phpunit": "^7.0",
-        "symfony/http-kernel": "^4.0"
+        "phpunit/phpunit": "^9.0",
+        "symfony/http-kernel": "^6.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "6.0-dev"
+        }
     }
 }
-

@@ -3,243 +3,51 @@
 namespace NS\UtilBundle\Form\Types;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Extension\Core\Type\TimeType as SymfonyTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\ReversedTransformer;
-use Symfony\Component\Form\Exception\InvalidConfigurationException;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToTimestampTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TimeType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $parts  = array('hour');
-        $format = 'H';
-
-        if ($options['with_seconds'] && !$options['with_minutes']) {
-            throw new InvalidConfigurationException('You can not disable minutes if you have enabled seconds.');
+        if ($options['widget'] !== 'choice') {
+            return;
         }
 
-        if ($options['with_minutes']) {
-            $format .= ':i';
-            $parts[] = 'minute';
-        }
-
-        if ($options['with_seconds']) {
-            $format .= ':s';
-            $parts[] = 'second';
-        }
-
-        if ('single_text' === $options['widget']) {
-            $builder->addViewTransformer(new DateTimeToStringTransformer($options['model_timezone'], $options['view_timezone'], $format));
-        } else {
-            $hourOptions = $minuteOptions = $secondOptions = array(
-                'error_bubbling' => true,
-            );
-
-            if ('choice' === $options['widget']) {
-                $hours = $minutes = array();
-
-                foreach ($options['hours'] as $hour) {
-                    $hours[$hour] = str_pad($hour, 2, '0', STR_PAD_LEFT);
-                }
-
-                // Only pass a subset of the options to children
-                $hourOptions['choices'] = $hours;
-                $hourOptions['placeholder'] = $options['placeholder']['hour'];
-                $hourOptions['preferred_choices'] = $options['preferred_choices']['hours'];
-
-                if ($options['with_minutes']) {
-                    foreach ($options['minutes'] as $minute) {
-                        $minutes[$minute] = str_pad($minute, 2, '0', STR_PAD_LEFT);
-                    }
-
-                    $minuteOptions['choices'] = $minutes;
-                    $minuteOptions['placeholder'] = $options['placeholder']['minute'];
-                    $minuteOptions['preferred_choices'] = $options['preferred_choices']['minutes'];
-                }
-
-                if ($options['with_seconds']) {
-                    $seconds = array();
-
-                    foreach ($options['seconds'] as $second) {
-                        $seconds[$second] = str_pad($second, 2, '0', STR_PAD_LEFT);
-                    }
-
-                    $secondOptions['choices'] = $seconds;
-                    $secondOptions['placeholder'] = $options['placeholder']['second'];
-                    $secondOptions['preferred_choices'] = $options['preferred_choices']['seconds'];                    
-                }
-
-                // Append generic carry-along options
-                foreach (array('required', 'translation_domain') as $passOpt) {
-                    $hourOptions[$passOpt] = $options[$passOpt];
-
-                    if ($options['with_minutes']) {
-                        $minuteOptions[$passOpt] = $options[$passOpt];
-                    }
-
-                    if ($options['with_seconds']) {
-                        $secondOptions[$passOpt] = $options[$passOpt];
-                    }
-                }
+        foreach (['hour' => 'hours', 'minute' => 'minutes', 'second' => 'seconds'] as $field => $part) {
+            if (!$builder->has($field)) {
+                continue;
             }
 
-            $builder->add('hour', $options['widget'], $hourOptions);
-
-            if ($options['with_minutes']) {
-                $builder->add('minute', $options['widget'], $minuteOptions);
-            }
-
-            if ($options['with_seconds']) {
-                $builder->add('second', $options['widget'], $secondOptions);
-            }
-
-            $builder->addViewTransformer(new DateTimeToArrayTransformer($options['model_timezone'], $options['view_timezone'], $parts, 'text' === $options['widget']));
-        }
-
-        if ('string' === $options['input']) {
-            $builder->addModelTransformer(new ReversedTransformer(
-                new DateTimeToStringTransformer($options['model_timezone'], $options['model_timezone'], 'H:i:s')
-            ));
-        } elseif ('timestamp' === $options['input']) {
-            $builder->addModelTransformer(new ReversedTransformer(
-                new DateTimeToTimestampTransformer($options['model_timezone'], $options['model_timezone'])
-            ));
-        } elseif ('array' === $options['input']) {
-            $builder->addModelTransformer(new ReversedTransformer(
-                new DateTimeToArrayTransformer($options['model_timezone'], $options['model_timezone'], $parts)
-            ));
+            $child = $builder->get($field);
+            $childOptions = $child->getOptions();
+            $childOptions['preferred_choices'] = $options['preferred_choices'][$part];
+            $builder->add($field, $child->getType()->getInnerType()::class, $childOptions);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $view->vars = array_replace($view->vars, array(
-            'widget'       => $options['widget'],
-            'with_minutes' => $options['with_minutes'],
-            'with_seconds' => $options['with_seconds'],
-        ));
-
-        if ('single_text' === $options['widget']) {
-            $view->vars['type'] = 'time';
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $compound = function (Options $options) {
-            return $options['widget'] !== 'single_text';
-        };
-
-        $emptyValue = $emptyValueDefault = function (Options $options) {
-            return $options['required'] ? null : '';
-        };
-
-        // for BC with the "placeholder" option
-        $placeholder = function (Options $options) {
-            return $options['placeholder'];
-        };
-
-        $emptyValueNormalizer = function (Options $options, $emptyValue) use ($emptyValueDefault) {
-            if (is_array($emptyValue)) {
-                $default = $emptyValueDefault($options);
-
-                return array_merge(
-                    array('hour' => $default, 'minute' => $default, 'second' => $default),
-                    $emptyValue
-                );
+        $resolver->setDefault('widget', 'choice');
+        $resolver->setDefault('preferred_choices', []);
+        $resolver->setNormalizer('preferred_choices', static function (Options $options, $choices): array {
+            if (!is_array($choices)) {
+                return ['hours' => $choices, 'minutes' => $choices, 'seconds' => $choices];
             }
 
-            return array(
-                'hour' => $emptyValue,
-                'minute' => $emptyValue,
-                'second' => $emptyValue
-            );
-        };
-
-        $preferredChoicesNormalizer = function (Options $options, $preferredChoices) {
-            if (is_array($preferredChoices)) {
-                $default = array();
-
-                return array_merge(
-                    array('hours' => $default, 'minutes' => $default, 'seconds' => $default),
-                    $preferredChoices
-                );
-            }
-
-            return array(
-                'hours' => $default,
-                'minutes' => $default,
-                'seconds' => $default
-            );
-        };
-
-        $resolver->setDefaults(array(
-            'hours'          => range(0, 23),
-            'minutes'        => range(0, 59),
-            'seconds'        => range(0, 59),
-            'widget'         => 'choice',
-            'input'          => 'datetime',
-            'preferred_choices'=> array(),
-            'with_minutes'   => true,
-            'with_seconds'   => false,
-            'model_timezone' => null,
-            'view_timezone'  => null,
-            'placeholder'    => $emptyValue,
-            'placeholder' => $placeholder,
-            'html5' => true,
-            // Don't modify \DateTime classes by reference, we treat
-            // them like immutable value objects
-            'by_reference'   => false,
-            'error_bubbling' => false,
-            // If initialized with a \DateTime object, FormType initializes
-            // this option to "\DateTime". Since the internal, normalized
-            // representation is not \DateTime, but an array, we need to unset
-            // this option.
-            'data_class'     => null,
-            'compound'       => $compound,
-        ));
-
-        $resolver->setNormalizers(array(
-            'placeholder' => $emptyValueNormalizer,
-            'preferred_choices' => $preferredChoicesNormalizer,
-        ));
-
-        $resolver->setAllowedValues(array(
-            'input' => array(
-                'datetime',
-                'string',
-                'timestamp',
-                'array',
-            ),
-            'widget' => array(
-                'single_text',
-                'text',
-                'choice',
-            ),
-        ));
+            return array_replace(['hours' => [], 'minutes' => [], 'seconds' => []], $choices);
+        });
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getParent(): string
     {
-        return 'time';
+        return SymfonyTimeType::class;
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'ns_time';
     }
 }

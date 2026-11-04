@@ -2,21 +2,16 @@
 
 namespace NS\UtilBundle\Form\Transformers;
 
+use NS\UtilBundle\Form\Types\ArrayChoice;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use UnexpectedValueException;
 
 class ChoiceTransformer implements DataTransformerInterface
 {
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
-    /**
-     * ChoiceTransformer constructor.
-     * @param $class
-     */
-    public function __construct($class)
+    public function __construct(string $class)
     {
         $this->className = $class;
     }
@@ -24,34 +19,34 @@ class ChoiceTransformer implements DataTransformerInterface
     /**
      * Transforms an object (ArrayChoice) to a string (number).
      *
-     * @param  ArrayChoice|null $object
-     * @return integer
+     * @param ArrayChoice|null $value
      */
-    public function transform($object)
+    public function transform($value): ?string
     {
-        if (null === $object || !is_object($object)) {
-            return "";
+        if (!is_object($value)) {
+            return null;
         }
 
-        return $object->getValue();
+        return (string)$value->getValue();
     }
 
     /**
      * Transforms a string (number) to an object (ArrayChoice).
      *
-     * @param  string $number
+     * @param string $value
+     *
      * @return ArrayChoice|null
      * @throws TransformationFailedException if object (issue) is not found.
      */
-    public function reverseTransform($number)
+    public function reverseTransform($value): ?ArrayChoice
     {
-        if (!empty($number) && !is_numeric($number)) {
+        if (!empty($value) && !is_numeric($value)) {
             throw new TransformationFailedException('Unable to transform non numeric types');
         }
 
         try {
-            $obj = new $this->className($number);
-        } catch (\UnexpectedValueException $e) {
+            $obj = new $this->className($value === '' ? null : $value);
+        } catch (UnexpectedValueException $e) {
             throw new TransformationFailedException($e->getMessage());
         }
 

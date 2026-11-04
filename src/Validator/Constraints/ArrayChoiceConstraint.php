@@ -2,6 +2,7 @@
 
 namespace NS\UtilBundle\Validator\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -11,11 +12,12 @@ use Symfony\Component\Validator\Constraint;
  *
  * @Annotation
  */
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class ArrayChoiceConstraint extends Constraint
 {
-    public $message = 'No option was selected';
+    public string $message = 'No option was selected';
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'NS\UtilBundle\Validator\Constraints\ArrayChoiceValidator';
     }

@@ -7,7 +7,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class ArrayChoice extends IntegerType
 {
-    protected $convert_class = 'stdClass';
+    protected string $convert_class = 'stdClass';
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -31,7 +31,7 @@ class ArrayChoice extends IntegerType
         return null;
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
