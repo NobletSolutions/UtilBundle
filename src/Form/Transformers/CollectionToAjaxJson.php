@@ -33,7 +33,7 @@ class CollectionToAjaxJson implements DataTransformerInterface
      *
      * @return null|string
      */
-    public function transform(mixed $entities)
+    public function transform(mixed $entities): string|false|null
     {
         if (empty($entities)) {
             return "";
@@ -61,7 +61,7 @@ class CollectionToAjaxJson implements DataTransformerInterface
      *
      * @return ArrayCollection|null
      */
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): mixed
     {
         if ('' === $value || null === $value) {
             return new ArrayCollection();

@@ -3,6 +3,7 @@
 namespace NS\UtilBundle\Tests\Form\Types;
 
 use NS\UtilBundle\Form\Types\ArrayChoice;
+use PHPUnit\Framework\Attributes\DataProvider;
 use NS\UtilBundle\Tests\Form\Fixtures\SubArrayChoice;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -17,16 +18,14 @@ class ArrayChoiceTest extends TypeTestCase
         SubArrayChoice::CHOICE_FOUR => 'Four',
     ];
 
-    /**
-     * @dataProvider getChoices
-     */
+    #[DataProvider('getChoices')]
     public function testEqual(?int $current, int|string|object|null $value, bool $expected): void
     {
         $choice = new SubArrayChoice($current);
         $this->assertEquals($expected, $choice->equal($value));
     }
 
-    public function getChoices(): array
+    public static function getChoices(): array
     {
         return [
             [null, SubArrayChoice::CHOICE_ONE, false],

@@ -24,7 +24,7 @@ class SetChoiceTransformer implements DataTransformerInterface
      * @param mixed $value
      * @return int
      */
-    public function transform($value)
+    public function transform(mixed $value): ?array
     {
         if (null === $value) {
             return null;
@@ -42,7 +42,7 @@ class SetChoiceTransformer implements DataTransformerInterface
      * @return ArrayChoice|null
      * @throws TransformationFailedException if object (issue) is not found.
      */
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): SetChoice
     {
         $value ??= [];
 

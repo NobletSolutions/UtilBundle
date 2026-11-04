@@ -265,7 +265,7 @@ abstract class SetChoice extends AbstractType
     {
         if ($allPossible) {
             if (is_numeric($values)) {
-                $values = $this->fromInteger((integer)$values);
+                $values = $this->fromInteger((int)$values);
             } elseif ($values instanceof self) {
                 $values = $values->toArray();
             } elseif (is_string($values)) {
@@ -334,7 +334,7 @@ abstract class SetChoice extends AbstractType
      */
     private function fromInteger($values)
     {
-        $values = (integer)$values;
+        $values = (int)$values;
         $possible = $this->set;
         $ret = [];
 
